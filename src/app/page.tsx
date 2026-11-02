@@ -18,6 +18,8 @@ import {
   ArrowRight,
   RotateCcw,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   ArrowUpDown,
   ExternalLink
 } from "lucide-react";
@@ -263,6 +265,7 @@ export default function Home() {
   // Filtros de Móviles en Venta
   const [deviceBrandFilter, setDeviceBrandFilter] = useState<string>("Todos");
   const [devicePriceSort, setDevicePriceSort] = useState<"default" | "asc" | "desc">("default");
+  const [showFullCatalog, setShowFullCatalog] = useState(false);
 
   // Estado del Carrito
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -444,6 +447,11 @@ export default function Home() {
 
     return list;
   }, [deviceBrandFilter, devicePriceSort]);
+
+  // Mostrar solo 3 unidades inicialmente, expandible con el botón de catálogo completo
+  const displayedDevices = useMemo(() => {
+    return showFullCatalog ? filteredDevices : filteredDevices.slice(0, 3);
+  }, [filteredDevices, showFullCatalog]);
 
   // Al elegir una sugerencia de texto, autocompleta Marca y Modelo en los filtros de abajo
   const handleSelectSuggestion = (suggestion: TextSuggestion) => {
@@ -943,7 +951,10 @@ export default function Home() {
               {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel"].map((brand) => (
                 <button
                   key={brand}
-                  onClick={() => setDeviceBrandFilter(brand)}
+                  onClick={() => {
+                    setDeviceBrandFilter(brand);
+                    setShowFullCatalog(false);
+                  }}
                   className={`px-4 py-2.5 rounded-2xl text-xs font-medium transition-all border btn-tactile ${
                     deviceBrandFilter.toLowerCase() === brand.toLowerCase()
                       ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
@@ -963,74 +974,97 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Parrilla de Teléfonos */}
+            {/* Parrilla de Teléfonos (Inicialmente 3 opciones, expandible a catálogo completo) */}
             {filteredDevices.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredDevices.map((dev) => (
-                  <div 
-                    key={dev.id}
-                    className="bg-[#FAF9F8] rounded-[2rem] p-6 border border-black/[0.04] flex flex-col justify-between minimal-card-hover animate-scaleIn group"
-                  >
-                    <div className="relative h-64 rounded-2xl bg-[#EBECEF]/60 overflow-hidden mb-6 flex items-center justify-center">
-                      <img 
-                        src={dev.image} 
-                        alt={dev.model}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      />
-                      <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                        {dev.grade}
-                      </span>
-                      <span className="absolute top-3.5 right-3.5 bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                        {dev.battery}
-                      </span>
-                    </div>
-
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[11px] text-zinc-600 font-medium">{dev.brand}</span>
-                        <span className="text-[10px] bg-zinc-200/70 text-zinc-700 px-2 py-0.5 rounded-full font-medium">
-                          {dev.tag}
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {displayedDevices.map((dev) => (
+                    <div 
+                      key={dev.id}
+                      className="bg-[#FAF9F8] rounded-[2rem] p-6 border border-black/[0.04] flex flex-col justify-between minimal-card-hover animate-scaleIn group"
+                    >
+                      <div className="relative h-64 rounded-2xl bg-[#EBECEF]/60 overflow-hidden mb-6 flex items-center justify-center">
+                        <img 
+                          src={dev.image} 
+                          alt={dev.model}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
+                        <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                          {dev.grade}
+                        </span>
+                        <span className="absolute top-3.5 right-3.5 bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                          {dev.battery}
                         </span>
                       </div>
-                      <h3 className="font-semibold text-lg text-zinc-900">{dev.model}</h3>
-                      <p className="text-xs text-zinc-600 mb-4">{dev.sub}</p>
 
-                      <div className="flex items-center gap-1.5 mb-6">
-                        <div className="flex items-center gap-1">
-                          {dev.colors.map((c, idx) => (
-                            <span 
-                              key={idx}
-                              style={{ backgroundColor: c }}
-                              className="w-2.5 h-2.5 rounded-full border border-black/10"
-                            />
-                          ))}
-                        </div>
-                        <span className="text-xs text-zinc-500 ml-auto">100% Verificado</span>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between mt-auto">
                       <div>
-                        <span className="text-[10px] text-zinc-500 block uppercase font-medium">Precio</span>
-                        <span className="text-2xl font-bold text-zinc-900 tracking-tight">${dev.price}</span>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[11px] text-zinc-600 font-medium">{dev.brand}</span>
+                          <span className="text-[10px] bg-zinc-200/70 text-zinc-700 px-2 py-0.5 rounded-full font-medium">
+                            {dev.tag}
+                          </span>
+                        </div>
+                        <h3 className="font-semibold text-lg text-zinc-900">{dev.model}</h3>
+                        <p className="text-xs text-zinc-600 mb-4">{dev.sub}</p>
+
+                        <div className="flex items-center gap-1.5 mb-6">
+                          <div className="flex items-center gap-1">
+                            {dev.colors.map((c, idx) => (
+                              <span 
+                                key={idx}
+                                style={{ backgroundColor: c }}
+                                className="w-2.5 h-2.5 rounded-full border border-black/10"
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-zinc-500 ml-auto">100% Verificado</span>
+                        </div>
                       </div>
 
-                      <button
-                        onClick={() => addToCart({
-                          id: dev.id,
-                          title: dev.model,
-                          subtitle: `${dev.sub} · ${dev.grade}`,
-                          price: dev.price
-                        })}
-                        className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Añadir</span>
-                      </button>
+                      <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between mt-auto">
+                        <div>
+                          <span className="text-[10px] text-zinc-500 block uppercase font-medium">Precio</span>
+                          <span className="text-2xl font-bold text-zinc-900 tracking-tight">${dev.price}</span>
+                        </div>
+
+                        <button
+                          onClick={() => addToCart({
+                            id: dev.id,
+                            title: dev.model,
+                            subtitle: `${dev.sub} · ${dev.grade}`,
+                            price: dev.price
+                          })}
+                          className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Añadir</span>
+                        </button>
+                      </div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Botón para mostrar catálogo completo o contraer */}
+                {filteredDevices.length > 3 && (
+                  <div className="mt-10 text-center animate-fadeIn">
+                    <button
+                      onClick={() => setShowFullCatalog((prev) => !prev)}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold bg-zinc-900 hover:bg-black text-white shadow-sm transition-all btn-tactile"
+                    >
+                      <span>
+                        {showFullCatalog
+                          ? "Mostrar menos equipos"
+                          : `Mostrar catálogo completo (${filteredDevices.length} disponibles)`}
+                      </span>
+                      {showFullCatalog ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                    </button>
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : (
               <div className="bg-[#FAF9F8] rounded-[2rem] p-12 text-center border border-black/[0.04] animate-scaleIn">
                 <p className="text-sm font-semibold text-zinc-900 mb-2">
