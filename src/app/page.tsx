@@ -581,16 +581,15 @@ export default function Home() {
 
         {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR (TIENDAS / REVENDEDORES / CLIENTE FINAL) */}
         <div className="max-w-2xl mb-12">
-          <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
+          <h1 className="animate-fadeIn font-cursive text-5xl sm:text-7xl font-bold tracking-tight text-zinc-950 mb-5 leading-[1.15]">
             Proveedor de taller <br />
-            <span className="font-light text-zinc-950">y equipos </span>
-            <span className="font-cursive-accent font-normal text-zinc-950">certificados.</span>
+            <span className="text-zinc-900">y equipos certificados.</span>
           </h1>
 
-          <p className="animate-fadeIn stagger-2 text-base text-zinc-600 font-normal leading-relaxed mb-8">
+          <p className="animate-fadeIn stagger-2 font-cursive text-xl sm:text-2xl text-zinc-700 leading-relaxed mb-8">
             Suministro de reparaciones especializadas y teléfonos verificados para{" "}
-            <strong className="font-semibold text-zinc-900">tiendas, revendedores y clientes directos</strong> en Panamá.
-            Tarifas con <span className="font-cursive-accent text-zinc-900 font-medium">garantía de taller</span>, repuestos en distintas calidades y respuesta inmediata.
+            <strong className="font-bold text-zinc-950">tiendas, revendedores y clientes directos</strong> en Panamá.
+            Tarifas con garantía de taller, repuestos en distintas calidades y respuesta inmediata.
           </p>
 
           {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
@@ -603,7 +602,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Catálogo de <span className="font-cursive-accent text-sm">Reparaciones</span>
+              Catálogo de Reparaciones
             </button>
             <button
               onClick={() => setActiveTab("productos")}
@@ -613,7 +612,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Equipos en <span className="font-cursive-accent text-sm">Venta</span> ({filteredDevices.length})
+              Equipos en Venta ({filteredDevices.length})
             </button>
           </div>
         </div>
