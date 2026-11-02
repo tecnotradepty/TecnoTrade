@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { 
   Smartphone, 
   Wrench, 
@@ -20,13 +20,14 @@ import {
   Layers,
   ChevronRight,
   ArrowUpDown,
-  Sparkles
+  ExternalLink
 } from "lucide-react";
-import { REPAIR_CATALOG, POPULAR_MODELS, RepairItem } from "@/data/repairCatalog";
+import { REPAIR_CATALOG, POPULAR_MODELS } from "@/data/repairCatalog";
 
 // Datos oficiales de TecnoTrade PTY
 const WHATSAPP_NUMBER = "50768529324";
 const INSTAGRAM_URL = "https://www.instagram.com/tecnotradepty/";
+const GOOGLE_MAPS_URL = "https://www.google.com/maps?q=Mobile+Hub+Pty,+C.+Ricardo+Arias+5,+Panam%C3%A1,+Provincia+de+Panam%C3%A1&ftid=0x8faca9a77aef134b:0x20520f48e572172d&entry=gps&shh=CAE&lucs=,94297699,94284454,94231188,94280568,47071704,94218641,94282134,94286869&g_ep=CAISEjI2LjE5LjIuOTEwMjIxOTUwMBgAIIgnKkgsOTQyOTc2OTksOTQyODQ0NTQsOTQyMzExODgsOTQyODA1NjgsNDcwNzE3MDQsOTQyMTg2NDEsOTQyODIxMzQsOTQyODY4NjlCAlBB&skid=78b66149-c412-4190-89b3-86f1842bf2a2&g_st=ic";
 
 // Dispositivos certificados en venta con filtros de marca y orden
 export interface DeviceItem {
@@ -275,6 +276,24 @@ export default function Home() {
   const [customerNote, setCustomerNote] = useState("");
   const [addedItemNotification, setAddedItemNotification] = useState<string | null>(null);
 
+  // Estado de la burbuja animada estilo WhatsApp ("¡Hey, también compramos tu teléfono!")
+  const [chatBubbleStep, setChatBubbleStep] = useState<"hidden" | "typing" | "message" | "dismissed">("hidden");
+
+  useEffect(() => {
+    const timerTyping = setTimeout(() => {
+      setChatBubbleStep((prev) => (prev === "hidden" ? "typing" : prev));
+    }, 1000);
+
+    const timerMessage = setTimeout(() => {
+      setChatBubbleStep((prev) => (prev === "typing" ? "message" : prev));
+    }, 2200);
+
+    return () => {
+      clearTimeout(timerTyping);
+      clearTimeout(timerMessage);
+    };
+  }, []);
+
   const addToCart = (item: { id: string; title: string; subtitle: string; price: number }) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
@@ -355,7 +374,6 @@ export default function Home() {
     });
 
     if (!matchedBackCover) {
-      // Coincidencia por serie para marcas Android y Apple
       matchedBackCover = REPAIR_CATALOG.find((item) => {
         if (item.category !== "Tapas Traseras") return false;
         if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
@@ -365,7 +383,7 @@ export default function Home() {
     }
 
     // Puerto de carga
-    let matchedPort = REPAIR_CATALOG.find((item) => {
+    const matchedPort = REPAIR_CATALOG.find((item) => {
       if (item.category !== "Puertos de Carga") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       const cleanItem = item.model.toLowerCase();
@@ -403,7 +421,6 @@ export default function Home() {
       return m.model.toLowerCase().includes(q) || m.brand.toLowerCase().includes(q);
     });
 
-    // Tomar las mejores 8 coincidencias y generar su resumen de piezas
     return matched.slice(0, 8).map((m) => getPartsSummary(m.model, m.brand));
   }, [directSearchQuery, allKnownModels]);
 
@@ -470,7 +487,7 @@ export default function Home() {
     if (customerNote.trim()) {
       message += `Nota: ${customerNote.trim()}\n`;
     }
-    message += `📍 Calle Ricardo Arias, diagonal a Iglesia del Carmen\n`;
+    message += `📍 Calle Ricardo Arias 5, Mobile Hub Pty\n`;
     message += `🕒 Horario: 10 AM - 7 PM\n\n`;
     message += `Hola TecnoTrade, me gustaría agendar para este pedido.`;
 
@@ -485,6 +502,11 @@ export default function Home() {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
+  const handleSellPhoneWhatsApp = () => {
+    const text = `Hola TecnoTrade 👋 Vi en la web que también compran teléfonos o los reciben en Trade-In. Quiero cotizar mi equipo:\n\n• Modelo:\n• Capacidad (GB):\n• Estado / Detalles:`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#111111] pb-32 font-sans selection:bg-[#111111] selection:text-white">
       
@@ -495,7 +517,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
           
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-2xl overflow-hidden bg-zinc-50 border border-black/[0.06] flex items-center justify-center p-1">
+            <div className="w-10 h-10 rounded-2xl overflow-hidden bg-zinc-50 border border-black/[0.06] flex items-center justify-center p-1 transition-transform duration-300 hover:scale-105">
               <img 
                 src="/logo.jpg" 
                 alt="TecnoTrade" 
@@ -506,17 +528,33 @@ export default function Home() {
               <span className="text-base font-semibold tracking-tight text-zinc-900 block leading-tight">
                 TecnoTrade
               </span>
-              <span className="text-xs text-zinc-600 font-normal">
-                Taller & Reestreno · Panamá
-              </span>
+              <a 
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-zinc-500 hover:text-zinc-900 font-normal inline-flex items-center gap-1 transition-colors"
+              >
+                <MapPin className="w-3 h-3" />
+                <span>Calle Ricardo Arias · Panamá</span>
+              </a>
             </div>
           </div>
 
-          {/* BOTÓN CARRITO SUPERIOR */}
-          <div className="flex items-center gap-3">
+          {/* ACCIONES DE CABECERA: UBICACIÓN Y CARRITO */}
+          <div className="flex items-center gap-2.5">
+            <a
+              href={GOOGLE_MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-zinc-700 hover:text-zinc-950 bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
+            >
+              <MapPin className="w-3.5 h-3.5 text-zinc-700" />
+              <span>Cómo llegar</span>
+            </a>
+
             <button
               onClick={() => setIsCartOpen(true)}
-              className="bg-zinc-900 hover:bg-black text-white text-xs font-medium px-4 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm"
+              className="bg-zinc-900 hover:bg-black text-white text-xs font-medium px-4 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm btn-tactile"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               <span>Carrito</span>
@@ -550,26 +588,33 @@ export default function Home() {
       {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-5xl mx-auto px-6 pt-14 md:pt-18">
 
-        {/* HERO EDITORIAL MINIMALISTA */}
+        {/* HERO EDITORIAL CON ENTRADA ESCALONADA SUAVE */}
         <div className="max-w-2xl mb-12">
-          <span className="text-xs text-zinc-600 uppercase tracking-widest font-semibold block mb-3.5">
-            Calle Ricardo Arias · Iglesia del Carmen
-          </span>
+          <a
+            href={GOOGLE_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="animate-fadeIn inline-flex items-center gap-1.5 text-xs text-zinc-600 hover:text-zinc-950 uppercase tracking-widest font-semibold mb-4 py-1 px-3 rounded-full bg-[#F4F4F6] border border-black/[0.04] transition-all hover:border-black/15"
+          >
+            <MapPin className="w-3.5 h-3.5 text-zinc-800" />
+            <span>Mobile Hub Pty · C. Ricardo Arias 5</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
 
-          <h1 className="text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
+          <h1 className="animate-fadeIn stagger-1 text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
             Reparación honesta. <br />
             <span className="font-semibold text-zinc-950">Móviles certificados.</span>
           </h1>
 
-          <p className="text-base text-zinc-600 font-normal leading-relaxed mb-8">
+          <p className="animate-fadeIn stagger-2 text-base text-zinc-600 font-normal leading-relaxed mb-8">
             Consulta los precios transparentes de nuestro taller o explora los dispositivos en stock listos para entrega inmediata con garantía.
           </p>
 
           {/* BIFURCADOR SUPERIOR EXCLUSIVO (Taller vs Teléfonos) */}
-          <div className="inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
+          <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
             <button
               onClick={() => setActiveTab("taller")}
-              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
                 activeTab === "taller"
                   ? "bg-white text-zinc-950 shadow-sm font-semibold"
                   : "text-zinc-500 hover:text-zinc-900"
@@ -579,7 +624,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setActiveTab("productos")}
-              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
                 activeTab === "productos"
                   ? "bg-white text-zinc-950 shadow-sm font-semibold"
                   : "text-zinc-500 hover:text-zinc-900"
@@ -594,9 +639,9 @@ export default function Home() {
         {/* TALLER // BUSCADOR DIRECTO O SELECTOR GUIADO */}
         {/* ============================================================== */}
         {activeTab === "taller" && (
-          <div className="space-y-10 animate-fadeIn mb-24">
+          <div className="space-y-10 animate-fadeIn stagger-2 mb-20">
             
-            <div className="bg-[#FAF9F8] rounded-[2.5rem] p-6 sm:p-10 border border-black/[0.04]">
+            <div className="bg-[#FAF9F8] rounded-[2.5rem] p-6 sm:p-10 border border-black/[0.04] transition-all">
               
               {/* Encabezado del Taller con Selector de Método (Buscador vs Filtros) */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-black/[0.06] mb-8 gap-4">
@@ -613,7 +658,7 @@ export default function Home() {
                 <div className="inline-flex p-1 bg-white rounded-2xl border border-black/[0.06] shadow-2xs self-start sm:self-auto">
                   <button
                     onClick={() => setTallerMode("search")}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 btn-tactile ${
                       tallerMode === "search"
                         ? "bg-zinc-900 text-white font-semibold shadow-xs"
                         : "text-zinc-600 hover:text-zinc-900"
@@ -624,7 +669,7 @@ export default function Home() {
                   </button>
                   <button
                     onClick={() => setTallerMode("steps")}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 btn-tactile ${
                       tallerMode === "steps"
                         ? "bg-zinc-900 text-white font-semibold shadow-xs"
                         : "text-zinc-600 hover:text-zinc-900"
@@ -644,7 +689,7 @@ export default function Home() {
                   
                   {/* Caja de Búsqueda */}
                   <div className="relative">
-                    <div className="bg-white rounded-2xl px-5 py-4 flex items-center gap-3.5 border border-black/[0.08] shadow-sm focus-within:border-black/30 transition-all">
+                    <div className="bg-white rounded-2xl px-5 py-4 flex items-center gap-3.5 border border-black/[0.08] shadow-sm focus-within:border-black/30 focus-within:shadow-md transition-all duration-300">
                       <Search className="w-5 h-5 text-zinc-400 shrink-0" />
                       <input 
                         type="text"
@@ -656,7 +701,7 @@ export default function Home() {
                       {directSearchQuery && (
                         <button 
                           onClick={() => setDirectSearchQuery("")} 
-                          className="text-zinc-400 hover:text-zinc-900 p-1"
+                          className="text-zinc-400 hover:text-zinc-900 p-1 transition-colors"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -665,7 +710,7 @@ export default function Home() {
 
                     {/* Chips de sugerencias rápidas populares */}
                     {!directSearchQuery && (
-                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                      <div className="mt-4 flex flex-wrap items-center gap-2 animate-fadeIn">
                         <span className="text-[11px] text-zinc-600 font-medium mr-1">Populares:</span>
                         {[
                           "iPhone 13", 
@@ -679,7 +724,7 @@ export default function Home() {
                           <button
                             key={m}
                             onClick={() => setDirectSearchQuery(m)}
-                            className="text-xs bg-white text-zinc-700 px-3 py-1.5 rounded-xl border border-black/[0.05] hover:border-black/20 hover:text-black transition-all shadow-2xs"
+                            className="text-xs bg-white text-zinc-700 px-3 py-1.5 rounded-xl border border-black/[0.05] hover:border-black/20 hover:text-black transition-all shadow-2xs btn-tactile"
                           >
                             {m}
                           </button>
@@ -690,7 +735,7 @@ export default function Home() {
 
                   {/* Resultados y Sugerencias detalladas con repuestos y calidades */}
                   {directSearchQuery.trim() && (
-                    <div className="space-y-3 pt-2">
+                    <div className="space-y-3 pt-2 animate-fadeIn">
                       <div className="flex items-center justify-between px-1">
                         <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
                           Sugerencias y Disponibilidad ({searchSuggestions.length})
@@ -705,7 +750,7 @@ export default function Home() {
                           {searchSuggestions.map((item) => (
                             <div 
                               key={item.model}
-                              className="bg-white rounded-3xl p-5 sm:p-6 border border-black/[0.06] shadow-xs hover:border-black/20 transition-all"
+                              className="bg-white rounded-3xl p-5 sm:p-6 border border-black/[0.06] shadow-xs minimal-card-hover animate-scaleIn"
                             >
                               {/* Cabecera del modelo */}
                               <div className="flex items-center justify-between mb-4 pb-3 border-b border-black/[0.04]">
@@ -737,7 +782,7 @@ export default function Home() {
                                       <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
                                         📱 Pantalla
                                       </span>
-                                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
+                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
                                         {item.screens.length > 0 ? "Disponible" : "Bajo Pedido"}
                                       </span>
                                     </div>
@@ -764,7 +809,7 @@ export default function Home() {
                                               subtitle: `Repuesto calibrado: ${sc.quality}`,
                                               price: sc.price
                                             })}
-                                            className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1"
+                                            className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
                                           >
                                             <Plus className="w-3 h-3" />
                                             <span>Añadir</span>
@@ -789,7 +834,7 @@ export default function Home() {
                                       <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
                                         🪟 Tapa Trasera
                                       </span>
-                                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
+                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
                                         {item.backCover ? "Disponible" : "Bajo Pedido"}
                                       </span>
                                     </div>
@@ -811,7 +856,7 @@ export default function Home() {
                                           subtitle: `Calidad: ${item.backCover!.quality}`,
                                           price: item.backCover!.price
                                         })}
-                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1"
+                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
                                       >
                                         <Plus className="w-3 h-3" />
                                         <span>Añadir</span>
@@ -834,7 +879,7 @@ export default function Home() {
                                       <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
                                         ⚡ Pin de Carga
                                       </span>
-                                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
+                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
                                         {item.chargingPort ? "Disponible" : "Bajo Pedido"}
                                       </span>
                                     </div>
@@ -856,7 +901,7 @@ export default function Home() {
                                           subtitle: `Calidad: ${item.chargingPort!.quality}`,
                                           price: item.chargingPort!.price
                                         })}
-                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1"
+                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
                                       >
                                         <Plus className="w-3 h-3" />
                                         <span>Añadir</span>
@@ -877,7 +922,7 @@ export default function Home() {
                           ))}
                         </div>
                       ) : (
-                        <div className="bg-white rounded-3xl p-8 border border-black/[0.06] text-center space-y-3">
+                        <div className="bg-white rounded-3xl p-8 border border-black/[0.06] text-center space-y-3 animate-scaleIn">
                           <p className="text-sm font-semibold text-zinc-800">
                             No encontramos &ldquo;{directSearchQuery}&rdquo; en la lista rápida
                           </p>
@@ -886,7 +931,7 @@ export default function Home() {
                           </p>
                           <button
                             onClick={() => handleConsultWhatsApp(directSearchQuery)}
-                            className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold px-5 py-2.5 rounded-full inline-flex items-center gap-2 transition-all shadow-sm"
+                            className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold px-5 py-2.5 rounded-full inline-flex items-center gap-2 transition-all shadow-sm btn-tactile"
                           >
                             <MessageCircle className="w-4 h-4 fill-current" />
                             <span>Consultar {directSearchQuery} en WhatsApp</span>
@@ -945,7 +990,7 @@ export default function Home() {
                             setSelectedCategory(null);
                             setModelSearch("");
                           }}
-                          className={`px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all border ${
+                          className={`px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
                             selectedBrand === brand
                               ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
                               : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
@@ -997,7 +1042,7 @@ export default function Home() {
                               setSelectedModel(model);
                               setSelectedCategory(null);
                             }}
-                            className={`text-xs px-4 py-2.5 rounded-xl transition-all border ${
+                            className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
                               selectedModel === model
                                 ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
                                 : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
@@ -1027,7 +1072,7 @@ export default function Home() {
                             <button
                               key={cat.id}
                               onClick={() => setSelectedCategory(cat.id as any)}
-                              className={`p-5 rounded-2xl border text-left transition-all ${
+                              className={`p-5 rounded-2xl border text-left transition-all btn-tactile ${
                                 isSelected
                                   ? "bg-zinc-900 text-white border-zinc-900 shadow-sm"
                                   : "bg-white text-zinc-800 border-black/[0.05] hover:border-black/20"
@@ -1061,7 +1106,7 @@ export default function Home() {
                           {matchingRepairs.map((item) => (
                             <div 
                               key={item.id}
-                              className="bg-white rounded-3xl p-6 border border-black/[0.06] shadow-sm flex flex-col justify-between minimal-card-hover"
+                              className="bg-white rounded-3xl p-6 border border-black/[0.06] shadow-sm flex flex-col justify-between minimal-card-hover animate-scaleIn"
                             >
                               <div>
                                 <div className="flex items-center justify-between mb-3">
@@ -1096,7 +1141,7 @@ export default function Home() {
                                     subtitle: `Calidad: ${item.quality}`,
                                     price: item.price
                                   })}
-                                  className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm"
+                                  className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
                                 >
                                   <Plus className="w-3.5 h-3.5" />
                                   <span>Añadir</span>
@@ -1106,11 +1151,11 @@ export default function Home() {
                           ))}
                         </div>
                       ) : (
-                        <div className="p-8 rounded-3xl bg-white border border-black/[0.06] text-center text-zinc-600 text-xs">
+                        <div className="p-8 rounded-3xl bg-white border border-black/[0.06] text-center text-zinc-600 text-xs animate-scaleIn">
                           <p>Para este modelo específico cotizamos de inmediato bajo pedido.</p>
                           <button
                             onClick={() => handleConsultWhatsApp(`${selectedModel} ${selectedCategory}`)}
-                            className="mt-4 bg-zinc-900 text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5"
+                            className="mt-4 bg-zinc-900 text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5 btn-tactile"
                           >
                             <MessageCircle className="w-3.5 h-3.5" />
                             <span>Consultar en WhatsApp</span>
@@ -1141,7 +1186,7 @@ export default function Home() {
         {/* DISPOSITIVOS EN VENTA (SHOWROOM CON FILTROS Y ORDENAMIENTO) */}
         {/* ============================================================== */}
         {activeTab === "productos" && (
-          <div className="animate-fadeIn mb-24">
+          <div className="animate-fadeIn mb-20">
             
             {/* Título de la Sección */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
@@ -1160,7 +1205,7 @@ export default function Home() {
                 <span className="text-xs text-zinc-600 font-medium">Ordenar:</span>
                 <button
                   onClick={() => setDevicePriceSort("default")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "default"
                       ? "bg-white text-zinc-900 font-semibold shadow-2xs"
                       : "text-zinc-600 hover:text-black"
@@ -1170,7 +1215,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => setDevicePriceSort("asc")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "asc"
                       ? "bg-white text-zinc-900 font-semibold shadow-2xs"
                       : "text-zinc-600 hover:text-black"
@@ -1180,7 +1225,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => setDevicePriceSort("desc")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "desc"
                       ? "bg-white text-zinc-900 font-semibold shadow-2xs"
                       : "text-zinc-600 hover:text-black"
@@ -1197,7 +1242,7 @@ export default function Home() {
                 <button
                   key={brand}
                   onClick={() => setDeviceBrandFilter(brand)}
-                  className={`px-4 py-2.5 rounded-2xl text-xs font-medium transition-all border ${
+                  className={`px-4 py-2.5 rounded-2xl text-xs font-medium transition-all border btn-tactile ${
                     deviceBrandFilter.toLowerCase() === brand.toLowerCase()
                       ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
                       : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
@@ -1210,7 +1255,7 @@ export default function Home() {
               {/* Botón especial: Consultar por otro en WhatsApp */}
               <button
                 onClick={() => handleConsultWhatsApp()}
-                className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80 hover:bg-emerald-100 transition-all shadow-2xs"
+                className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80 hover:bg-emerald-100 transition-all shadow-2xs btn-tactile"
               >
                 <MessageCircle className="w-3.5 h-3.5 fill-current text-emerald-600" />
                 <span>Consultar por otro en WhatsApp</span>
@@ -1223,13 +1268,13 @@ export default function Home() {
                 {filteredDevices.map((dev) => (
                   <div 
                     key={dev.id}
-                    className="bg-[#FAF9F8] rounded-[2rem] p-6 border border-black/[0.04] flex flex-col justify-between minimal-card-hover group"
+                    className="bg-[#FAF9F8] rounded-[2rem] p-6 border border-black/[0.04] flex flex-col justify-between minimal-card-hover animate-scaleIn group"
                   >
                     <div className="relative h-64 rounded-2xl bg-[#EBECEF]/60 overflow-hidden mb-6 flex items-center justify-center">
                       <img 
                         src={dev.image} 
                         alt={dev.model}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                       <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                         {dev.grade}
@@ -1276,7 +1321,7 @@ export default function Home() {
                           subtitle: `${dev.sub} · ${dev.grade}`,
                           price: dev.price
                         })}
-                        className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm"
+                        className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Al Carrito</span>
@@ -1286,7 +1331,7 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <div className="bg-[#FAF9F8] rounded-[2rem] p-12 text-center border border-black/[0.04]">
+              <div className="bg-[#FAF9F8] rounded-[2rem] p-12 text-center border border-black/[0.04] animate-scaleIn">
                 <p className="text-sm font-semibold text-zinc-900 mb-2">
                   No hay dispositivos listados en este filtro por ahora
                 </p>
@@ -1295,7 +1340,7 @@ export default function Home() {
                 </p>
                 <button
                   onClick={() => handleConsultWhatsApp(deviceBrandFilter !== "Todos" ? deviceBrandFilter : undefined)}
-                  className="bg-zinc-900 text-white text-xs font-semibold px-6 py-3 rounded-full inline-flex items-center gap-2"
+                  className="bg-zinc-900 text-white text-xs font-semibold px-6 py-3 rounded-full inline-flex items-center gap-2 btn-tactile"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Consultar en WhatsApp</span>
@@ -1303,30 +1348,51 @@ export default function Home() {
               </div>
             )}
 
-            {/* Banner inferior de consulta personalizada */}
-            <div className="mt-12 bg-[#FAF9F8] rounded-[2rem] p-8 border border-black/[0.04] flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div>
-                <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-1">
-                  ¿Buscas otro modelo o capacidad?
-                </span>
-                <h4 className="text-lg font-semibold text-zinc-900">
-                  Cotizamos cualquier equipo nuevo o certificado bajo pedido
-                </h4>
-                <p className="text-xs text-zinc-600 mt-1">
-                  Atención directa con nuestro equipo en Calle Ricardo Arias, Panamá.
-                </p>
-              </div>
-              <button
-                onClick={() => handleConsultWhatsApp()}
-                className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold px-6 py-3 rounded-full text-xs sm:text-sm shrink-0 flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20"
-              >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Escríbenos por WhatsApp</span>
-              </button>
-            </div>
-
           </div>
         )}
+
+        {/* ============================================================== */}
+        {/* SECCIÓN DE UBICACIÓN OFICIAL & REDES (GOOGLE MAPS + INSTAGRAM) */}
+        {/* ============================================================== */}
+        <section className="mt-16 pt-12 border-t border-black/[0.06] animate-fadeIn">
+          <div className="bg-[#FAF9F8] rounded-[2.5rem] p-8 sm:p-10 border border-black/[0.04] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div className="space-y-3 max-w-xl">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+                <MapPin className="w-3.5 h-3.5 text-zinc-900" />
+                <span>Ubicación del Taller & Showroom</span>
+              </span>
+              <h3 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
+                Mobile Hub Pty · Calle Ricardo Arias 5, Panamá
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+                Cerca de la Iglesia del Carmen. Atención personalizada de Lunes a Sábado de 10:00 AM a 7:00 PM. Envíos a todo el país y entregas a domicilio en la ciudad.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-zinc-900 hover:bg-black text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 shadow-sm transition-all btn-tactile"
+              >
+                <MapPin className="w-4 h-4" />
+                <span>Abrir en Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+              </a>
+
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white hover:bg-zinc-100 text-zinc-900 text-xs sm:text-sm font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 border border-black/[0.08] transition-all btn-tactile"
+              >
+                <span>@tecnotradepty</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+              </a>
+            </div>
+          </div>
+        </section>
 
       </main>
 
@@ -1348,7 +1414,7 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 hover:text-black"
+                className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 hover:text-black transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1368,7 +1434,7 @@ export default function Home() {
                 cart.map((item) => (
                   <div 
                     key={item.id}
-                    className="p-4 rounded-2xl bg-[#FAF9F8] border border-black/[0.04] flex items-center justify-between gap-3"
+                    className="p-4 rounded-2xl bg-[#FAF9F8] border border-black/[0.04] flex items-center justify-between gap-3 animate-scaleIn"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold text-zinc-900 truncate">{item.title}</p>
@@ -1443,7 +1509,7 @@ export default function Home() {
 
                 <button
                   onClick={handleCheckoutWhatsApp}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20"
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20 btn-tactile"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
                   <span>Enviar Cotización a WhatsApp</span>
@@ -1459,17 +1525,17 @@ export default function Home() {
       {/* BOTÓN FLOTANTE INFERIOR EXCLUSIVO DEL CARRITO (SOLO CON ITEMS) */}
       {/* ============================================================== */}
       {totalCartCount > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 animate-slideUp">
+        <div className="fixed bottom-6 left-6 sm:left-1/2 sm:-translate-x-1/2 z-40 animate-slideUp">
           <button
             onClick={() => setIsCartOpen(true)}
-            className="bg-zinc-950 hover:bg-black text-white rounded-full px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-white/15 transition-all hover:scale-105 active:scale-95 group"
+            className="bg-zinc-950 hover:bg-black text-white rounded-full px-5 sm:px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-white/15 transition-all hover:scale-105 active:scale-95 group"
           >
             <div className="relative">
               <ShoppingCart className="w-4 h-4 text-white" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400" />
             </div>
             <span className="text-xs font-semibold tracking-tight">
-              Ver Carrito ({totalCartCount} {totalCartCount === 1 ? "artículo" : "artículos"})
+              Carrito ({totalCartCount})
             </span>
             <span className="text-xs text-zinc-500 font-normal">·</span>
             <span className="text-xs font-bold text-emerald-400">
@@ -1479,6 +1545,71 @@ export default function Home() {
           </button>
         </div>
       )}
+
+      {/* ============================================================== */}
+      {/* WIDGET DE WHATSAPP EN ESQUINA INFERIOR DERECHA ("COMPRAMOS TU EQUIPO") */}
+      {/* ============================================================== */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5">
+        
+        {/* Burbuja de mensaje estilo chat de WhatsApp */}
+        {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
+          <div className="animate-chatPop relative bg-white rounded-2xl rounded-br-xs p-3.5 pr-8 shadow-xl border border-black/[0.08] max-w-[250px] text-left">
+            
+            {/* Botón cerrar burbuja */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setChatBubbleStep("dismissed");
+              }}
+              aria-label="Cerrar mensaje"
+              className="absolute top-2.5 right-2.5 text-zinc-400 hover:text-zinc-800 p-0.5 rounded-full transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+
+            {chatBubbleStep === "typing" ? (
+              <div className="flex items-center gap-1.5 py-1.5 px-2">
+                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
+              </div>
+            ) : (
+              <div 
+                onClick={handleSellPhoneWhatsApp}
+                className="cursor-pointer group"
+              >
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+                    TecnoTrade · Trade-In
+                  </span>
+                </div>
+                <p className="text-xs font-semibold text-zinc-900 leading-snug group-hover:text-emerald-700 transition-colors">
+                  ¡Hey, también compramos tu teléfono! 📱💵
+                </p>
+                <span className="text-[11px] text-emerald-700 font-medium mt-1 inline-flex items-center gap-1">
+                  <span>Cotizar mi equipo</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Botón circular principal de WhatsApp */}
+        <button
+          onClick={handleSellPhoneWhatsApp}
+          onMouseEnter={() => {
+            if (chatBubbleStep === "dismissed") {
+              setChatBubbleStep("message");
+            }
+          }}
+          title="Vende tu teléfono o cotiza por WhatsApp"
+          className="w-13 h-13 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-lg shadow-black/10 flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+        >
+          <MessageCircle className="w-6 h-6 fill-current" />
+        </button>
+      </div>
 
     </div>
   );
