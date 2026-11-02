@@ -17,7 +17,6 @@ import {
   CheckCircle2,
   ArrowRight,
   RotateCcw,
-  Layers,
   ChevronRight,
   ArrowUpDown,
   ExternalLink
@@ -29,7 +28,7 @@ const WHATSAPP_NUMBER = "50768529324";
 const INSTAGRAM_URL = "https://www.instagram.com/tecnotradepty/";
 const GOOGLE_MAPS_URL = "https://www.google.com/maps?q=Mobile+Hub+Pty,+C.+Ricardo+Arias+5,+Panam%C3%A1,+Provincia+de+Panam%C3%A1&ftid=0x8faca9a77aef134b:0x20520f48e572172d&entry=gps&shh=CAE&lucs=,94297699,94284454,94231188,94280568,47071704,94218641,94282134,94286869&g_ep=CAISEjI2LjE5LjIuOTEwMjIxOTUwMBgAIIgnKkgsOTQyOTc2OTksOTQyODQ0NTQsOTQyMzExODgsOTQyODA1NjgsNDcwNzE3MDQsOTQyMTg2NDEsOTQyODIxMzQsOTQyODY4NjlCAlBB&skid=78b66149-c412-4190-89b3-86f1842bf2a2&g_st=ic";
 
-// Dispositivos certificados en venta con filtros de marca y orden
+// Dispositivos certificados en venta (para cliente final y revendedores)
 export interface DeviceItem {
   id: string;
   brand: "iPhone" | "Samsung" | "Honor" | "Xiaomi" | "Pixel";
@@ -51,7 +50,7 @@ const DEVICES: DeviceItem[] = [
     model: "iPhone 15 Pro",
     sub: "Titanio Natural · 128 GB",
     battery: "99% Salud",
-    grade: "Certificado A+",
+    grade: "Grado A+",
     price: 790,
     tag: "Titanium",
     colors: ["#9E9689", "#3C3D40", "#E3E4E5"],
@@ -63,9 +62,9 @@ const DEVICES: DeviceItem[] = [
     model: "iPhone 14 Pro Max",
     sub: "Deep Purple · 128 GB",
     battery: "94% Salud",
-    grade: "Excelente",
+    grade: "Grado A+",
     price: 680,
-    tag: "Top Ventas",
+    tag: "Alta Rotación",
     colors: ["#483D4F", "#232426", "#F2F1ED"],
     image: "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?auto=format&fit=crop&w=700&q=80"
   },
@@ -77,7 +76,7 @@ const DEVICES: DeviceItem[] = [
     battery: "92% Salud",
     grade: "Impecable",
     price: 430,
-    tag: "Recomendado",
+    tag: "Más Pedido",
     colors: ["#F4F3ED", "#262C3A", "#DF3542"],
     image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=700&q=80"
   },
@@ -87,9 +86,9 @@ const DEVICES: DeviceItem[] = [
     model: "iPhone 12",
     sub: "Black · 64 GB",
     battery: "89% Salud",
-    grade: "Muy Bueno",
+    grade: "Verificado",
     price: 310,
-    tag: "Económico",
+    tag: "Ideal Reventa",
     colors: ["#202124", "#F4F3ED", "#35485E"],
     image: "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=700&q=80"
   },
@@ -103,7 +102,7 @@ const DEVICES: DeviceItem[] = [
     battery: "95% Salud",
     grade: "Seminuevo",
     price: 640,
-    tag: "Pro Camera",
+    tag: "Flagship",
     colors: ["#232426", "#424D41", "#DCD4C6"],
     image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=80"
   },
@@ -115,7 +114,7 @@ const DEVICES: DeviceItem[] = [
     battery: "93% Salud",
     grade: "Excelente",
     price: 420,
-    tag: "Gama Alta",
+    tag: "Serie S",
     colors: ["#32463F", "#1D1E22", "#F6F5F3"],
     image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=80"
   },
@@ -127,7 +126,7 @@ const DEVICES: DeviceItem[] = [
     battery: "98% Salud",
     grade: "Como Nuevo",
     price: 220,
-    tag: "Batería 5000mAh",
+    tag: "Alta Demanda",
     colors: ["#2C3033", "#C5D8A4", "#928490"],
     image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=700&q=80"
   },
@@ -139,9 +138,9 @@ const DEVICES: DeviceItem[] = [
     model: "Honor Magic 5 Pro",
     sub: "Meadow Green · 512 GB",
     battery: "96% Salud",
-    grade: "Gama Flagship",
+    grade: "Grado A+",
     price: 490,
-    tag: "Cámara Top",
+    tag: "512 GB",
     colors: ["#2D4F3C", "#1F2024"],
     image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=700&q=80"
   },
@@ -165,7 +164,7 @@ const DEVICES: DeviceItem[] = [
     battery: "99% Salud",
     grade: "Seminuevo",
     price: 240,
-    tag: "Pantalla Curva",
+    tag: "Stock Rápido",
     colors: ["#1B3B30", "#DF7A34"],
     image: "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=700&q=80"
   },
@@ -177,7 +176,7 @@ const DEVICES: DeviceItem[] = [
     model: "Xiaomi 13T Pro",
     sub: "Black Ceramic · 512 GB",
     battery: "97% Salud",
-    grade: "Potencia Extrema",
+    grade: "Grado A+",
     price: 460,
     tag: "Carga 120W",
     colors: ["#171717", "#879CB0"],
@@ -201,9 +200,9 @@ const DEVICES: DeviceItem[] = [
     model: "Poco X6 Pro",
     sub: "Yellow Edition · 256 GB",
     battery: "99% Salud",
-    grade: "Gaming",
+    grade: "Impecable",
     price: 270,
-    tag: "Dimensity 8300",
+    tag: "Alto Rendimiento",
     colors: ["#F9D342", "#1F1F1F"],
     image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?auto=format&fit=crop&w=700&q=80"
   },
@@ -215,7 +214,7 @@ const DEVICES: DeviceItem[] = [
     model: "Google Pixel 8 Pro",
     sub: "Bay Blue · 128 GB",
     battery: "98% Salud",
-    grade: "Certificado A+",
+    grade: "Grado A+",
     price: 540,
     tag: "Google AI",
     colors: ["#A8C7FA", "#202124", "#E3E3E3"],
@@ -229,7 +228,7 @@ const DEVICES: DeviceItem[] = [
     battery: "94% Salud",
     grade: "Excelente",
     price: 320,
-    tag: "Cámara Pura",
+    tag: "Puro Android",
     colors: ["#202124", "#E7E8D1"],
     image: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=700&q=80"
   }
@@ -243,27 +242,23 @@ export interface CartItem {
   quantity: number;
 }
 
-// Resumen de repuestos disponibles para sugerencias en vivo
-export interface ModelPartsSummary {
+// Resumen compacto en texto para las sugerencias de búsqueda
+export interface TextSuggestion {
   model: string;
-  brand: string;
-  screens: { id: string; quality: string; price: number }[];
-  backCover?: { id: string; quality: string; price: number };
-  chargingPort?: { id: string; quality: string; price: number };
+  brand: "Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google";
+  summaryLine: string;
 }
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"taller" | "productos">("taller");
 
-  // Modo del Taller: "search" (buscador directo con sugerencias) | "steps" (filtros paso a paso)
-  const [tallerMode, setTallerMode] = useState<"search" | "steps">("search");
+  // Barra de búsqueda superior unificada en Taller
   const [directSearchQuery, setDirectSearchQuery] = useState("");
 
-  // Estado del flujo guiado por pasos
+  // Filtros paso a paso ubicados justo debajo de la barra de búsqueda
   const [selectedBrand, setSelectedBrand] = useState<"Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google" | null>(null);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<"Pantallas" | "Tapas Traseras" | "Puertos de Carga" | null>(null);
-  const [modelSearch, setModelSearch] = useState("");
 
   // Filtros de Móviles en Venta
   const [deviceBrandFilter, setDeviceBrandFilter] = useState<string>("Todos");
@@ -333,17 +328,22 @@ export default function Home() {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
 
-  // Lista plana de todos los modelos únicos conocidos para el buscador inteligente
+  // Lista plana de todos los modelos conocidos
   const allKnownModels = useMemo(() => {
-    const list: { model: string; brand: string }[] = [];
+    const list: { model: string; brand: "Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google" }[] = [];
     Object.entries(POPULAR_MODELS).forEach(([brand, models]) => {
-      models.forEach((m) => list.push({ model: m, brand }));
+      models.forEach((m) =>
+        list.push({
+          model: m,
+          brand: brand as "Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google"
+        })
+      );
     });
     return list;
   }, []);
 
-  // Helper para generar el desglose de piezas (pantalla con calidades, tapa, puerto)
-  const getPartsSummary = (modelName: string, brandHint: string): ModelPartsSummary => {
+  // Construye una línea puramente de texto indicando si hay pantalla (y sus calidades), tapa y puerto
+  const buildTextSummaryForModel = (modelName: string, brandHint: string): string => {
     const cleanTarget = modelName.toLowerCase();
     const words = cleanTarget
       .replace(/galaxy|honor|pixel|iphone|\/|\+/g, " ")
@@ -351,69 +351,48 @@ export default function Home() {
       .split(/\s+/)
       .filter((w) => w.length >= 2);
 
-    // Pantallas exactas o coincidentes
-    const matchedScreens = REPAIR_CATALOG.filter((item) => {
+    // Calidades de pantalla disponibles
+    const screenQualities = REPAIR_CATALOG.filter((item) => {
       if (item.category !== "Pantallas") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       const cleanItem = item.model.toLowerCase();
       if (cleanItem.includes(cleanTarget) || cleanTarget.includes(cleanItem)) return true;
       return words.length > 0 && words.every((w) => cleanItem.includes(w));
-    }).map((s) => ({
-      id: s.id,
-      quality: s.quality,
-      price: s.price
-    }));
+    }).map((s) => s.quality);
 
-    // Tapa trasera
-    let matchedBackCover = REPAIR_CATALOG.find((item) => {
+    const uniqueQualities = Array.from(new Set(screenQualities));
+
+    // Verificar si hay tapa trasera
+    const hasBackCover = REPAIR_CATALOG.some((item) => {
       if (item.category !== "Tapas Traseras") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       const cleanItem = item.model.toLowerCase();
       if (cleanItem.includes(cleanTarget) || cleanTarget.includes(cleanItem)) return true;
-      return words.length > 0 && words.every((w) => cleanItem.includes(w));
+      return words.length > 0 && words.some((w) => cleanItem.includes(w));
     });
 
-    if (!matchedBackCover) {
-      matchedBackCover = REPAIR_CATALOG.find((item) => {
-        if (item.category !== "Tapas Traseras") return false;
-        if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
-        const cleanItem = item.model.toLowerCase();
-        return words.length > 0 && words.some((w) => cleanItem.includes(w));
-      });
+    // Verificar si hay puerto de carga
+    const hasPort = REPAIR_CATALOG.some((item) => {
+      if (item.category !== "Puertos de Carga") return false;
+      return item.brand.toLowerCase() === brandHint.toLowerCase();
+    });
+
+    const partsText: string[] = [];
+    if (uniqueQualities.length > 0) {
+      partsText.push(`Pantalla (${uniqueQualities.join(", ")})`);
+    }
+    if (hasBackCover) {
+      partsText.push("Tapa");
+    }
+    if (hasPort) {
+      partsText.push("Puerto");
     }
 
-    // Puerto de carga
-    const matchedPort = REPAIR_CATALOG.find((item) => {
-      if (item.category !== "Puertos de Carga") return false;
-      if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
-      const cleanItem = item.model.toLowerCase();
-      if (brandHint === "Apple") {
-        if (cleanTarget.includes("16") && cleanItem.includes("16")) return true;
-        if ((cleanTarget.includes("14") || cleanTarget.includes("15")) && cleanItem.includes("14 / 15")) return true;
-        if ((cleanTarget.includes("12") || cleanTarget.includes("13")) && cleanItem.includes("12 / 13")) return true;
-        if ((cleanTarget.includes("8") || cleanTarget.includes("x") || cleanTarget.includes("11")) && cleanItem.includes("8 a 11")) return true;
-      } else if (brandHint === "Samsung") {
-        if ((cleanTarget.includes("s2") || cleanTarget.includes("note") || cleanTarget.includes("flip")) && cleanItem.includes("series s")) return true;
-        if (cleanTarget.includes("a") && cleanItem.includes("series a")) return true;
-      } else if (brandHint === "Honor" && cleanItem.includes("honor")) {
-        return true;
-      } else if (brandHint === "Xiaomi" && cleanItem.includes("redmi")) {
-        return true;
-      }
-      return false;
-    });
-
-    return {
-      model: modelName,
-      brand: brandHint,
-      screens: matchedScreens,
-      backCover: matchedBackCover ? { id: matchedBackCover.id, quality: matchedBackCover.quality, price: matchedBackCover.price } : undefined,
-      chargingPort: matchedPort ? { id: matchedPort.id, quality: matchedPort.quality, price: matchedPort.price } : undefined
-    };
+    return partsText.length > 0 ? partsText.join(" · ") : "Consultar disponibilidad bajo pedido";
   };
 
-  // Sugerencias inteligentes para el buscador de Taller
-  const searchSuggestions = useMemo(() => {
+  // Sugerencias de búsqueda en texto limpio (sin tarjetas que abrumen)
+  const textSuggestions = useMemo<TextSuggestion[]>(() => {
     if (!directSearchQuery.trim()) return [];
 
     const q = directSearchQuery.toLowerCase().trim();
@@ -421,18 +400,20 @@ export default function Home() {
       return m.model.toLowerCase().includes(q) || m.brand.toLowerCase().includes(q);
     });
 
-    return matched.slice(0, 8).map((m) => getPartsSummary(m.model, m.brand));
+    return matched.slice(0, 7).map((m) => ({
+      model: m.model,
+      brand: m.brand,
+      summaryLine: buildTextSummaryForModel(m.model, m.brand)
+    }));
   }, [directSearchQuery, allKnownModels]);
 
-  // Modelos disponibles para el selector guiado
+  // Modelos disponibles según la marca seleccionada en los filtros
   const availableModels = useMemo(() => {
     if (!selectedBrand) return [];
-    const list = POPULAR_MODELS[selectedBrand] || [];
-    if (!modelSearch) return list;
-    return list.filter((m) => m.toLowerCase().includes(modelSearch.toLowerCase()));
-  }, [selectedBrand, modelSearch]);
+    return POPULAR_MODELS[selectedBrand] || [];
+  }, [selectedBrand]);
 
-  // Reparaciones coincidentes en el selector guiado
+  // Reparaciones coincidentes cuando se completan los 3 filtros
   const matchingRepairs = useMemo(() => {
     if (!selectedBrand || !selectedModel || !selectedCategory) return [];
 
@@ -464,17 +445,25 @@ export default function Home() {
     return list;
   }, [deviceBrandFilter, devicePriceSort]);
 
+  // Al elegir una sugerencia de texto, autocompleta Marca y Modelo en los filtros de abajo
+  const handleSelectSuggestion = (suggestion: TextSuggestion) => {
+    setSelectedBrand(suggestion.brand);
+    setSelectedModel(suggestion.model);
+    setSelectedCategory(null);
+    setDirectSearchQuery("");
+  };
+
   // Enviar carrito como recibo formateado a WhatsApp
   const handleCheckoutWhatsApp = () => {
     if (cart.length === 0) return;
 
-    let message = `🧾 *COTIZACIÓN · TECNOTRADE PTY*\n`;
+    let message = `🧾 *PEDIDO / COTIZACIÓN · TECNOTRADE PTY*\n`;
     message += `──────────────────────\n`;
     if (customerName.trim()) {
-      message += `Cliente: ${customerName.trim()}\n`;
+      message += `Cliente / Tienda: ${customerName.trim()}\n`;
     }
     message += `Fecha: ${new Date().toLocaleDateString("es-PA")}\n\n`;
-    message += `*PEDIDO / COTIZACIÓN:*\n`;
+    message += `*DETALLE DEL PEDIDO:*\n`;
 
     cart.forEach((item, index) => {
       message += `${index + 1}. *${item.title}*\n`;
@@ -487,9 +476,9 @@ export default function Home() {
     if (customerNote.trim()) {
       message += `Nota: ${customerNote.trim()}\n`;
     }
-    message += `📍 Calle Ricardo Arias 5, Mobile Hub Pty\n`;
-    message += `🕒 Horario: 10 AM - 7 PM\n\n`;
-    message += `Hola TecnoTrade, me gustaría agendar para este pedido.`;
+    message += `📍 Mobile Hub Pty, Calle Ricardo Arias 5\n`;
+    message += `🕒 Lunes a Sábado: 10 AM - 7 PM\n\n`;
+    message += `Hola TecnoTrade, envío esta orden desde el catálogo web para coordinar disponibilidad.`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
@@ -497,13 +486,13 @@ export default function Home() {
 
   const handleConsultWhatsApp = (modelQuery?: string) => {
     const text = modelQuery 
-      ? `Hola TecnoTrade, quisiera consultar disponibilidad y precio para el modelo: ${modelQuery}`
-      : `Hola TecnoTrade, estoy buscando un teléfono en venta que no veo en el catálogo web. ¿Tienen disponibilidad o cotizan bajo pedido?`;
+      ? `Hola TecnoTrade, quisiera consultar disponibilidad y tarifa para: ${modelQuery}`
+      : `Hola TecnoTrade, les escribo desde el catálogo web. Busco cotizar equipos o repuestos (tienda / revendedor / cliente directo).`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   const handleSellPhoneWhatsApp = () => {
-    const text = `Hola TecnoTrade 👋 Vi en la web que también compran teléfonos o los reciben en Trade-In. Quiero cotizar mi equipo:\n\n• Modelo:\n• Capacidad (GB):\n• Estado / Detalles:`;
+    const text = `Hola TecnoTrade 👋 Vi en la web que también compran teléfonos o los reciben como parte de pago (Trade-In). Quiero cotizar mi equipo:\n\n• Modelo:\n• Capacidad (GB):\n• Estado / Detalles:`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
@@ -535,7 +524,7 @@ export default function Home() {
                 className="text-xs text-zinc-500 hover:text-zinc-900 font-normal inline-flex items-center gap-1 transition-colors"
               >
                 <MapPin className="w-3 h-3" />
-                <span>Calle Ricardo Arias · Panamá</span>
+                <span>Proveedor Técnico & Móviles · Panamá</span>
               </a>
             </div>
           </div>
@@ -549,7 +538,7 @@ export default function Home() {
               className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-zinc-700 hover:text-zinc-950 bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
             >
               <MapPin className="w-3.5 h-3.5 text-zinc-700" />
-              <span>Cómo llegar</span>
+              <span>Ubicación</span>
             </a>
 
             <button
@@ -557,7 +546,7 @@ export default function Home() {
               className="bg-zinc-900 hover:bg-black text-white text-xs font-medium px-4 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm btn-tactile"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
-              <span>Carrito</span>
+              <span>Pedido</span>
               {totalCartCount > 0 && (
                 <span className="bg-white text-zinc-900 text-[11px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center">
                   {totalCartCount}
@@ -574,7 +563,7 @@ export default function Home() {
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <div className="text-xs">
             <p className="font-semibold">{addedItemNotification}</p>
-            <p className="text-zinc-400 text-[11px]">Agregado al carrito</p>
+            <p className="text-zinc-400 text-[11px]">Añadido al pedido</p>
           </div>
           <button 
             onClick={() => setIsCartOpen(true)}
@@ -588,7 +577,7 @@ export default function Home() {
       {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-5xl mx-auto px-6 pt-14 md:pt-18">
 
-        {/* HERO EDITORIAL CON ENTRADA ESCALONADA SUAVE */}
+        {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR (TIENDAS / REVENDEDORES / CLIENTE FINAL) */}
         <div className="max-w-2xl mb-12">
           <a
             href={GOOGLE_MAPS_URL}
@@ -602,15 +591,15 @@ export default function Home() {
           </a>
 
           <h1 className="animate-fadeIn stagger-1 text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
-            Reparación honesta. <br />
-            <span className="font-semibold text-zinc-950">Móviles certificados.</span>
+            Proveedor de taller <br />
+            <span className="font-semibold text-zinc-950">y equipos certificados.</span>
           </h1>
 
           <p className="animate-fadeIn stagger-2 text-base text-zinc-600 font-normal leading-relaxed mb-8">
-            Consulta los precios transparentes de nuestro taller o explora los dispositivos en stock listos para entrega inmediata con garantía.
+            Suministro de reparaciones especializadas y teléfonos verificados para <strong className="font-semibold text-zinc-900">tiendas, revendedores y clientes directos</strong> en Panamá. Tarifas claras, repuestos en distintas calidades y respuesta inmediata.
           </p>
 
-          {/* BIFURCADOR SUPERIOR EXCLUSIVO (Taller vs Teléfonos) */}
+          {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
           <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
             <button
               onClick={() => setActiveTab("taller")}
@@ -620,7 +609,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Taller de Reparaciones
+              Catálogo de Reparaciones
             </button>
             <button
               onClick={() => setActiveTab("productos")}
@@ -630,552 +619,282 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Dispositivos en Venta ({filteredDevices.length})
+              Equipos en Venta ({filteredDevices.length})
             </button>
           </div>
         </div>
 
         {/* ============================================================== */}
-        {/* TALLER // BUSCADOR DIRECTO O SELECTOR GUIADO */}
+        {/* TALLER // BUSCADOR SUPERIOR + FILTROS ABAJO UNIFICADOS */}
         {/* ============================================================== */}
         {activeTab === "taller" && (
           <div className="space-y-10 animate-fadeIn stagger-2 mb-20">
             
             <div className="bg-[#FAF9F8] rounded-[2.5rem] p-6 sm:p-10 border border-black/[0.04] transition-all">
               
-              {/* Encabezado del Taller con Selector de Método (Buscador vs Filtros) */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-black/[0.06] mb-8 gap-4">
+              {/* Cabecera del Cotizador */}
+              <div className="flex items-baseline justify-between pb-6 border-b border-black/[0.06] mb-8">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
-                    Cotizador de Taller
+                    Cotizador de Servicio Técnico
                   </h2>
                   <p className="text-xs text-zinc-600 mt-1">
-                    Encuentra piezas con instalación y calibración incluidas
+                    Busca tu modelo arriba o selecciona marca y pieza abajo para armar tu orden
                   </p>
                 </div>
 
-                {/* Alternador de Método de Búsqueda */}
-                <div className="inline-flex p-1 bg-white rounded-2xl border border-black/[0.06] shadow-2xs self-start sm:self-auto">
+                {(selectedBrand || selectedModel || selectedCategory || directSearchQuery) && (
                   <button
-                    onClick={() => setTallerMode("search")}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 btn-tactile ${
-                      tallerMode === "search"
-                        ? "bg-zinc-900 text-white font-semibold shadow-xs"
-                        : "text-zinc-600 hover:text-zinc-900"
-                    }`}
+                    onClick={() => {
+                      setSelectedBrand(null);
+                      setSelectedModel(null);
+                      setSelectedCategory(null);
+                      setDirectSearchQuery("");
+                    }}
+                    className="text-xs text-zinc-600 hover:text-zinc-900 flex items-center gap-1 font-medium transition-colors shrink-0"
                   >
-                    <Search className="w-3.5 h-3.5" />
-                    <span>Buscador Inteligente</span>
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Limpiar</span>
                   </button>
-                  <button
-                    onClick={() => setTallerMode("steps")}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 btn-tactile ${
-                      tallerMode === "steps"
-                        ? "bg-zinc-900 text-white font-semibold shadow-xs"
-                        : "text-zinc-600 hover:text-zinc-900"
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Filtros por Pasos</span>
-                  </button>
-                </div>
+                )}
               </div>
 
-              {/* ------------------------------------------------------------ */}
-              {/* OPCIÓN 1: BUSCADOR INTELIGENTE CON SUGERENCIAS EN VIVO */}
-              {/* ------------------------------------------------------------ */}
-              {tallerMode === "search" && (
-                <div className="space-y-6 animate-fadeIn">
-                  
-                  {/* Caja de Búsqueda */}
-                  <div className="relative">
-                    <div className="bg-white rounded-2xl px-5 py-4 flex items-center gap-3.5 border border-black/[0.08] shadow-sm focus-within:border-black/30 focus-within:shadow-md transition-all duration-300">
-                      <Search className="w-5 h-5 text-zinc-400 shrink-0" />
-                      <input 
-                        type="text"
-                        value={directSearchQuery}
-                        onChange={(e) => setDirectSearchQuery(e.target.value)}
-                        placeholder="Escribe el modelo (ej: iPhone 13, Galaxy S23, Honor Magic 6, Poco X6)..."
-                        className="w-full bg-transparent text-sm text-zinc-900 focus:outline-none placeholder:text-zinc-400 font-medium"
-                      />
-                      {directSearchQuery && (
-                        <button 
-                          onClick={() => setDirectSearchQuery("")} 
-                          className="text-zinc-400 hover:text-zinc-900 p-1 transition-colors"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
+              {/* 1. BARRA DE BÚSQUEDA ARRIBA CON SUGERENCIAS DE SOLO TEXTO */}
+              <div className="relative mb-10">
+                <div className="bg-white rounded-2xl px-5 py-3.5 flex items-center gap-3.5 border border-black/[0.08] shadow-xs focus-within:border-black/30 transition-all">
+                  <Search className="w-4 h-4 text-zinc-400 shrink-0" />
+                  <input 
+                    type="text"
+                    value={directSearchQuery}
+                    onChange={(e) => setDirectSearchQuery(e.target.value)}
+                    placeholder="Buscar modelo rápido (ej: iPhone 13, Galaxy S23, Honor 90, Redmi Note 13)..."
+                    className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 focus:outline-none placeholder:text-zinc-400"
+                  />
+                  {directSearchQuery && (
+                    <button 
+                      onClick={() => setDirectSearchQuery("")} 
+                      className="text-zinc-400 hover:text-zinc-900 p-1"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
 
-                    {/* Chips de sugerencias rápidas populares */}
-                    {!directSearchQuery && (
-                      <div className="mt-4 flex flex-wrap items-center gap-2 animate-fadeIn">
-                        <span className="text-[11px] text-zinc-600 font-medium mr-1">Populares:</span>
-                        {[
-                          "iPhone 13", 
-                          "iPhone 14 Pro", 
-                          "Galaxy A54", 
-                          "Galaxy S23 Ultra", 
-                          "Honor Magic 6 Lite", 
-                          "Honor 90", 
-                          "Redmi Note 13"
-                        ].map((m) => (
-                          <button
-                            key={m}
-                            onClick={() => setDirectSearchQuery(m)}
-                            className="text-xs bg-white text-zinc-700 px-3 py-1.5 rounded-xl border border-black/[0.05] hover:border-black/20 hover:text-black transition-all shadow-2xs btn-tactile"
-                          >
-                            {m}
-                          </button>
-                        ))}
+                {/* Lista desplegable minimalista de sugerencias en SOLO TEXTO */}
+                {directSearchQuery.trim() && (
+                  <div className="mt-2 bg-white rounded-2xl border border-black/[0.08] shadow-lg overflow-hidden divide-y divide-black/[0.04] animate-fadeIn">
+                    {textSuggestions.length > 0 ? (
+                      textSuggestions.map((sug) => (
+                        <button
+                          key={sug.model}
+                          onClick={() => handleSelectSuggestion(sug)}
+                          className="w-full px-5 py-3 text-left hover:bg-[#FAF9F8] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-1"
+                        >
+                          <span className="text-xs sm:text-sm font-semibold text-zinc-900">
+                            {sug.model}
+                          </span>
+                          <span className="text-[11px] sm:text-xs text-zinc-500 font-normal">
+                            {sug.summaryLine}
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-5 py-3.5 flex items-center justify-between text-xs text-zinc-600">
+                        <span>Sin coincidencias exactas para &ldquo;{directSearchQuery}&rdquo;</span>
+                        <button
+                          onClick={() => handleConsultWhatsApp(directSearchQuery)}
+                          className="font-semibold text-zinc-900 underline hover:text-black"
+                        >
+                          Consultar por WhatsApp
+                        </button>
                       </div>
                     )}
                   </div>
+                )}
+              </div>
 
-                  {/* Resultados y Sugerencias detalladas con repuestos y calidades */}
-                  {directSearchQuery.trim() && (
-                    <div className="space-y-3 pt-2 animate-fadeIn">
-                      <div className="flex items-center justify-between px-1">
-                        <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
-                          Sugerencias y Disponibilidad ({searchSuggestions.length})
-                        </span>
-                        <span className="text-[11px] text-zinc-600">
-                          Precios con mano de obra incluida
-                        </span>
-                      </div>
-
-                      {searchSuggestions.length > 0 ? (
-                        <div className="space-y-3">
-                          {searchSuggestions.map((item) => (
-                            <div 
-                              key={item.model}
-                              className="bg-white rounded-3xl p-5 sm:p-6 border border-black/[0.06] shadow-xs minimal-card-hover animate-scaleIn"
-                            >
-                              {/* Cabecera del modelo */}
-                              <div className="flex items-center justify-between mb-4 pb-3 border-b border-black/[0.04]">
-                                <div className="flex items-center gap-2.5">
-                                  <h4 className="font-semibold text-base sm:text-lg text-zinc-900">
-                                    {item.model}
-                                  </h4>
-                                  <span className="text-[10px] bg-zinc-100 text-zinc-700 px-2.5 py-0.5 rounded-full font-medium">
-                                    {item.brand}
-                                  </span>
-                                </div>
-
-                                <button
-                                  onClick={() => handleConsultWhatsApp(item.model)}
-                                  className="text-[11px] text-zinc-600 hover:text-black font-medium flex items-center gap-1 transition-colors"
-                                >
-                                  <span>¿Otra pieza?</span>
-                                  <ArrowRight className="w-3 h-3" />
-                                </button>
-                              </div>
-
-                              {/* Desglose de piezas disponibles: Pantalla (calidades), Tapa, Puerto */}
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                
-                                {/* 1. PANTALLAS Y CALIDADES */}
-                                <div className="bg-[#FAF9F8] rounded-2xl p-4 border border-black/[0.03] flex flex-col justify-between">
-                                  <div>
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
-                                        📱 Pantalla
-                                      </span>
-                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
-                                        {item.screens.length > 0 ? "Disponible" : "Bajo Pedido"}
-                                      </span>
-                                    </div>
-                                    <p className="text-[11px] text-zinc-600 mb-3">
-                                      Calidades y tecnologías en stock:
-                                    </p>
-                                  </div>
-
-                                  {item.screens.length > 0 ? (
-                                    <div className="space-y-1.5">
-                                      {item.screens.map((sc) => (
-                                        <div 
-                                          key={sc.id}
-                                          className="bg-white rounded-xl p-2 px-2.5 flex items-center justify-between border border-black/[0.04] text-xs shadow-2xs"
-                                        >
-                                          <div>
-                                            <span className="font-medium text-zinc-800">{sc.quality}</span>
-                                            <span className="font-bold text-zinc-950 ml-1.5">${sc.price}</span>
-                                          </div>
-                                          <button
-                                            onClick={() => addToCart({
-                                              id: sc.id,
-                                              title: `${item.model} (Pantalla ${sc.quality})`,
-                                              subtitle: `Repuesto calibrado: ${sc.quality}`,
-                                              price: sc.price
-                                            })}
-                                            className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
-                                          >
-                                            <Plus className="w-3 h-3" />
-                                            <span>Añadir</span>
-                                          </button>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => handleConsultWhatsApp(`${item.model} Pantalla`)}
-                                      className="text-xs text-zinc-600 hover:text-black underline text-left pt-2"
-                                    >
-                                      Consultar pantalla en WhatsApp
-                                    </button>
-                                  )}
-                                </div>
-
-                                {/* 2. TAPA TRASERA */}
-                                <div className="bg-[#FAF9F8] rounded-2xl p-4 border border-black/[0.03] flex flex-col justify-between">
-                                  <div>
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
-                                        🪟 Tapa Trasera
-                                      </span>
-                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
-                                        {item.backCover ? "Disponible" : "Bajo Pedido"}
-                                      </span>
-                                    </div>
-                                    <p className="text-[11px] text-zinc-600 mb-3">
-                                      Cristal / chasis con sellado hermético
-                                    </p>
-                                  </div>
-
-                                  {item.backCover ? (
-                                    <div className="bg-white rounded-xl p-2 px-2.5 flex items-center justify-between border border-black/[0.04] text-xs shadow-2xs mt-auto">
-                                      <div>
-                                        <span className="text-zinc-600 text-[11px]">Costo:</span>
-                                        <span className="font-bold text-zinc-950 ml-1.5">${item.backCover.price}</span>
-                                      </div>
-                                      <button
-                                        onClick={() => addToCart({
-                                          id: item.backCover!.id,
-                                          title: `${item.model} (Tapa Trasera)`,
-                                          subtitle: `Calidad: ${item.backCover!.quality}`,
-                                          price: item.backCover!.price
-                                        })}
-                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
-                                      >
-                                        <Plus className="w-3 h-3" />
-                                        <span>Añadir</span>
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => handleConsultWhatsApp(`${item.model} Tapa Trasera`)}
-                                      className="text-xs text-zinc-600 hover:text-black underline text-left pt-2"
-                                    >
-                                      Consultar tapa en WhatsApp
-                                    </button>
-                                  )}
-                                </div>
-
-                                {/* 3. PUERTO / PIN DE CARGA */}
-                                <div className="bg-[#FAF9F8] rounded-2xl p-4 border border-black/[0.03] flex flex-col justify-between">
-                                  <div>
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
-                                        ⚡ Pin de Carga
-                                      </span>
-                                      <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
-                                        {item.chargingPort ? "Disponible" : "Bajo Pedido"}
-                                      </span>
-                                    </div>
-                                    <p className="text-[11px] text-zinc-600 mb-3">
-                                      Conector de carga rápida y micrófono
-                                    </p>
-                                  </div>
-
-                                  {item.chargingPort ? (
-                                    <div className="bg-white rounded-xl p-2 px-2.5 flex items-center justify-between border border-black/[0.04] text-xs shadow-2xs mt-auto">
-                                      <div>
-                                        <span className="text-zinc-600 text-[11px]">Costo:</span>
-                                        <span className="font-bold text-zinc-950 ml-1.5">${item.chargingPort.price}</span>
-                                      </div>
-                                      <button
-                                        onClick={() => addToCart({
-                                          id: item.chargingPort!.id,
-                                          title: `${item.model} (Pin de Carga)`,
-                                          subtitle: `Calidad: ${item.chargingPort!.quality}`,
-                                          price: item.chargingPort!.price
-                                        })}
-                                        className="bg-zinc-900 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 btn-tactile"
-                                      >
-                                        <Plus className="w-3 h-3" />
-                                        <span>Añadir</span>
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => handleConsultWhatsApp(`${item.model} Pin de Carga`)}
-                                      className="text-xs text-zinc-600 hover:text-black underline text-left pt-2"
-                                    >
-                                      Consultar pin en WhatsApp
-                                    </button>
-                                  )}
-                                </div>
-
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="bg-white rounded-3xl p-8 border border-black/[0.06] text-center space-y-3 animate-scaleIn">
-                          <p className="text-sm font-semibold text-zinc-800">
-                            No encontramos &ldquo;{directSearchQuery}&rdquo; en la lista rápida
-                          </p>
-                          <p className="text-xs text-zinc-600 max-w-md mx-auto">
-                            Tenemos repuestos para casi todos los modelos del mercado bajo pedido inmediato. Escríbenos directamente a WhatsApp y te cotizamos al momento.
-                          </p>
-                          <button
-                            onClick={() => handleConsultWhatsApp(directSearchQuery)}
-                            className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold px-5 py-2.5 rounded-full inline-flex items-center gap-2 transition-all shadow-sm btn-tactile"
-                          >
-                            <MessageCircle className="w-4 h-4 fill-current" />
-                            <span>Consultar {directSearchQuery} en WhatsApp</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {!directSearchQuery.trim() && (
-                    <div className="bg-white/80 rounded-2xl p-8 text-center border border-black/[0.03]">
-                      <p className="text-xs text-zinc-600">
-                        Escribe el modelo de tu teléfono arriba para ver al instante si hay pantalla (Incell, OLED u Original), tapa trasera o puerto de carga con sus precios exactos.
-                      </p>
-                    </div>
-                  )}
-
+              {/* 2. FILTROS DEBAJO DE LA BARRA DE BÚSQUEDA */}
+              <div className="space-y-8">
+                
+                {/* PASO 1: MARCA */}
+                <div>
+                  <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-3.5">
+                    1. Marca
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {(["Apple", "Samsung", "Honor", "Xiaomi", "Google"] as const).map((brand) => (
+                      <button
+                        key={brand}
+                        onClick={() => {
+                          setSelectedBrand(brand);
+                          setSelectedModel(null);
+                          setSelectedCategory(null);
+                        }}
+                        className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
+                          selectedBrand === brand
+                            ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
+                            : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
+                        }`}
+                      >
+                        {brand}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
 
-              {/* ------------------------------------------------------------ */}
-              {/* OPCIÓN 2: SELECTOR GUIADO POR PASOS (Marca ➔ Modelo ➔ Repuesto) */}
-              {/* ------------------------------------------------------------ */}
-              {tallerMode === "steps" && (
-                <div className="space-y-10 animate-fadeIn">
-                  
-                  {/* PASO 1: MARCAS */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block">
-                        1. Marca del dispositivo
+                {/* PASO 2: MODELO */}
+                {selectedBrand && (
+                  <div className="animate-fadeIn">
+                    <div className="flex items-center justify-between mb-3.5">
+                      <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
+                        2. Modelo de {selectedBrand}
                       </span>
-                      {(selectedBrand || selectedModel || selectedCategory) && (
-                        <button
-                          onClick={() => {
-                            setSelectedBrand(null);
-                            setSelectedModel(null);
-                            setSelectedCategory(null);
-                            setModelSearch("");
-                          }}
-                          className="text-xs text-zinc-600 hover:text-zinc-900 flex items-center gap-1 font-medium transition-colors"
-                        >
-                          <RotateCcw className="w-3.5 h-3.5" />
-                          <span>Reiniciar</span>
-                        </button>
-                      )}
+                      <span className="text-xs text-zinc-500">
+                        {availableModels.length} modelos
+                      </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-2.5">
-                      {(["Apple", "Samsung", "Honor", "Xiaomi", "Google"] as const).map((brand) => (
+                    <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto p-0.5 scrollbar-thin">
+                      {availableModels.map((model) => (
                         <button
-                          key={brand}
+                          key={model}
                           onClick={() => {
-                            setSelectedBrand(brand);
-                            setSelectedModel(null);
+                            setSelectedModel(model);
                             setSelectedCategory(null);
-                            setModelSearch("");
                           }}
-                          className={`px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
-                            selectedBrand === brand
-                              ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
+                          className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
+                            selectedModel === model
+                              ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
                               : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
                           }`}
                         >
-                          {brand}
+                          {model}
                         </button>
                       ))}
                     </div>
                   </div>
+                )}
 
-                  {/* PASO 2: MODELOS (SOLO VISIBLE AL ELEGIR MARCA) */}
-                  {selectedBrand && (
-                    <div className="animate-fadeIn">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
-                          2. Modelo de {selectedBrand}
-                        </span>
-                        <span className="text-xs text-zinc-600">
-                          {availableModels.length} opciones
-                        </span>
-                      </div>
-
-                      {/* Buscador de modelo interno */}
-                      <div className="mb-4">
-                        <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3 border border-black/[0.06] shadow-2xs">
-                          <Search className="w-4 h-4 text-zinc-400" />
-                          <input 
-                            type="text"
-                            value={modelSearch}
-                            onChange={(e) => setModelSearch(e.target.value)}
-                            placeholder={`Filtrar ${selectedBrand} (ej: 13, Ultra, Note, Pro)...`}
-                            className="w-full bg-transparent text-xs text-zinc-900 focus:outline-none"
-                          />
-                          {modelSearch && (
-                            <button onClick={() => setModelSearch("")} className="text-xs text-zinc-400">
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Chips de modelos */}
-                      <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto p-1 scrollbar-thin">
-                        {availableModels.map((model) => (
+                {/* PASO 3: REPUESTO / SERVICIO */}
+                {selectedModel && (
+                  <div className="animate-fadeIn">
+                    <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-3.5">
+                      3. Pieza requerida para {selectedModel}
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {[
+                        { id: "Pantallas", title: "Pantalla", desc: "Calidades Incell, OLED y Original" },
+                        { id: "Tapas Traseras", title: "Tapa Trasera", desc: "Reemplazo de cristal posterior" },
+                        { id: "Puertos de Carga", title: "Puerto de Carga", desc: "Flex de carga y micrófono" },
+                      ].map((cat) => {
+                        const isSelected = selectedCategory === cat.id;
+                        return (
                           <button
-                            key={model}
-                            onClick={() => {
-                              setSelectedModel(model);
-                              setSelectedCategory(null);
-                            }}
-                            className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
-                              selectedModel === model
-                                ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
-                                : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
+                            key={cat.id}
+                            onClick={() => setSelectedCategory(cat.id as any)}
+                            className={`p-4 sm:p-5 rounded-2xl border text-left transition-all btn-tactile ${
+                              isSelected
+                                ? "bg-zinc-900 text-white border-zinc-900 shadow-xs"
+                                : "bg-white text-zinc-800 border-black/[0.05] hover:border-black/20"
                             }`}
                           >
-                            {model}
+                            <p className="font-semibold text-sm">{cat.title}</p>
+                            <p className={`text-xs mt-1 ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
+                              {cat.desc}
+                            </p>
                           </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* RESULTADOS REVELADOS AL ESPECIFICAR LOS 3 PASOS */}
+                {selectedBrand && selectedModel && selectedCategory && (
+                  <div className="pt-8 border-t border-black/[0.06] animate-fadeIn">
+                    <div className="mb-5">
+                      <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold block">
+                        Cotización para {selectedModel}
+                      </span>
+                      <h3 className="text-lg font-semibold text-zinc-900 mt-0.5">
+                        Calidades disponibles · {selectedCategory}
+                      </h3>
+                    </div>
+
+                    {matchingRepairs.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {matchingRepairs.map((item) => (
+                          <div 
+                            key={item.id}
+                            className="bg-white rounded-3xl p-6 border border-black/[0.06] shadow-xs flex flex-col justify-between minimal-card-hover animate-scaleIn"
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-3">
+                                <span className="bg-zinc-100 text-zinc-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
+                                  {item.quality}
+                                </span>
+                                <span className="text-[11px] text-zinc-500">
+                                  Incluye instalación
+                                </span>
+                              </div>
+
+                              <h4 className="font-semibold text-base text-zinc-900 mb-1">
+                                {item.model}
+                              </h4>
+                              <p className="text-xs text-zinc-500 mb-5">
+                                Repuesto verificado con garantía de taller.
+                              </p>
+                            </div>
+
+                            <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between">
+                              <div>
+                                <span className="text-[10px] text-zinc-500 block uppercase font-medium">Tarifa</span>
+                                <span className="text-2xl font-bold text-zinc-900 tracking-tight">
+                                  ${item.price.toFixed(2)}
+                                </span>
+                              </div>
+
+                              <button
+                                onClick={() => addToCart({
+                                  id: item.id,
+                                  title: `${item.model} (${item.category})`,
+                                  subtitle: `Calidad: ${item.quality}`,
+                                  price: item.price
+                                })}
+                                className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-xs btn-tactile"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>Añadir</span>
+                              </button>
+                            </div>
+                          </div>
                         ))}
                       </div>
-                    </div>
-                  )}
-
-                  {/* PASO 3: TIPO DE REPARACIÓN */}
-                  {selectedModel && (
-                    <div className="animate-fadeIn">
-                      <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-4">
-                        3. Tipo de reparación para {selectedModel}
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {[
-                          { id: "Pantallas", title: "Pantalla", desc: "Display OLED o Incell calibrada" },
-                          { id: "Tapas Traseras", title: "Tapa Trasera", desc: "Cristal o chasis de reemplazo" },
-                          { id: "Puertos de Carga", title: "Pin de Carga", desc: "Reparación de conector y micrófono" },
-                        ].map((cat) => {
-                          const isSelected = selectedCategory === cat.id;
-                          return (
-                            <button
-                              key={cat.id}
-                              onClick={() => setSelectedCategory(cat.id as any)}
-                              className={`p-5 rounded-2xl border text-left transition-all btn-tactile ${
-                                isSelected
-                                  ? "bg-zinc-900 text-white border-zinc-900 shadow-sm"
-                                  : "bg-white text-zinc-800 border-black/[0.05] hover:border-black/20"
-                              }`}
-                            >
-                              <p className="font-semibold text-sm">{cat.title}</p>
-                              <p className={`text-xs mt-1 ${isSelected ? "text-zinc-300" : "text-zinc-600"}`}>
-                                {cat.desc}
-                              </p>
-                            </button>
-                          );
-                        })}
+                    ) : (
+                      <div className="p-8 rounded-3xl bg-white border border-black/[0.06] text-center text-zinc-600 text-xs animate-scaleIn">
+                        <p>Esta pieza específica se maneja bajo pedido directo en almacén.</p>
+                        <button
+                          onClick={() => handleConsultWhatsApp(`${selectedModel} - ${selectedCategory}`)}
+                          className="mt-4 bg-zinc-900 text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5 btn-tactile"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          <span>Consultar disponibilidad en WhatsApp</span>
+                        </button>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                )}
 
-                  {/* RESULTADOS REVELADOS SOLO AL COMPLETAR LOS 3 PASOS */}
-                  {selectedBrand && selectedModel && selectedCategory && (
-                    <div className="pt-8 border-t border-black/[0.06] animate-fadeIn">
-                      <div className="mb-5">
-                        <span className="text-xs text-zinc-600 uppercase tracking-wider font-semibold block">
-                          Resultado para {selectedModel}
-                        </span>
-                        <h3 className="text-lg font-semibold text-zinc-900 mt-0.5">
-                          Opciones disponibles ({selectedCategory})
-                        </h3>
-                      </div>
+                {/* AVISO CUANDO AÚN NO SE HA SELECCIONADO LA PIEZA */}
+                {(!selectedBrand || !selectedModel || !selectedCategory) && (
+                  <div className="bg-white/80 rounded-2xl p-5 text-center text-zinc-500 text-xs border border-black/[0.03]">
+                    <p>
+                      Especifica el equipo y la pieza para mostrar las tarifas exactas y añadirlas a tu pedido.
+                    </p>
+                  </div>
+                )}
 
-                      {matchingRepairs.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          {matchingRepairs.map((item) => (
-                            <div 
-                              key={item.id}
-                              className="bg-white rounded-3xl p-6 border border-black/[0.06] shadow-sm flex flex-col justify-between minimal-card-hover animate-scaleIn"
-                            >
-                              <div>
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className="bg-zinc-100 text-zinc-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
-                                    {item.quality}
-                                  </span>
-                                  <span className="text-[11px] text-zinc-600">
-                                    Garantía taller
-                                  </span>
-                                </div>
-
-                                <h4 className="font-semibold text-base text-zinc-900 mb-1">
-                                  {item.model}
-                                </h4>
-                                <p className="text-xs text-zinc-600 mb-5">
-                                  Instalación profesional y sellado incluidos.
-                                </p>
-                              </div>
-
-                              <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between">
-                                <div>
-                                  <span className="text-[10px] text-zinc-600 block uppercase font-medium">Precio cerrado</span>
-                                  <span className="text-2xl font-bold text-zinc-900 tracking-tight">
-                                    ${item.price.toFixed(2)}
-                                  </span>
-                                </div>
-
-                                <button
-                                  onClick={() => addToCart({
-                                    id: item.id,
-                                    title: `${item.model} (${item.category})`,
-                                    subtitle: `Calidad: ${item.quality}`,
-                                    price: item.price
-                                  })}
-                                  className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
-                                >
-                                  <Plus className="w-3.5 h-3.5" />
-                                  <span>Añadir</span>
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="p-8 rounded-3xl bg-white border border-black/[0.06] text-center text-zinc-600 text-xs animate-scaleIn">
-                          <p>Para este modelo específico cotizamos de inmediato bajo pedido.</p>
-                          <button
-                            onClick={() => handleConsultWhatsApp(`${selectedModel} ${selectedCategory}`)}
-                            className="mt-4 bg-zinc-900 text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5 btn-tactile"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5" />
-                            <span>Consultar en WhatsApp</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* AVISO DE SELECCIÓN INCOMPLETA */}
-                  {(!selectedBrand || !selectedModel || !selectedCategory) && (
-                    <div className="bg-white/80 rounded-2xl p-6 text-center text-zinc-600 text-xs mt-4 border border-black/[0.03]">
-                      <p>
-                        Completa los 3 pasos anteriores para ver los repuestos y agregarlos al carrito.
-                      </p>
-                    </div>
-                  )}
-
-                </div>
-              )}
+              </div>
 
             </div>
 
@@ -1183,7 +902,7 @@ export default function Home() {
         )}
 
         {/* ============================================================== */}
-        {/* DISPOSITIVOS EN VENTA (SHOWROOM CON FILTROS Y ORDENAMIENTO) */}
+        {/* EQUIPOS EN VENTA (PARA CLIENTE FINAL Y REVENDEDORES) */}
         {/* ============================================================== */}
         {activeTab === "productos" && (
           <div className="animate-fadeIn mb-20">
@@ -1192,17 +911,17 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
               <div>
                 <h2 className="text-2xl font-semibold text-zinc-900">
-                  Dispositivos de Reestreno Certificados
+                  Stock de Dispositivos Verificados
                 </h2>
                 <p className="text-xs text-zinc-600 mt-1">
-                  Equipos garantizados, probados minuciosamente en taller (6 meses de garantía)
+                  Disponibles por unidad para cliente final o para tiendas y revendedores
                 </p>
               </div>
 
               {/* Selector de ordenamiento: menor a mayor / mayor a menor */}
               <div className="flex items-center gap-2 self-start md:self-auto bg-[#F4F4F6] p-1.5 rounded-2xl border border-black/[0.04]">
                 <ArrowUpDown className="w-3.5 h-3.5 text-zinc-500 ml-2" />
-                <span className="text-xs text-zinc-600 font-medium">Ordenar:</span>
+                <span className="text-xs text-zinc-600 font-medium">Precio:</span>
                 <button
                   onClick={() => setDevicePriceSort("default")}
                   className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
@@ -1252,13 +971,12 @@ export default function Home() {
                 </button>
               ))}
 
-              {/* Botón especial: Consultar por otro en WhatsApp */}
               <button
                 onClick={() => handleConsultWhatsApp()}
                 className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80 hover:bg-emerald-100 transition-all shadow-2xs btn-tactile"
               >
                 <MessageCircle className="w-3.5 h-3.5 fill-current text-emerald-600" />
-                <span>Consultar por otro en WhatsApp</span>
+                <span>Consultar otro modelo o lote en WhatsApp</span>
               </button>
             </div>
 
@@ -1304,13 +1022,13 @@ export default function Home() {
                             />
                           ))}
                         </div>
-                        <span className="text-xs text-zinc-600 ml-auto">Garantía 6 Meses</span>
+                        <span className="text-xs text-zinc-500 ml-auto">100% Verificado</span>
                       </div>
                     </div>
 
                     <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between mt-auto">
                       <div>
-                        <span className="text-[10px] text-zinc-600 block uppercase font-medium">Precio final</span>
+                        <span className="text-[10px] text-zinc-500 block uppercase font-medium">Precio</span>
                         <span className="text-2xl font-bold text-zinc-900 tracking-tight">${dev.price}</span>
                       </div>
 
@@ -1324,7 +1042,7 @@ export default function Home() {
                         className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
                       >
                         <Plus className="w-3.5 h-3.5" />
-                        <span>Al Carrito</span>
+                        <span>Añadir</span>
                       </button>
                     </div>
                   </div>
@@ -1333,10 +1051,10 @@ export default function Home() {
             ) : (
               <div className="bg-[#FAF9F8] rounded-[2rem] p-12 text-center border border-black/[0.04] animate-scaleIn">
                 <p className="text-sm font-semibold text-zinc-900 mb-2">
-                  No hay dispositivos listados en este filtro por ahora
+                  Sin unidades listadas en esta marca por el momento
                 </p>
                 <p className="text-xs text-zinc-600 max-w-md mx-auto mb-6">
-                  Renovamos inventario semanalmente. Consúltanos por el modelo específico que buscas y te lo conseguimos de inmediato.
+                  Consulta directamente por WhatsApp el stock del día para revendedores y clientes finales.
                 </p>
                 <button
                   onClick={() => handleConsultWhatsApp(deviceBrandFilter !== "Todos" ? deviceBrandFilter : undefined)}
@@ -1352,20 +1070,20 @@ export default function Home() {
         )}
 
         {/* ============================================================== */}
-        {/* SECCIÓN DE UBICACIÓN OFICIAL & REDES (GOOGLE MAPS + INSTAGRAM) */}
+        {/* SECCIÓN DE PROVEEDOR / UBICACIÓN OFICIAL (GOOGLE MAPS + IG) */}
         {/* ============================================================== */}
         <section className="mt-16 pt-12 border-t border-black/[0.06] animate-fadeIn">
           <div className="bg-[#FAF9F8] rounded-[2.5rem] p-8 sm:p-10 border border-black/[0.04] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="space-y-3 max-w-xl">
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-600">
                 <MapPin className="w-3.5 h-3.5 text-zinc-900" />
-                <span>Ubicación del Taller & Showroom</span>
+                <span>Centro de Servicio & Distribución</span>
               </span>
               <h3 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
                 Mobile Hub Pty · Calle Ricardo Arias 5, Panamá
               </h3>
               <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-                Cerca de la Iglesia del Carmen. Atención personalizada de Lunes a Sábado de 10:00 AM a 7:00 PM. Envíos a todo el país y entregas a domicilio en la ciudad.
+                Atendemos a tiendas aliadas, revendedores y clientes finales de Lunes a Sábado (10:00 AM a 7:00 PM). Mensajería en Ciudad de Panamá y envíos a todas las provincias.
               </p>
             </div>
 
@@ -1406,10 +1124,10 @@ export default function Home() {
             <div className="flex items-center justify-between pb-5 border-b border-black/[0.06]">
               <div>
                 <h3 className="font-semibold text-lg text-zinc-900">
-                  Tu Cotización
+                  Resumen del Pedido
                 </h3>
                 <span className="text-xs text-zinc-600">
-                  {totalCartCount} {totalCartCount === 1 ? "artículo" : "artículos"} seleccionados
+                  {totalCartCount} {totalCartCount === 1 ? "ítem seleccionado" : "ítems seleccionados"}
                 </span>
               </div>
               <button
@@ -1425,9 +1143,9 @@ export default function Home() {
               {cart.length === 0 ? (
                 <div className="text-center py-24 text-zinc-400">
                   <ShoppingCart className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-semibold text-zinc-700">Tu carrito está vacío</p>
+                  <p className="text-sm font-semibold text-zinc-700">Tu pedido está vacío</p>
                   <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
-                    Selecciona una reparación en el cotizador o un teléfono de reestreno.
+                    Agrega reparaciones o dispositivos del catálogo para generar tu recibo hacia WhatsApp.
                   </p>
                 </div>
               ) : (
@@ -1477,25 +1195,25 @@ export default function Home() {
               <div className="pt-4 border-t border-black/[0.06] space-y-3.5">
                 <div>
                   <label className="text-xs font-medium text-zinc-600 block mb-1">
-                    Tu nombre (opcional)
+                    Nombre o Tienda (opcional)
                   </label>
                   <input 
                     type="text" 
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="Ej: Carlos Mendoza"
+                    placeholder="Ej: Carlos / Tienda Aliada"
                     className="w-full bg-[#FAF9F8] px-4 py-2.5 rounded-xl text-xs text-zinc-900 focus:outline-none border border-black/[0.04]"
                   />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-zinc-600 block mb-1">
-                    Detalle del equipo o falla (opcional)
+                    Notas del pedido (opcional)
                   </label>
                   <input 
                     type="text" 
                     value={customerNote}
                     onChange={(e) => setCustomerNote(e.target.value)}
-                    placeholder="Ej: Pantalla rota pero enciende"
+                    placeholder="Ej: Para entrega hoy / Color del repuesto"
                     className="w-full bg-[#FAF9F8] px-4 py-2.5 rounded-xl text-xs text-zinc-900 focus:outline-none border border-black/[0.04]"
                   />
                 </div>
@@ -1512,7 +1230,7 @@ export default function Home() {
                   className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20 btn-tactile"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
-                  <span>Enviar Cotización a WhatsApp</span>
+                  <span>Enviar Pedido a WhatsApp</span>
                 </button>
               </div>
             )}
@@ -1535,7 +1253,7 @@ export default function Home() {
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400" />
             </div>
             <span className="text-xs font-semibold tracking-tight">
-              Carrito ({totalCartCount})
+              Ver Pedido ({totalCartCount})
             </span>
             <span className="text-xs text-zinc-500 font-normal">·</span>
             <span className="text-xs font-bold text-emerald-400">
@@ -1555,7 +1273,6 @@ export default function Home() {
         {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
           <div className="animate-chatPop relative bg-white rounded-2xl rounded-br-xs p-3.5 pr-8 shadow-xl border border-black/[0.08] max-w-[250px] text-left">
             
-            {/* Botón cerrar burbuja */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
