@@ -581,15 +581,35 @@ export default function Home() {
 
         {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR (TIENDAS / REVENDEDORES / CLIENTE FINAL) */}
         <div className="max-w-2xl mb-12">
-          <h1 className="animate-fadeIn font-cursive text-5xl sm:text-7xl font-bold tracking-tight text-zinc-950 mb-5 leading-[1.15]">
-            Proveedor de taller <br />
-            <span className="text-zinc-900">y equipos certificados.</span>
+          <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-950 mb-6 leading-[1.14]">
+            <span>Proveedor de </span>
+            <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block pr-1">
+              taller
+            </span>
+            <br />
+            <span>y equipos </span>
+            <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block">
+              certificados.
+            </span>
           </h1>
 
-          <p className="animate-fadeIn stagger-2 font-cursive text-xl sm:text-2xl text-zinc-700 leading-relaxed mb-8">
-            Suministro de reparaciones especializadas y teléfonos verificados para{" "}
-            <strong className="font-bold text-zinc-950">tiendas, revendedores y clientes directos</strong> en Panamá.
-            Tarifas con garantía de taller, repuestos en distintas calidades y respuesta inmediata.
+          <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed mb-8">
+            Suministro de{" "}
+            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              reparaciones especializadas
+            </span>{" "}
+            y teléfonos verificados para{" "}
+            <strong className="font-semibold text-zinc-900">
+              tiendas, revendedores y clientes directos
+            </strong>{" "}
+            en Panamá. Tarifas con{" "}
+            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              garantía de taller
+            </span>
+            , repuestos en distintas calidades y{" "}
+            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              respuesta inmediata.
+            </span>
           </p>
 
           {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
@@ -602,7 +622,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Catálogo de Reparaciones
+              Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
             </button>
             <button
               onClick={() => setActiveTab("productos")}
@@ -612,7 +632,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Equipos en Venta ({filteredDevices.length})
+              Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
             </button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat, Dancing_Script } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,16 +12,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  style: ["italic", "normal"],
 });
 
-const dancingScript = Dancing_Script({
-  variable: "--font-dancing",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  style: ["italic", "normal"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${dancingScript.variable} scroll-smooth`}>
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${playfair.variable} scroll-smooth`}>
       <body className="min-h-screen bg-[#F4F4F7] text-zinc-900 antialiased selection:bg-zinc-900 selection:text-white">
         {children}
       </body>
