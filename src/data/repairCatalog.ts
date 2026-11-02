@@ -1,159 +1,390 @@
 export interface RepairItem {
   id: string;
-  category: "Pantallas" | "Baterías" | "Tapas Traseras";
   brand: "Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google";
-  models: string;
-  quality: "Original" | "OLED" | "Incell";
-  regularPrice: number;
-  promoPrice: number;
-  code: string;
+  category: "Pantallas" | "Tapas Traseras" | "Puertos de Carga" | "Baterías";
+  model: string;
+  quality: "Incell" | "OLED" | "Original" | "Original de equipo" | "Servipack" | "Estándar";
+  price: number;
+  cost?: number;
 }
 
 export const REPAIR_CATALOG: RepairItem[] = [
   // ==========================================
-  // APPLE - PANTALLAS (Piso mínimo $35 Incell)
+  // 1. IPHONE - PANTALLAS
   // ==========================================
-  { id: "ap-1", category: "Pantallas", brand: "Apple", models: "iPhone X, XR, XS", quality: "Incell", regularPrice: 48, promoPrice: 35, code: "IPHONE35" },
-  { id: "ap-2", category: "Pantallas", brand: "Apple", models: "iPhone 11", quality: "Incell", regularPrice: 48, promoPrice: 35, code: "IPHONE35" },
-  { id: "ap-3", category: "Pantallas", brand: "Apple", models: "iPhone X, XR, XS", quality: "OLED", regularPrice: 65, promoPrice: 49, code: "SCRNOLED" },
-  { id: "ap-4", category: "Pantallas", brand: "Apple", models: "iPhone XS Max, 11 Pro, 11 Pro Max", quality: "Incell", regularPrice: 52, promoPrice: 38, code: "IPHONE38" },
-  { id: "ap-5", category: "Pantallas", brand: "Apple", models: "iPhone 11 Pro, 11 Pro Max", quality: "OLED", regularPrice: 75, promoPrice: 58, code: "SCRNOLED" },
-  
-  { id: "ap-6", category: "Pantallas", brand: "Apple", models: "iPhone 12 mini, 12, 12 Pro", quality: "Incell", regularPrice: 55, promoPrice: 39, code: "IPHONE39" },
-  { id: "ap-7", category: "Pantallas", brand: "Apple", models: "iPhone 12, 12 Pro", quality: "OLED", regularPrice: 85, promoPrice: 68, code: "SCRNOLED" },
-  { id: "ap-8", category: "Pantallas", brand: "Apple", models: "iPhone 12 Pro Max", quality: "Incell", regularPrice: 58, promoPrice: 42, code: "IPHONE42" },
-  { id: "ap-9", category: "Pantallas", brand: "Apple", models: "iPhone 12 Pro Max", quality: "OLED", regularPrice: 95, promoPrice: 78, code: "SCRNOLED" },
+  { id: "ip-scr-x-incell", brand: "Apple", category: "Pantallas", model: "iPhone X", quality: "Incell", price: 30, cost: 13 },
+  { id: "ip-scr-x-oled", brand: "Apple", category: "Pantallas", model: "iPhone X", quality: "OLED", price: 45, cost: 25 },
+  { id: "ip-scr-x-ori", brand: "Apple", category: "Pantallas", model: "iPhone X", quality: "Original", price: 65, cost: 44 },
 
-  { id: "ap-10", category: "Pantallas", brand: "Apple", models: "iPhone 13 mini, 13", quality: "Incell", regularPrice: 58, promoPrice: 42, code: "IPHONE42" },
-  { id: "ap-11", category: "Pantallas", brand: "Apple", models: "iPhone 13", quality: "OLED", regularPrice: 90, promoPrice: 72, code: "SCRNOLED" },
-  { id: "ap-12", category: "Pantallas", brand: "Apple", models: "iPhone 13 Pro, 13 Pro Max", quality: "Incell", regularPrice: 65, promoPrice: 48, code: "IPHONE48" },
-  { id: "ap-13", category: "Pantallas", brand: "Apple", models: "iPhone 13 Pro, 13 Pro Max", quality: "OLED", regularPrice: 110, promoPrice: 85, code: "SCRNOLED" },
+  { id: "ip-scr-xr-incell", brand: "Apple", category: "Pantallas", model: "iPhone XR", quality: "Incell", price: 35, cost: 13 },
+  { id: "ip-scr-xr-ori", brand: "Apple", category: "Pantallas", model: "iPhone XR", quality: "Original", price: 45, cost: 23 },
 
-  { id: "ap-14", category: "Pantallas", brand: "Apple", models: "iPhone 14, 14 Plus", quality: "Incell", regularPrice: 65, promoPrice: 48, code: "IPHONE48" },
-  { id: "ap-15", category: "Pantallas", brand: "Apple", models: "iPhone 14, 14 Plus", quality: "OLED", regularPrice: 95, promoPrice: 75, code: "SCRNOLED" },
-  { id: "ap-16", category: "Pantallas", brand: "Apple", models: "iPhone 14 Pro, 14 Pro Max", quality: "Incell", regularPrice: 75, promoPrice: 55, code: "IPHONE55" },
-  { id: "ap-17", category: "Pantallas", brand: "Apple", models: "iPhone 14 Pro, 14 Pro Max", quality: "OLED", regularPrice: 125, promoPrice: 98, code: "SCRNOLED" },
+  { id: "ip-scr-xs-incell", brand: "Apple", category: "Pantallas", model: "iPhone XS", quality: "Incell", price: 35, cost: 13 },
+  { id: "ip-scr-xs-oled", brand: "Apple", category: "Pantallas", model: "iPhone XS", quality: "OLED", price: 45, cost: 25 },
+  { id: "ip-scr-xs-ori", brand: "Apple", category: "Pantallas", model: "iPhone XS", quality: "Original", price: 65, cost: 39 },
 
-  { id: "ap-18", category: "Pantallas", brand: "Apple", models: "iPhone 15, 15 Plus", quality: "Incell", regularPrice: 75, promoPrice: 55, code: "IPHONE55" },
-  { id: "ap-19", category: "Pantallas", brand: "Apple", models: "iPhone 15 Pro, 15 Pro Max", quality: "Incell", regularPrice: 80, promoPrice: 59, code: "IPHONE59" },
-  { id: "ap-20", category: "Pantallas", brand: "Apple", models: "iPhone 15 Pro, 15 Pro Max", quality: "OLED", regularPrice: 155, promoPrice: 125, code: "SCRNOLED" },
-  { id: "ap-21", category: "Pantallas", brand: "Apple", models: "iPhone 16, 16 Pro, 16 Pro Max", quality: "Incell", regularPrice: 95, promoPrice: 72, code: "IPHONE72" },
+  { id: "ip-scr-xsmax-incell", brand: "Apple", category: "Pantallas", model: "iPhone XS Max", quality: "Incell", price: 35, cost: 15 },
+  { id: "ip-scr-xsmax-oled", brand: "Apple", category: "Pantallas", model: "iPhone XS Max", quality: "OLED", price: 55, cost: 32 },
+  { id: "ip-scr-xsmax-ori", brand: "Apple", category: "Pantallas", model: "iPhone XS Max", quality: "Original", price: 75, cost: 50 },
+
+  { id: "ip-scr-11-incell", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Incell", price: 35, cost: 13 },
+  { id: "ip-scr-11-ori", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Original", price: 50, cost: 23 },
+  { id: "ip-scr-11-orieq", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Original de equipo", price: 55, cost: 28 },
+
+  { id: "ip-scr-11p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro", quality: "Incell", price: 35, cost: 16 },
+  { id: "ip-scr-11p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro", quality: "OLED", price: 55, cost: 30 },
+  { id: "ip-scr-11p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro", quality: "Original", price: 85, cost: 59 },
+
+  { id: "ip-scr-11pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro Max", quality: "Incell", price: 37, cost: 18 },
+  { id: "ip-scr-11pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro Max", quality: "OLED", price: 60, cost: 38 },
+  { id: "ip-scr-11pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro Max", quality: "Original", price: 90, cost: 60 },
+
+  { id: "ip-scr-12m-incell", brand: "Apple", category: "Pantallas", model: "iPhone 12 mini", quality: "Incell", price: 40, cost: 23 },
+  { id: "ip-scr-12m-oled", brand: "Apple", category: "Pantallas", model: "iPhone 12 mini", quality: "OLED", price: 75, cost: 50 },
+
+  { id: "ip-scr-12-incell", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "Incell", price: 35, cost: 17 },
+  { id: "ip-scr-12-oled", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "OLED", price: 65, cost: 38 },
+  { id: "ip-scr-12-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "Original", price: 85, cost: 56 },
+
+  { id: "ip-scr-12pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "Incell", price: 37.5, cost: 18 },
+  { id: "ip-scr-12pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "OLED", price: 75, cost: 50 },
+  { id: "ip-scr-12pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "Original", price: 130, cost: 95 },
+
+  { id: "ip-scr-13m-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 mini", quality: "Incell", price: 40, cost: 23 },
+  { id: "ip-scr-13m-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 mini", quality: "OLED", price: 90, cost: 65 },
+
+  { id: "ip-scr-13-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "Incell", price: 40, cost: 19 },
+  { id: "ip-scr-13-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "OLED", price: 65, cost: 43 },
+  { id: "ip-scr-13-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "Original", price: 90, cost: 66 },
+
+  { id: "ip-scr-13p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "Incell", price: 40, cost: 23 },
+  { id: "ip-scr-13p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "OLED", price: 75, cost: 50 },
+  { id: "ip-scr-13p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "Original de equipo", price: 140, cost: 125 },
+
+  { id: "ip-scr-13pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "Incell", price: 50, cost: 25 },
+  { id: "ip-scr-13pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "OLED", price: 80, cost: 53 },
+  { id: "ip-scr-13pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "Original", price: 125, cost: 75 },
+
+  { id: "ip-scr-14-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "Incell", price: 45, cost: 22 },
+  { id: "ip-scr-14-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "OLED", price: 65, cost: 42 },
+  { id: "ip-scr-14-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "Original de equipo", price: 150, cost: 130 },
+
+  { id: "ip-scr-14plus-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14 Plus", quality: "Incell", price: 50, cost: 25 },
+  { id: "ip-scr-14plus-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14 Plus", quality: "OLED", price: 90, cost: 65 },
+
+  { id: "ip-scr-14p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro", quality: "Incell", price: 55, cost: 30 },
+  { id: "ip-scr-14p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro", quality: "OLED", price: 100, cost: 70 },
+  { id: "ip-scr-14p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro", quality: "Original", price: 130, cost: 93 },
+
+  { id: "ip-scr-14pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "Incell", price: 55, cost: 26 },
+  { id: "ip-scr-14pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "OLED", price: 90, cost: 65 },
+  { id: "ip-scr-14pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "Original", price: 150, cost: 170 },
+
+  { id: "ip-scr-15-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "Incell", price: 55, cost: 30 },
+  { id: "ip-scr-15-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "OLED", price: 120, cost: 90 },
+  { id: "ip-scr-15-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "Original", price: 150, cost: 110 },
+
+  { id: "ip-scr-15plus-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Plus", quality: "Incell", price: 60, cost: 34 },
+  { id: "ip-scr-15plus-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Plus", quality: "OLED", price: 125, cost: 96 },
+
+  { id: "ip-scr-15p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "Incell", price: 55, cost: 28 },
+  { id: "ip-scr-15p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "OLED", price: 125, cost: 100 },
+  { id: "ip-scr-15p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "Original", price: 160, cost: 168 },
+
+  { id: "ip-scr-15pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro Max", quality: "Incell", price: 60, cost: 31 },
+  { id: "ip-scr-15pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro Max", quality: "OLED", price: 115, cost: 86 },
+  { id: "ip-scr-15pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro Max", quality: "Original", price: 150, cost: 110 },
+
+  { id: "ip-scr-16-incell", brand: "Apple", category: "Pantallas", model: "iPhone 16", quality: "Incell", price: 70, cost: 44 },
+  { id: "ip-scr-16-oled", brand: "Apple", category: "Pantallas", model: "iPhone 16", quality: "OLED", price: 135, cost: 105 },
+
+  { id: "ip-scr-16plus-incell", brand: "Apple", category: "Pantallas", model: "iPhone 16 Plus", quality: "Incell", price: 60, cost: 31 },
+  { id: "ip-scr-16plus-oled", brand: "Apple", category: "Pantallas", model: "iPhone 16 Plus", quality: "OLED", price: 150, cost: 120 },
+
+  { id: "ip-scr-16p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 16 Pro", quality: "Incell", price: 75, cost: 52 },
+  { id: "ip-scr-16p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 16 Pro", quality: "OLED", price: 115, cost: 85 },
+
+  { id: "ip-scr-16pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 16 Pro Max", quality: "Incell", price: 70, cost: 48 },
+  { id: "ip-scr-16pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 16 Pro Max", quality: "OLED", price: 115, cost: 85 },
 
   // ==========================================
-  // SAMSUNG - PANTALLAS
+  // 2. IPHONE - TAPAS TRASERAS
   // ==========================================
-  { id: "sp-1", category: "Pantallas", brand: "Samsung", models: "Galaxy A04, A04s, A05, A05s, A06", quality: "Original", regularPrice: 38, promoPrice: 26, code: "SAM26" },
-  { id: "sp-2", category: "Pantallas", brand: "Samsung", models: "Galaxy A14, A15, A16", quality: "Incell", regularPrice: 42, promoPrice: 30, code: "SAM30" },
-  { id: "sp-3", category: "Pantallas", brand: "Samsung", models: "Galaxy A15, A16", quality: "OLED", regularPrice: 65, promoPrice: 48, code: "SAMOLED" },
-  { id: "sp-4", category: "Pantallas", brand: "Samsung", models: "Galaxy A24, A25, A34, A35", quality: "Incell", regularPrice: 48, promoPrice: 35, code: "SAM35" },
-  { id: "sp-5", category: "Pantallas", brand: "Samsung", models: "Galaxy A34, A35, A54, A55", quality: "OLED", regularPrice: 78, promoPrice: 59, code: "SAMOLED" },
-  { id: "sp-6", category: "Pantallas", brand: "Samsung", models: "Galaxy S20 FE, S21 FE", quality: "OLED", regularPrice: 70, promoPrice: 55, code: "SAMOLED" },
-  { id: "sp-7", category: "Pantallas", brand: "Samsung", models: "Galaxy S20, S21, S22 (Base / Plus)", quality: "Incell", regularPrice: 75, promoPrice: 58, code: "SAMS58" },
-  { id: "sp-8", category: "Pantallas", brand: "Samsung", models: "Galaxy S22 Ultra, S23 Ultra, S24 Ultra", quality: "Incell", regularPrice: 105, promoPrice: 79, code: "ULTRA79" },
-  { id: "sp-9", category: "Pantallas", brand: "Samsung", models: "Galaxy S22 Ultra, S23 Ultra", quality: "OLED", regularPrice: 155, promoPrice: 119, code: "ULTRAOLED" },
+  { id: "ip-bk-8", brand: "Apple", category: "Tapas Traseras", model: "iPhone 8 / 8 Plus", quality: "Original", price: 35, cost: 4.5 },
+  { id: "ip-bk-x", brand: "Apple", category: "Tapas Traseras", model: "iPhone X / XR / XS / XS Max", quality: "Original", price: 35, cost: 5 },
+  { id: "ip-bk-11", brand: "Apple", category: "Tapas Traseras", model: "iPhone 11 / 11 Pro", quality: "Original", price: 35, cost: 5 },
+  { id: "ip-bk-11pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 11 Pro Max", quality: "Original", price: 40, cost: 5 },
+  { id: "ip-bk-12m", brand: "Apple", category: "Tapas Traseras", model: "iPhone 12 mini", quality: "Original", price: 35, cost: 5 },
+  { id: "ip-bk-12", brand: "Apple", category: "Tapas Traseras", model: "iPhone 12", quality: "Original", price: 35, cost: 5 },
+  { id: "ip-bk-12p", brand: "Apple", category: "Tapas Traseras", model: "iPhone 12 Pro", quality: "Original", price: 40, cost: 5 },
+  { id: "ip-bk-12pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 12 Pro Max", quality: "Original", price: 45, cost: 5 },
+  { id: "ip-bk-13m", brand: "Apple", category: "Tapas Traseras", model: "iPhone 13 mini", quality: "Original", price: 35, cost: 5 },
+  { id: "ip-bk-13", brand: "Apple", category: "Tapas Traseras", model: "iPhone 13", quality: "Original", price: 40, cost: 5 },
+  { id: "ip-bk-13p", brand: "Apple", category: "Tapas Traseras", model: "iPhone 13 Pro", quality: "Original", price: 40, cost: 5 },
+  { id: "ip-bk-13pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 13 Pro Max", quality: "Original", price: 45, cost: 5 },
+  { id: "ip-bk-14", brand: "Apple", category: "Tapas Traseras", model: "iPhone 14", quality: "Original", price: 40, cost: 6 },
+  { id: "ip-bk-14plus", brand: "Apple", category: "Tapas Traseras", model: "iPhone 14 Plus", quality: "Original", price: 45, cost: 6 },
+  { id: "ip-bk-14p", brand: "Apple", category: "Tapas Traseras", model: "iPhone 14 Pro", quality: "Original", price: 45, cost: 6 },
+  { id: "ip-bk-14pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 14 Pro Max", quality: "Original", price: 50, cost: 6 },
+  { id: "ip-bk-15", brand: "Apple", category: "Tapas Traseras", model: "iPhone 15", quality: "Original", price: 45, cost: 6 },
+  { id: "ip-bk-15plus", brand: "Apple", category: "Tapas Traseras", model: "iPhone 15 Plus", quality: "Original", price: 50, cost: 6 },
+  { id: "ip-bk-15p", brand: "Apple", category: "Tapas Traseras", model: "iPhone 15 Pro", quality: "Original", price: 50, cost: 6 },
+  { id: "ip-bk-15pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 15 Pro Max", quality: "Original", price: 55, cost: 6 },
+  { id: "ip-bk-16", brand: "Apple", category: "Tapas Traseras", model: "iPhone 16", quality: "Original", price: 45, cost: 13 },
+  { id: "ip-bk-16plus", brand: "Apple", category: "Tapas Traseras", model: "iPhone 16 Plus", quality: "Original", price: 50, cost: 13 },
+  { id: "ip-bk-16p", brand: "Apple", category: "Tapas Traseras", model: "iPhone 16 Pro", quality: "Original", price: 55, cost: 15 },
+  { id: "ip-bk-16pm", brand: "Apple", category: "Tapas Traseras", model: "iPhone 16 Pro Max", quality: "Original", price: 60, cost: 15 },
 
   // ==========================================
-  // HONOR - PANTALLAS
+  // 3. SAMSUNG - PANTALLAS
   // ==========================================
-  { id: "hp-1", category: "Pantallas", brand: "Honor", models: "Honor X6, X6s, X7, X7a, X7b, X8, X8a", quality: "Original", regularPrice: 38, promoPrice: 28, code: "HON28" },
-  { id: "hp-2", category: "Pantallas", brand: "Honor", models: "Honor X9", quality: "Original", regularPrice: 45, promoPrice: 32, code: "HON32" },
-  { id: "hp-3", category: "Pantallas", brand: "Honor", models: "Honor Magic 5 Lite, Magic 6 Lite, Magic 7 Lite", quality: "Incell", regularPrice: 55, promoPrice: 42, code: "MAGIC42" },
-  { id: "hp-4", category: "Pantallas", brand: "Honor", models: "Honor Magic 5 Lite, Magic 6 Lite", quality: "OLED", regularPrice: 85, promoPrice: 65, code: "MAGICOLED" },
-  { id: "hp-5", category: "Pantallas", brand: "Honor", models: "Honor 90, Honor 200, Honor 200 Lite", quality: "OLED", regularPrice: 85, promoPrice: 65, code: "HONOLED" },
+  { id: "sam-scr-a02", brand: "Samsung", category: "Pantallas", model: "Galaxy A02 / A03 / A03s", quality: "Original", price: 30, cost: 8.5 },
+  { id: "sam-scr-a04", brand: "Samsung", category: "Pantallas", model: "Galaxy A04 / A04s / A04e", quality: "Original", price: 30, cost: 10 },
+  { id: "sam-scr-a05", brand: "Samsung", category: "Pantallas", model: "Galaxy A05 / A05s / A06", quality: "Original", price: 30, cost: 10 },
+  { id: "sam-scr-a12", brand: "Samsung", category: "Pantallas", model: "Galaxy A12 / A13", quality: "Original", price: 35, cost: 11 },
+  { id: "sam-scr-a14", brand: "Samsung", category: "Pantallas", model: "Galaxy A14 4G / 5G", quality: "Incell", price: 35, cost: 12 },
+  { id: "sam-scr-a15-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A15", quality: "Incell", price: 35, cost: 15 },
+  { id: "sam-scr-a15-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A15", quality: "OLED", price: 50, cost: 30 },
+  { id: "sam-scr-a15-servi", brand: "Samsung", category: "Pantallas", model: "Galaxy A15", quality: "Servipack", price: 85, cost: 60 },
+  { id: "sam-scr-a16-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A16 4G / 5G", quality: "Incell", price: 35, cost: 17 },
+  { id: "sam-scr-a16-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A16 4G / 5G", quality: "OLED", price: 65, cost: 45 },
+  { id: "sam-scr-a24-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A24", quality: "Incell", price: 35, cost: 15 },
+  { id: "sam-scr-a24-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A24", quality: "OLED", price: 55, cost: 34.5 },
+  { id: "sam-scr-a25-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A25", quality: "Incell", price: 35, cost: 15 },
+  { id: "sam-scr-a25-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A25", quality: "OLED", price: 55, cost: 34 },
+  { id: "sam-scr-a34-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A34", quality: "Incell", price: 35, cost: 17 },
+  { id: "sam-scr-a34-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A34", quality: "OLED", price: 55, cost: 36 },
+  { id: "sam-scr-a35-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A35", quality: "Incell", price: 35, cost: 20 },
+  { id: "sam-scr-a35-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A35", quality: "OLED", price: 55, cost: 36 },
+  { id: "sam-scr-a54-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A54", quality: "Incell", price: 37.5, cost: 18 },
+  { id: "sam-scr-a54-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A54", quality: "OLED", price: 60, cost: 31 },
+  { id: "sam-scr-a54-ori", brand: "Samsung", category: "Pantallas", model: "Galaxy A54", quality: "Original", price: 85, cost: 65 },
+  { id: "sam-scr-a55-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy A55", quality: "Incell", price: 37.5, cost: 22 },
+  { id: "sam-scr-a55-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy A55", quality: "OLED", price: 60, cost: 37 },
+  { id: "sam-scr-a55-ori", brand: "Samsung", category: "Pantallas", model: "Galaxy A55", quality: "Original", price: 100, cost: 80 },
+
+  { id: "sam-scr-s20fe-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S20 FE", quality: "Incell", price: 40, cost: 19 },
+  { id: "sam-scr-s20fe-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S20 FE", quality: "OLED", price: 60, cost: 33 },
+  { id: "sam-scr-s20fe-ori", brand: "Samsung", category: "Pantallas", model: "Galaxy S20 FE", quality: "Original", price: 90, cost: 64 },
+  { id: "sam-scr-s21fe-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S21 FE", quality: "OLED", price: 70, cost: 42 },
+
+  { id: "sam-scr-s20-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S20", quality: "Incell", price: 65, cost: 38 },
+  { id: "sam-scr-s20-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S20", quality: "OLED", price: 80, cost: 70 },
+  { id: "sam-scr-s20p-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S20+", quality: "Incell", price: 65, cost: 34 },
+  { id: "sam-scr-s20p-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S20+", quality: "OLED", price: 90, cost: 57 },
+  { id: "sam-scr-s20u-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S20 Ultra", quality: "Incell", price: 65, cost: 42 },
+  { id: "sam-scr-s20u-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S20 Ultra", quality: "OLED", price: 100, cost: 77 },
+
+  { id: "sam-scr-s21-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S21", quality: "Incell", price: 65, cost: 38 },
+  { id: "sam-scr-s21-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S21", quality: "OLED", price: 85, cost: 83 },
+  { id: "sam-scr-s21p-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S21+", quality: "Incell", price: 65, cost: 35 },
+  { id: "sam-scr-s21p-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S21+", quality: "OLED", price: 105, cost: 60 },
+  { id: "sam-scr-s21u-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S21 Ultra", quality: "Incell", price: 75, cost: 50 },
+  { id: "sam-scr-s21u-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S21 Ultra", quality: "OLED", price: 100, cost: 71 },
+
+  { id: "sam-scr-s22-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S22", quality: "Incell", price: 65, cost: 38 },
+  { id: "sam-scr-s22p-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S22+", quality: "Incell", price: 65, cost: 42 },
+  { id: "sam-scr-s22p-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S22+", quality: "OLED", price: 90, cost: 67 },
+  { id: "sam-scr-s22u-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S22 Ultra", quality: "Incell", price: 75, cost: 50 },
+  { id: "sam-scr-s22u-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S22 Ultra", quality: "OLED", price: 110, cost: 75 },
+
+  { id: "sam-scr-s23-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S23", quality: "Incell", price: 75, cost: 50 },
+  { id: "sam-scr-s23p-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S23+", quality: "Incell", price: 65, cost: 40 },
+  { id: "sam-scr-s23p-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S23+", quality: "OLED", price: 85, cost: 62 },
+  { id: "sam-scr-s23u-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S23 Ultra", quality: "Incell", price: 75, cost: 50 },
+  { id: "sam-scr-s23u-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S23 Ultra", quality: "OLED", price: 100, cost: 75 },
+
+  { id: "sam-scr-s24u-inc", brand: "Samsung", category: "Pantallas", model: "Galaxy S24 Ultra", quality: "Incell", price: 75, cost: 50 },
+  { id: "sam-scr-s24u-oled", brand: "Samsung", category: "Pantallas", model: "Galaxy S24 Ultra", quality: "OLED", price: 130, cost: 95 },
+
+  { id: "sam-scr-zflip3", brand: "Samsung", category: "Pantallas", model: "Galaxy Z Flip 3", quality: "Original", price: 250, cost: 195 },
+  { id: "sam-scr-zflip4", brand: "Samsung", category: "Pantallas", model: "Galaxy Z Flip 4", quality: "Original", price: 260, cost: 205 },
+  { id: "sam-scr-zflip5", brand: "Samsung", category: "Pantallas", model: "Galaxy Z Flip 5", quality: "Original", price: 310, cost: 260 },
 
   // ==========================================
-  // XIAOMI & POCO - PANTALLAS
+  // 4. SAMSUNG - TAPAS TRASERAS
   // ==========================================
-  { id: "xp-1", category: "Pantallas", brand: "Xiaomi", models: "Redmi 9, 10, 12, 13, 13C, 14C", quality: "Original", regularPrice: 38, promoPrice: 26, code: "REDMI26" },
-  { id: "xp-2", category: "Pantallas", brand: "Xiaomi", models: "Redmi Note 11, Note 12, Note 13, Note 14", quality: "Incell", regularPrice: 42, promoPrice: 30, code: "NOTE30" },
-  { id: "xp-3", category: "Pantallas", brand: "Xiaomi", models: "Redmi Note 11 Pro, 12 Pro, 13 Pro, 14 Pro", quality: "OLED", regularPrice: 70, promoPrice: 52, code: "XMOLED" },
-  { id: "xp-4", category: "Pantallas", brand: "Xiaomi", models: "Poco X3, X3 Pro, X4 Pro, X5, X6, X6 Pro", quality: "Incell", regularPrice: 45, promoPrice: 32, code: "POCO32" },
-  { id: "xp-5", category: "Pantallas", brand: "Xiaomi", models: "Poco X5, X6, F3, F4, F5", quality: "OLED", regularPrice: 75, promoPrice: 55, code: "POCOOLED" },
+  { id: "sam-bk-a-series", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy A10 a A72 (Series A)", quality: "Original", price: 20, cost: 6 },
+  { id: "sam-bk-s20", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S20 / S20+ / S20 FE", quality: "Original", price: 25, cost: 6 },
+  { id: "sam-bk-s21", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S21 / S21+ / S21 FE", quality: "Original", price: 25, cost: 6 },
+  { id: "sam-bk-s21u", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S21 Ultra", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s22", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S22 / S22+ / S22 Ultra", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s23", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S23", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s23p", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S23+", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s23u", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S23 Ultra", quality: "Original", price: 35, cost: 7 },
+  { id: "sam-bk-s24", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S24", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s24p", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S24+", quality: "Original", price: 30, cost: 7 },
+  { id: "sam-bk-s24u", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy S24 Ultra", quality: "Original", price: 35, cost: 7 },
+  { id: "sam-bk-note", brand: "Samsung", category: "Tapas Traseras", model: "Galaxy Note 10 / Note 20 Ultra", quality: "Original", price: 25, cost: 7 },
 
   // ==========================================
-  // GOOGLE PIXEL - PANTALLAS
+  // 5. HONOR - PANTALLAS
   // ==========================================
-  { id: "gp-1", category: "Pantallas", brand: "Google", models: "Pixel 6, 6A, 7", quality: "Incell", regularPrice: 65, promoPrice: 49, code: "PIX49" },
-  { id: "gp-2", category: "Pantallas", brand: "Google", models: "Pixel 6, 6A, 7", quality: "OLED", regularPrice: 95, promoPrice: 72, code: "PIXOLED" },
-  { id: "gp-3", category: "Pantallas", brand: "Google", models: "Pixel 6 Pro, 7 Pro, 8 Pro", quality: "OLED", regularPrice: 115, promoPrice: 85, code: "PIXPRO" },
+  { id: "hn-scr-x5", brand: "Honor", category: "Pantallas", model: "Honor X5 / X6 / X6s", quality: "Original", price: 30, cost: 10 },
+  { id: "hn-scr-x7", brand: "Honor", category: "Pantallas", model: "Honor X7 / X7a / X7b", quality: "Original", price: 30, cost: 11 },
+  { id: "hn-scr-x8", brand: "Honor", category: "Pantallas", model: "Honor X8 / X8a / X8b", quality: "Original", price: 37.5, cost: 14 },
+  { id: "hn-scr-x9", brand: "Honor", category: "Pantallas", model: "Honor X9", quality: "Original", price: 25, cost: 20 },
+  { id: "hn-scr-m5l-inc", brand: "Honor", category: "Pantallas", model: "Honor Magic 5 Lite", quality: "Incell", price: 37.5, cost: 22 },
+  { id: "hn-scr-m5l-oled", brand: "Honor", category: "Pantallas", model: "Honor Magic 5 Lite", quality: "OLED", price: 65, cost: 38 },
+  { id: "hn-scr-m6l-inc", brand: "Honor", category: "Pantallas", model: "Honor Magic 6 Lite", quality: "Incell", price: 60, cost: 28 },
+  { id: "hn-scr-m6l-oled", brand: "Honor", category: "Pantallas", model: "Honor Magic 6 Lite", quality: "OLED", price: 75, cost: 45 },
+  { id: "hn-scr-m7l-inc", brand: "Honor", category: "Pantallas", model: "Honor Magic 7 Lite", quality: "Incell", price: 60, cost: 28 },
+  { id: "hn-scr-m7l-ori", brand: "Honor", category: "Pantallas", model: "Honor Magic 7 Lite", quality: "Original", price: 76, cost: 45 },
+  { id: "hn-scr-90-inc", brand: "Honor", category: "Pantallas", model: "Honor 90 / 90 Lite", quality: "Incell", price: 35, cost: 14 },
+  { id: "hn-scr-90-ori", brand: "Honor", category: "Pantallas", model: "Honor 90", quality: "Original", price: 60, cost: 42 },
+  { id: "hn-scr-200-inc", brand: "Honor", category: "Pantallas", model: "Honor 200 / 200 Lite", quality: "Incell", price: 45, cost: 24 },
+  { id: "hn-scr-200-ori", brand: "Honor", category: "Pantallas", model: "Honor 200", quality: "Original", price: 65, cost: 43 },
 
   // ==========================================
-  // TAPAS TRASERAS (PISO IPHONE $35 MÍNIMO)
+  // 6. HONOR - TAPAS TRASERAS
   // ==========================================
-  // iPhone Tapas: Mínimo $35 para cubrir 30% tienda y riesgo de desarme/láser
-  { id: "tt-1", category: "Tapas Traseras", brand: "Apple", models: "iPhone X, XR, XS, 11, 12, 13", quality: "Original", regularPrice: 48, promoPrice: 35, code: "TAPAIPHONE" },
-  { id: "tt-2", category: "Tapas Traseras", brand: "Apple", models: "iPhone 13 Pro, 14, 14 Plus, 14 Pro, 14 Pro Max", quality: "Original", regularPrice: 55, promoPrice: 40, code: "TAPAIPHONE" },
-  { id: "tt-3", category: "Tapas Traseras", brand: "Apple", models: "iPhone 15, 15 Pro, 15 Pro Max, 16 Pro", quality: "Original", regularPrice: 65, promoPrice: 45, code: "TAPAIPHONE" },
-  
-  // Android Tapas: Más económicas ($24 a $26) ya que son de menor complejidad
-  { id: "tt-4", category: "Tapas Traseras", brand: "Samsung", models: "Galaxy A14, A24, A34, A54, A55", quality: "Original", regularPrice: 35, promoPrice: 24, code: "TAPASAM" },
-  { id: "tt-5", category: "Tapas Traseras", brand: "Samsung", models: "Galaxy S20, S21, S22, S23, S24 (Base, Plus, Ultra)", quality: "Original", regularPrice: 40, promoPrice: 26, code: "TAPASAM" },
-  { id: "tt-6", category: "Tapas Traseras", brand: "Honor", models: "Honor X7, X8, Magic 5 Lite, 6 Lite, 90", quality: "Original", regularPrice: 35, promoPrice: 24, code: "TAPAHO" },
-  { id: "tt-7", category: "Tapas Traseras", brand: "Xiaomi", models: "Redmi Note 11, 12, 13, Poco X3, X5, X6", quality: "Original", regularPrice: 35, promoPrice: 24, code: "TAPAXIAOMI" },
+  { id: "hn-bk-x", brand: "Honor", category: "Tapas Traseras", model: "Honor X6 / X7 / X8 / X9", quality: "Original", price: 20, cost: 5.5 },
+  { id: "hn-bk-m5l", brand: "Honor", category: "Tapas Traseras", model: "Honor Magic 5 Lite", quality: "Original", price: 20, cost: 6 },
+  { id: "hn-bk-m6l", brand: "Honor", category: "Tapas Traseras", model: "Honor Magic 6 Lite", quality: "Original", price: 20, cost: 6 },
+  { id: "hn-bk-h50", brand: "Honor", category: "Tapas Traseras", model: "Honor 50 / 90 / 200", quality: "Original", price: 25, cost: 8 },
 
   // ==========================================
-  // BATERÍAS (0 ciclos - Alta duración)
+  // 7. XIAOMI - PANTALLAS
   // ==========================================
-  { id: "bt-1", category: "Baterías", brand: "Apple", models: "iPhone X, XR, XS, 11", quality: "Original", regularPrice: 45, promoPrice: 32, code: "BATAPPLE" },
-  { id: "bt-2", category: "Baterías", brand: "Apple", models: "iPhone 12, 12 Pro, 13, 13 Pro", quality: "Original", regularPrice: 55, promoPrice: 39, code: "BATAPPLE" },
-  { id: "bt-3", category: "Baterías", brand: "Apple", models: "iPhone 14, 15 Pro", quality: "Original", regularPrice: 68, promoPrice: 49, code: "BATAPPLE" },
-  { id: "bt-4", category: "Baterías", brand: "Samsung", models: "Galaxy A12, A14, A15, A24, A34, A54, A55", quality: "Original", regularPrice: 38, promoPrice: 26, code: "BATSAM" },
-  { id: "bt-5", category: "Baterías", brand: "Samsung", models: "Galaxy S20, S21, S22, S23 Ultra", quality: "Original", regularPrice: 48, promoPrice: 35, code: "BATSAM" },
-  { id: "bt-6", category: "Baterías", brand: "Honor", models: "Honor X6, X7, X8, Magic 5 Lite, 6 Lite", quality: "Original", regularPrice: 38, promoPrice: 27, code: "BATHON" },
-  { id: "bt-7", category: "Baterías", brand: "Xiaomi", models: "Redmi Note 10, 11, 12, 13, Poco X3", quality: "Original", regularPrice: 38, promoPrice: 26, code: "BATXM" }
+  { id: "xm-scr-red9", brand: "Xiaomi", category: "Pantallas", model: "Redmi 9 / 9A / 9C / 10 / 10C", quality: "Original", price: 30, cost: 11 },
+  { id: "xm-scr-red12", brand: "Xiaomi", category: "Pantallas", model: "Redmi 12 / 13 / 13C / 14C", quality: "Original", price: 30, cost: 11 },
+  { id: "xm-scr-n10-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 10 / 10s", quality: "OLED", price: 45, cost: 26 },
+  { id: "xm-scr-n11-inc", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 11 / 11s", quality: "Incell", price: 35, cost: 13 },
+  { id: "xm-scr-n11-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 11 / 11s", quality: "OLED", price: 45, cost: 28 },
+  { id: "xm-scr-n12-inc", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 12 4G / 5G", quality: "Incell", price: 35, cost: 14 },
+  { id: "xm-scr-n12-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 12 4G / 5G", quality: "OLED", price: 55, cost: 32 },
+  { id: "xm-scr-n13-inc", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 13 4G / 5G", quality: "Incell", price: 35, cost: 15 },
+  { id: "xm-scr-n13-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 13 4G / 5G", quality: "OLED", price: 55, cost: 36 },
+  { id: "xm-scr-n14-inc", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 14", quality: "Incell", price: 35, cost: 14 },
+  { id: "xm-scr-n14-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 14", quality: "OLED", price: 60, cost: 36 },
+  { id: "xm-scr-n14p-oled", brand: "Xiaomi", category: "Pantallas", model: "Redmi Note 14 Pro", quality: "OLED", price: 65, cost: 41 },
+  { id: "xm-scr-x3-inc", brand: "Xiaomi", category: "Pantallas", model: "Poco X3 / X3 Pro", quality: "Incell", price: 35, cost: 14 },
+  { id: "xm-scr-x4p-oled", brand: "Xiaomi", category: "Pantallas", model: "Poco X4 Pro / X5", quality: "OLED", price: 65, cost: 33 },
+  { id: "xm-scr-x6-inc", brand: "Xiaomi", category: "Pantallas", model: "Poco X6", quality: "Incell", price: 35, cost: 18 },
+  { id: "xm-scr-x6p-inc", brand: "Xiaomi", category: "Pantallas", model: "Poco X6 Pro", quality: "Incell", price: 55, cost: 28 },
+  { id: "xm-scr-x6-oled", brand: "Xiaomi", category: "Pantallas", model: "Poco X6 / X6 Pro", quality: "OLED", price: 65, cost: 40 },
+  { id: "xm-scr-f3-oled", brand: "Xiaomi", category: "Pantallas", model: "Poco F3 / F4 / F5", quality: "OLED", price: 65, cost: 35 },
+
+  // ==========================================
+  // 8. XIAOMI - TAPAS TRASERAS
+  // ==========================================
+  { id: "xm-bk-note", brand: "Xiaomi", category: "Tapas Traseras", model: "Redmi Note 8 / 9 / 10 / 11 / 12 / 13", quality: "Original", price: 20, cost: 6.5 },
+  { id: "xm-bk-pocox", brand: "Xiaomi", category: "Tapas Traseras", model: "Poco X3 / X4 Pro / X5 Pro / X6", quality: "Original", price: 25, cost: 6.5 },
+  { id: "xm-bk-pocof", brand: "Xiaomi", category: "Tapas Traseras", model: "Poco F3 / F4 / F5", quality: "Original", price: 25, cost: 6.5 },
+
+  // ==========================================
+  // 9. FLEX / PUERTOS DE CARGA
+  // ==========================================
+  { id: "ch-ip-x", brand: "Apple", category: "Puertos de Carga", model: "iPhone X / XR / XS / XS Max", quality: "Original", price: 35, cost: 9 },
+  { id: "ch-ip-11", brand: "Apple", category: "Puertos de Carga", model: "iPhone 11", quality: "Original", price: 35, cost: 10 },
+  { id: "ch-ip-11p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 11 Pro", quality: "Original", price: 35, cost: 26 },
+  { id: "ch-ip-11pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 11 Pro Max", quality: "Original", price: 45, cost: 27 },
+  { id: "ch-ip-12", brand: "Apple", category: "Puertos de Carga", model: "iPhone 12", quality: "Original", price: 35, cost: 12 },
+  { id: "ch-ip-12p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 12 Pro", quality: "Original", price: 35, cost: 12 },
+  { id: "ch-ip-12pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 12 Pro Max", quality: "Original", price: 45, cost: 20 },
+  { id: "ch-ip-13", brand: "Apple", category: "Puertos de Carga", model: "iPhone 13", quality: "Original", price: 35, cost: 12 },
+  { id: "ch-ip-13p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 13 Pro", quality: "Original", price: 35, cost: 18 },
+  { id: "ch-ip-13pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 13 Pro Max", quality: "Original", price: 45, cost: 16 },
+  { id: "ch-ip-14", brand: "Apple", category: "Puertos de Carga", model: "iPhone 14", quality: "Original", price: 40, cost: 16 },
+  { id: "ch-ip-14p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 14 Pro", quality: "Original", price: 40, cost: 20 },
+  { id: "ch-ip-14pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 14 Pro Max", quality: "Original", price: 50, cost: 28 },
+  { id: "ch-ip-15", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15", quality: "Original", price: 50, cost: 28 },
+  { id: "ch-ip-15p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15 Pro", quality: "Original", price: 55, cost: 32 },
+  { id: "ch-ip-15pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15 Pro Max", quality: "Original", price: 60, cost: 38 },
+
+  { id: "ch-sam-a", brand: "Samsung", category: "Puertos de Carga", model: "Galaxy Series A (A12, A14, A15, A54, A55)", quality: "Original", price: 30, cost: 7 },
+  { id: "ch-sam-s-std", brand: "Samsung", category: "Puertos de Carga", model: "Galaxy Series S (S20, S21, S22 Base / Plus)", quality: "Original", price: 30, cost: 8 },
+  { id: "ch-sam-s-ultra", brand: "Samsung", category: "Puertos de Carga", model: "Galaxy Series S (S22, S23, S24 Ultra)", quality: "Original", price: 35, cost: 14 },
+
+  { id: "ch-hn-all", brand: "Honor", category: "Puertos de Carga", model: "Honor Series X & Magic Lite", quality: "Original", price: 35, cost: 8 },
+  { id: "ch-xm-all", brand: "Xiaomi", category: "Puertos de Carga", model: "Redmi Note & Poco Series", quality: "Original", price: 27.5, cost: 7 }
 ];
 
 export const POPULAR_MODELS: Record<string, string[]> = {
   Apple: [
+    "iPhone 16 Pro Max",
+    "iPhone 16 Pro",
+    "iPhone 16 Plus",
+    "iPhone 16",
     "iPhone 15 Pro Max",
     "iPhone 15 Pro",
+    "iPhone 15 Plus",
     "iPhone 15",
     "iPhone 14 Pro Max",
     "iPhone 14 Pro",
+    "iPhone 14 Plus",
     "iPhone 14",
     "iPhone 13 Pro Max",
     "iPhone 13 Pro",
     "iPhone 13",
+    "iPhone 13 mini",
     "iPhone 12 Pro Max",
-    "iPhone 12 Pro",
-    "iPhone 12",
+    "iPhone 12 / 12 Pro",
+    "iPhone 12 mini",
+    "iPhone 11 Pro Max",
     "iPhone 11 Pro",
     "iPhone 11",
-    "iPhone XR / XS / X"
+    "iPhone XS Max",
+    "iPhone XS",
+    "iPhone XR",
+    "iPhone X",
+    "iPhone 8 / 8 Plus"
   ],
   Samsung: [
     "Galaxy S24 Ultra",
+    "Galaxy S24 / S24+",
     "Galaxy S23 Ultra",
     "Galaxy S23 / S23+",
     "Galaxy S22 Ultra",
     "Galaxy S22 / S22+",
-    "Galaxy S21 Ultra / S21",
-    "Galaxy S20 FE / S20",
-    "Galaxy A55 / A54",
-    "Galaxy A35 / A34",
-    "Galaxy A25 / A24",
-    "Galaxy A15 / A14",
-    "Galaxy A05 / A06"
+    "Galaxy S21 Ultra",
+    "Galaxy S21 / S21+",
+    "Galaxy S21 FE",
+    "Galaxy S20 Ultra",
+    "Galaxy S20 / S20+",
+    "Galaxy S20 FE",
+    "Galaxy Z Flip 5",
+    "Galaxy Z Flip 4",
+    "Galaxy Z Flip 3",
+    "Galaxy A55",
+    "Galaxy A54",
+    "Galaxy A35",
+    "Galaxy A34",
+    "Galaxy A25",
+    "Galaxy A24",
+    "Galaxy A16 4G / 5G",
+    "Galaxy A15",
+    "Galaxy A14 4G / 5G",
+    "Galaxy A12 / A13",
+    "Galaxy A05 / A05s / A06",
+    "Galaxy A04 / A04s / A04e",
+    "Galaxy A02 / A03 / A03s",
+    "Galaxy Note 10 / Note 20 Ultra"
   ],
   Honor: [
+    "Honor Magic 7 Lite",
     "Honor Magic 6 Lite",
     "Honor Magic 5 Lite",
     "Honor 200 / 200 Lite",
     "Honor 90 / 90 Lite",
     "Honor X9",
-    "Honor X8 / X8b",
-    "Honor X7 / X7b",
-    "Honor X6 / X6s"
+    "Honor X8 / X8a / X8b",
+    "Honor X7 / X7a / X7b",
+    "Honor X5 / X6 / X6s",
+    "Honor 50 / 90 / 200"
   ],
   Xiaomi: [
     "Redmi Note 14 / 14 Pro",
-    "Redmi Note 13 / 13 Pro",
-    "Redmi Note 12 / 12 Pro",
-    "Redmi Note 11 / 11 Pro",
+    "Redmi Note 13 4G / 5G",
+    "Redmi Note 12 4G / 5G",
+    "Redmi Note 11 / 11s",
+    "Redmi Note 10 / 10s",
     "Poco X6 / X6 Pro",
-    "Poco X5 / X5 Pro",
+    "Poco X4 Pro / X5",
     "Poco X3 / X3 Pro",
-    "Redmi 13C / 12C / 10C"
+    "Poco F3 / F4 / F5",
+    "Redmi 12 / 13 / 13C / 14C",
+    "Redmi 9 / 9A / 9C / 10 / 10C"
   ],
   Google: [
     "Pixel 8 Pro",
