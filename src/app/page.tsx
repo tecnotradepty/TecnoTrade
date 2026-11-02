@@ -579,62 +579,88 @@ export default function Home() {
       {/* CONTENIDO PRINCIPAL */}
       <main className="max-w-5xl mx-auto px-6 pt-14 md:pt-18">
 
-        {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR (TIENDAS / REVENDEDORES / CLIENTE FINAL) */}
-        <div className="max-w-2xl mb-12">
-          <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-950 mb-6 leading-[1.14]">
-            <span>Proveedor de </span>
-            <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block pr-1">
-              taller
-            </span>
-            <br />
-            <span>y equipos </span>
-            <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block">
-              certificados.
-            </span>
-          </h1>
+        {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR CON IPHONE DIAGONAL AL LADO DERECHO */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16">
+          
+          {/* COLUMNA IZQUIERDA: TITULO, LEYENDA Y SELECTOR */}
+          <div className="lg:col-span-7">
+            <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-950 mb-6 leading-[1.14]">
+              <span>Proveedor de </span>
+              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block pr-1">
+                taller
+              </span>
+              <br />
+              <span>y equipos </span>
+              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block">
+                certificados.
+              </span>
+            </h1>
 
-          <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed mb-8">
-            Suministro de{" "}
-            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
-              reparaciones especializadas
-            </span>{" "}
-            y teléfonos verificados para{" "}
-            <strong className="font-semibold text-zinc-900">
-              tiendas, revendedores y clientes directos
-            </strong>{" "}
-            en Panamá. Tarifas con{" "}
-            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
-              garantía de taller
-            </span>
-            , repuestos en distintas calidades y{" "}
-            <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
-              respuesta inmediata.
-            </span>
-          </p>
+            <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed mb-8 max-w-xl">
+              Suministro de{" "}
+              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+                reparaciones especializadas
+              </span>{" "}
+              y teléfonos verificados para{" "}
+              <strong className="font-semibold text-zinc-900">
+                tiendas, revendedores y clientes directos
+              </strong>{" "}
+              en Panamá. Tarifas con{" "}
+              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+                garantía de taller
+              </span>
+              , repuestos en distintas calidades y{" "}
+              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+                respuesta inmediata.
+              </span>
+            </p>
 
-          {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
-          <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
-            <button
-              onClick={() => setActiveTab("taller")}
-              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
-                activeTab === "taller"
-                  ? "bg-white text-zinc-950 shadow-sm font-semibold"
-                  : "text-zinc-500 hover:text-zinc-900"
-              }`}
-            >
-              Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("productos")}
-              className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
-                activeTab === "productos"
-                  ? "bg-white text-zinc-950 shadow-sm font-semibold"
-                  : "text-zinc-500 hover:text-zinc-900"
-              }`}
-            >
-              Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
-            </button>
+            {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
+            <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
+              <button
+                onClick={() => setActiveTab("taller")}
+                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
+                  activeTab === "taller"
+                    ? "bg-white text-zinc-950 shadow-sm font-semibold"
+                    : "text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("productos")}
+                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
+                  activeTab === "productos"
+                    ? "bg-white text-zinc-950 shadow-sm font-semibold"
+                    : "text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
+              </button>
+            </div>
           </div>
+
+          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end animate-fadeIn stagger-2">
+            <div className="relative w-full max-w-[300px] sm:max-w-[340px] flex items-center justify-center py-4">
+              <div className="relative w-full rounded-[2.5rem] p-3 sm:p-4 bg-gradient-to-b from-zinc-50/80 to-zinc-100/40 border border-black/[0.04] shadow-xs group">
+                <img
+                  src="/hero-iphone.jpg"
+                  alt="iPhone 15 Pro Titanium"
+                  className="w-full h-auto object-contain rounded-3xl drop-shadow-md group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                />
+
+                {/* Badge flotante de certificación */}
+                <div className="absolute -bottom-3 left-6 bg-white/95 backdrop-blur-md border border-black/[0.08] rounded-2xl px-3.5 py-2 shadow-lg flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] font-semibold text-zinc-900 tracking-tight">
+                    Equipos & Pantallas Calibradas
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* ============================================================== */}
