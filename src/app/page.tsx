@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import { 
   Smartphone, 
   Wrench, 
@@ -21,220 +22,17 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowUpDown,
-  ExternalLink
+  ExternalLink,
+  Settings
 } from "lucide-react";
 import { REPAIR_CATALOG, POPULAR_MODELS } from "@/data/repairCatalog";
+import INITIAL_INVENTORY from "@/data/inventory.json";
+import { InventoryProduct } from "@/types/inventory";
 
 // Datos oficiales de TecnoTrade PTY
 const WHATSAPP_NUMBER = "50768529324";
 const INSTAGRAM_URL = "https://www.instagram.com/tecnotradepty/";
 const GOOGLE_MAPS_URL = "https://www.google.com/maps?q=Mobile+Hub+Pty,+C.+Ricardo+Arias+5,+Panam%C3%A1,+Provincia+de+Panam%C3%A1&ftid=0x8faca9a77aef134b:0x20520f48e572172d&entry=gps&shh=CAE&lucs=,94297699,94284454,94231188,94280568,47071704,94218641,94282134,94286869&g_ep=CAISEjI2LjE5LjIuOTEwMjIxOTUwMBgAIIgnKkgsOTQyOTc2OTksOTQyODQ0NTQsOTQyMzExODgsOTQyODA1NjgsNDcwNzE3MDQsOTQyMTg2NDEsOTQyODIxMzQsOTQyODY4NjlCAlBB&skid=78b66149-c412-4190-89b3-86f1842bf2a2&g_st=ic";
-
-// Dispositivos certificados en venta (para cliente final y revendedores)
-export interface DeviceItem {
-  id: string;
-  brand: "iPhone" | "Samsung" | "Honor" | "Xiaomi" | "Pixel";
-  model: string;
-  sub: string;
-  battery: string;
-  grade: string;
-  price: number;
-  tag: string;
-  colors: string[];
-  image: string;
-}
-
-const DEVICES: DeviceItem[] = [
-  // iPhone
-  {
-    id: "dev-ip15p",
-    brand: "iPhone",
-    model: "iPhone 15 Pro",
-    sub: "Titanio Natural · 128 GB",
-    battery: "99% Salud",
-    grade: "Grado A+",
-    price: 790,
-    tag: "Titanium",
-    colors: ["#9E9689", "#3C3D40", "#E3E4E5"],
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-ip14pm",
-    brand: "iPhone",
-    model: "iPhone 14 Pro Max",
-    sub: "Deep Purple · 128 GB",
-    battery: "94% Salud",
-    grade: "Grado A+",
-    price: 680,
-    tag: "Alta Rotación",
-    colors: ["#483D4F", "#232426", "#F2F1ED"],
-    image: "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-ip13",
-    brand: "iPhone",
-    model: "iPhone 13",
-    sub: "Blanco Estrella · 128 GB",
-    battery: "92% Salud",
-    grade: "Impecable",
-    price: 430,
-    tag: "Más Pedido",
-    colors: ["#F4F3ED", "#262C3A", "#DF3542"],
-    image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-ip12",
-    brand: "iPhone",
-    model: "iPhone 12",
-    sub: "Black · 64 GB",
-    battery: "89% Salud",
-    grade: "Verificado",
-    price: 310,
-    tag: "Ideal Reventa",
-    colors: ["#202124", "#F4F3ED", "#35485E"],
-    image: "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=700&q=80"
-  },
-
-  // Samsung
-  {
-    id: "dev-s23u",
-    brand: "Samsung",
-    model: "Samsung Galaxy S23 Ultra",
-    sub: "Phantom Black · 256 GB",
-    battery: "95% Salud",
-    grade: "Seminuevo",
-    price: 640,
-    tag: "Flagship",
-    colors: ["#232426", "#424D41", "#DCD4C6"],
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-s22p",
-    brand: "Samsung",
-    model: "Samsung Galaxy S22+",
-    sub: "Verde Bosque · 128 GB",
-    battery: "93% Salud",
-    grade: "Excelente",
-    price: 420,
-    tag: "Serie S",
-    colors: ["#32463F", "#1D1E22", "#F6F5F3"],
-    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-a54",
-    brand: "Samsung",
-    model: "Samsung Galaxy A54 5G",
-    sub: "Awesome Graphite · 128 GB",
-    battery: "98% Salud",
-    grade: "Como Nuevo",
-    price: 220,
-    tag: "Alta Demanda",
-    colors: ["#2C3033", "#C5D8A4", "#928490"],
-    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=700&q=80"
-  },
-
-  // Honor
-  {
-    id: "dev-hn-m5p",
-    brand: "Honor",
-    model: "Honor Magic 5 Pro",
-    sub: "Meadow Green · 512 GB",
-    battery: "96% Salud",
-    grade: "Grado A+",
-    price: 490,
-    tag: "512 GB",
-    colors: ["#2D4F3C", "#1F2024"],
-    image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-hn-90",
-    brand: "Honor",
-    model: "Honor 90",
-    sub: "Diamond Silver · 256 GB",
-    battery: "97% Salud",
-    grade: "Impecable",
-    price: 280,
-    tag: "200 MP",
-    colors: ["#D8DCE0", "#183059"],
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-hn-m6l",
-    brand: "Honor",
-    model: "Honor Magic 6 Lite",
-    sub: "Emerald Green · 256 GB",
-    battery: "99% Salud",
-    grade: "Seminuevo",
-    price: 240,
-    tag: "Stock Rápido",
-    colors: ["#1B3B30", "#DF7A34"],
-    image: "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=700&q=80"
-  },
-
-  // Xiaomi
-  {
-    id: "dev-xm-13tp",
-    brand: "Xiaomi",
-    model: "Xiaomi 13T Pro",
-    sub: "Black Ceramic · 512 GB",
-    battery: "97% Salud",
-    grade: "Grado A+",
-    price: 460,
-    tag: "Carga 120W",
-    colors: ["#171717", "#879CB0"],
-    image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-xm-rn13p",
-    brand: "Xiaomi",
-    model: "Redmi Note 13 Pro+ 5G",
-    sub: "Aurora Purple · 256 GB",
-    battery: "98% Salud",
-    grade: "Como Nuevo",
-    price: 310,
-    tag: "Curvo 1.5K",
-    colors: ["#D1C4E9", "#212121"],
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-xm-px6p",
-    brand: "Xiaomi",
-    model: "Poco X6 Pro",
-    sub: "Yellow Edition · 256 GB",
-    battery: "99% Salud",
-    grade: "Impecable",
-    price: 270,
-    tag: "Alto Rendimiento",
-    colors: ["#F9D342", "#1F1F1F"],
-    image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?auto=format&fit=crop&w=700&q=80"
-  },
-
-  // Pixel
-  {
-    id: "dev-px-8p",
-    brand: "Pixel",
-    model: "Google Pixel 8 Pro",
-    sub: "Bay Blue · 128 GB",
-    battery: "98% Salud",
-    grade: "Grado A+",
-    price: 540,
-    tag: "Google AI",
-    colors: ["#A8C7FA", "#202124", "#E3E3E3"],
-    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=80"
-  },
-  {
-    id: "dev-px-7",
-    brand: "Pixel",
-    model: "Google Pixel 7",
-    sub: "Obsidian · 128 GB",
-    battery: "94% Salud",
-    grade: "Excelente",
-    price: 320,
-    tag: "Puro Android",
-    colors: ["#202124", "#E7E8D1"],
-    image: "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=700&q=80"
-  }
-];
 
 export interface CartItem {
   id: string;
@@ -253,6 +51,20 @@ export interface TextSuggestion {
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"taller" | "productos">("taller");
+
+  // Inventario dinámico sincronizado con la base de datos y panel admin
+  const [products, setProducts] = useState<InventoryProduct[]>(INITIAL_INVENTORY as InventoryProduct[]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+        }
+      })
+      .catch((err) => console.error("Error al sincronizar inventario en vivo:", err));
+  }, []);
 
   // Barra de búsqueda superior unificada en Taller
   const [directSearchQuery, setDirectSearchQuery] = useState("");
@@ -433,10 +245,10 @@ export default function Home() {
 
   // Dispositivos filtrados y ordenados para el Showroom
   const filteredDevices = useMemo(() => {
-    let list = [...DEVICES];
+    let list = [...products];
 
     if (deviceBrandFilter !== "Todos") {
-      list = list.filter((dev) => dev.brand.toLowerCase() === deviceBrandFilter.toLowerCase());
+      list = list.filter((dev) => dev.category.toLowerCase() === deviceBrandFilter.toLowerCase());
     }
 
     if (devicePriceSort === "asc") {
@@ -446,7 +258,7 @@ export default function Home() {
     }
 
     return list;
-  }, [deviceBrandFilter, devicePriceSort]);
+  }, [products, deviceBrandFilter, devicePriceSort]);
 
   // Mostrar solo 3 unidades inicialmente, expandible con el botón de catálogo completo
   const displayedDevices = useMemo(() => {
@@ -984,22 +796,22 @@ export default function Home() {
               </div>
             </div>
 
-            {/* FILTROS POR MARCA + BOTÓN CONSULTAR EN WHATSAPP */}
+            {/* FILTROS POR MARCA Y CATEGORÍA + BOTÓN CONSULTAR EN WHATSAPP */}
             <div className="flex flex-wrap items-center gap-2 mb-8">
-              {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel"].map((brand) => (
+              {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel", "Covers & Fundas", "Accesorios", "Otros"].map((cat) => (
                 <button
-                  key={brand}
+                  key={cat}
                   onClick={() => {
-                    setDeviceBrandFilter(brand);
+                    setDeviceBrandFilter(cat);
                     setShowFullCatalog(false);
                   }}
                   className={`px-4 py-2.5 rounded-2xl text-xs font-medium transition-all border btn-tactile ${
-                    deviceBrandFilter.toLowerCase() === brand.toLowerCase()
+                    deviceBrandFilter.toLowerCase() === cat.toLowerCase()
                       ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
                       : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
                   }`}
                 >
-                  {brand}
+                  {cat}
                 </button>
               ))}
 
@@ -1012,7 +824,7 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Parrilla de Teléfonos (Inicialmente 3 opciones, expandible a catálogo completo) */}
+            {/* Parrilla de Teléfonos y Productos (Inicialmente 3 opciones, expandible a catálogo completo) */}
             {filteredDevices.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -1023,41 +835,53 @@ export default function Home() {
                     >
                       <div className="relative h-64 rounded-2xl bg-[#EBECEF]/60 overflow-hidden mb-6 flex items-center justify-center">
                         <img 
-                          src={dev.image} 
-                          alt={dev.model}
+                          src={dev.image || "/logo.jpg"} 
+                          alt={dev.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
-                        <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                          {dev.grade}
-                        </span>
-                        <span className="absolute top-3.5 right-3.5 bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                          {dev.battery}
-                        </span>
+                        {dev.grade && (
+                          <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                            {dev.grade}
+                          </span>
+                        )}
+                        {dev.battery && (
+                          <span className="absolute top-3.5 right-3.5 bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                            {dev.battery}
+                          </span>
+                        )}
                       </div>
 
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[11px] text-zinc-600 font-medium">{dev.brand}</span>
-                          <span className="text-[10px] bg-zinc-200/70 text-zinc-700 px-2 py-0.5 rounded-full font-medium">
-                            {dev.tag}
-                          </span>
+                          <span className="text-[11px] text-zinc-600 font-medium">{dev.category}</span>
+                          {dev.tag && (
+                            <span className="text-[10px] bg-zinc-200/70 text-zinc-700 px-2 py-0.5 rounded-full font-medium">
+                              {dev.tag}
+                            </span>
+                          )}
                         </div>
-                        <h3 className="font-semibold text-lg text-zinc-900">{dev.model}</h3>
-                        <p className="text-xs text-zinc-600 mb-4">{dev.sub}</p>
+                        <h3 className="font-semibold text-lg text-zinc-900">{dev.name}</h3>
+                        <p className="text-xs text-zinc-600 mb-4">{dev.subtitle || dev.category}</p>
 
                         <div className="flex items-center gap-1.5 mb-6">
-                          <div className="flex items-center gap-1">
-                            {dev.colors.map((c, idx) => (
-                              <span 
-                                key={idx}
-                                style={{ backgroundColor: c }}
-                                className="w-2.5 h-2.5 rounded-full border border-black/10"
-                              />
-                            ))}
-                          </div>
+                          {dev.colors && dev.colors.length > 0 && (
+                            <div className="flex items-center gap-1">
+                              {dev.colors.map((c, idx) => (
+                                <span 
+                                  key={idx}
+                                  style={{ backgroundColor: c }}
+                                  className="w-2.5 h-2.5 rounded-full border border-black/10"
+                                />
+                              ))}
+                            </div>
+                          )}
                           <span className="text-xs text-zinc-500 ml-auto">
-                          100% <span className="font-cursive-accent text-zinc-700">Verificado</span>
-                        </span>
+                            {dev.inStock !== false ? (
+                              <>Stock <span className="font-cursive-accent text-zinc-700">Disponible</span></>
+                            ) : (
+                              <span className="text-amber-600 font-medium">Agotado</span>
+                            )}
+                          </span>
                         </div>
                       </div>
 
@@ -1070,8 +894,8 @@ export default function Home() {
                         <button
                           onClick={() => addToCart({
                             id: dev.id,
-                            title: dev.model,
-                            subtitle: `${dev.sub} · ${dev.grade}`,
+                            title: dev.name,
+                            subtitle: `${dev.subtitle || dev.category} · ${dev.grade || "Garantizado"}`,
                             price: dev.price
                           })}
                           className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
@@ -1133,15 +957,24 @@ export default function Home() {
           <p>
             TecnoTrade PTY · <span className="font-cursive-accent text-zinc-600">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
           </p>
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-zinc-700 hover:text-black font-medium inline-flex items-center gap-1 transition-colors"
-          >
-            <span>Instagram @tecnotradepty</span>
-            <ExternalLink className="w-3 h-3 opacity-60" />
-          </a>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/admin"
+              className="text-zinc-500 hover:text-zinc-950 font-medium inline-flex items-center gap-1.5 transition-colors text-[11px] bg-zinc-100 hover:bg-zinc-200/80 px-3 py-1.5 rounded-lg border border-black/[0.04]"
+            >
+              <Settings className="w-3 h-3" />
+              <span>Panel Inventario</span>
+            </Link>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-700 hover:text-black font-medium inline-flex items-center gap-1 transition-colors"
+            >
+              <span>Instagram @tecnotradepty</span>
+              <ExternalLink className="w-3 h-3 opacity-60" />
+            </a>
+          </div>
         </footer>
 
       </main>
