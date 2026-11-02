@@ -640,13 +640,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA (SOLO, SIN MARCO, MÁS GRANDE) */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end animate-fadeIn stagger-2">
-            <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[460px] flex items-center justify-center">
+          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA (TOTALMENTE ESTÁTICO, SIN SOMBRA DE CAJA NI MARCO) */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end select-none pointer-events-none">
+            <div className="relative w-full max-w-[380px] sm:max-w-[440px] lg:max-w-[480px] flex items-center justify-center">
               <img
                 src="/hero-iphone.jpg"
                 alt="iPhone 15 Pro Titanium"
-                className="w-full h-auto object-contain hover:scale-[1.03] transition-transform duration-700 ease-out drop-shadow-xl"
+                className="w-full h-auto object-contain mix-blend-multiply"
               />
             </div>
           </div>
