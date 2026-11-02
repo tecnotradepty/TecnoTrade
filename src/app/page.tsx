@@ -517,28 +517,22 @@ export default function Home() {
               <span className="text-base font-semibold tracking-tight text-zinc-900 block leading-tight">
                 TecnoTrade
               </span>
-              <a 
-                href={GOOGLE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-zinc-500 hover:text-zinc-900 font-normal inline-flex items-center gap-1 transition-colors"
-              >
-                <MapPin className="w-3 h-3" />
-                <span>Proveedor Técnico & Móviles · Panamá</span>
-              </a>
+              <span className="text-xs text-zinc-500 font-normal block">
+                Proveedor Técnico & Móviles · Panamá
+              </span>
             </div>
           </div>
 
-          {/* ACCIONES DE CABECERA: UBICACIÓN Y CARRITO */}
+          {/* ACCIONES DE CABECERA: CÓMO LLEGAR Y PEDIDO */}
           <div className="flex items-center gap-2.5">
             <a
               href={GOOGLE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-zinc-700 hover:text-zinc-950 bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-700 hover:text-zinc-950 bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
             >
               <MapPin className="w-3.5 h-3.5 text-zinc-700" />
-              <span>Ubicación</span>
+              <span>Cómo llegar</span>
             </a>
 
             <button
@@ -579,18 +573,7 @@ export default function Home() {
 
         {/* HERO EDITORIAL ENFOCADO EN PROVEEDOR (TIENDAS / REVENDEDORES / CLIENTE FINAL) */}
         <div className="max-w-2xl mb-12">
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="animate-fadeIn inline-flex items-center gap-1.5 text-xs text-zinc-600 hover:text-zinc-950 uppercase tracking-widest font-semibold mb-4 py-1 px-3 rounded-full bg-[#F4F4F6] border border-black/[0.04] transition-all hover:border-black/15"
-          >
-            <MapPin className="w-3.5 h-3.5 text-zinc-800" />
-            <span>Mobile Hub Pty · C. Ricardo Arias 5</span>
-            <ExternalLink className="w-3 h-3 opacity-60" />
-          </a>
-
-          <h1 className="animate-fadeIn stagger-1 text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
+          <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
             Proveedor de taller <br />
             <span className="font-semibold text-zinc-950">y equipos certificados.</span>
           </h1>
@@ -1070,47 +1053,22 @@ export default function Home() {
         )}
 
         {/* ============================================================== */}
-        {/* SECCIÓN DE PROVEEDOR / UBICACIÓN OFICIAL (GOOGLE MAPS + IG) */}
+        {/* PIE DE PÁGINA MINIMALISTA */}
         {/* ============================================================== */}
-        <section className="mt-16 pt-12 border-t border-black/[0.06] animate-fadeIn">
-          <div className="bg-[#FAF9F8] rounded-[2.5rem] p-8 sm:p-10 border border-black/[0.04] flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="space-y-3 max-w-xl">
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-600">
-                <MapPin className="w-3.5 h-3.5 text-zinc-900" />
-                <span>Centro de Servicio & Distribución</span>
-              </span>
-              <h3 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
-                Mobile Hub Pty · Calle Ricardo Arias 5, Panamá
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-                Atendemos a tiendas aliadas, revendedores y clientes finales de Lunes a Sábado (10:00 AM a 7:00 PM). Mensajería en Ciudad de Panamá y envíos a todas las provincias.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <a
-                href={GOOGLE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-zinc-900 hover:bg-black text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 shadow-sm transition-all btn-tactile"
-              >
-                <MapPin className="w-4 h-4" />
-                <span>Abrir en Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-              </a>
-
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white hover:bg-zinc-100 text-zinc-900 text-xs sm:text-sm font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 border border-black/[0.08] transition-all btn-tactile"
-              >
-                <span>@tecnotradepty</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-              </a>
-            </div>
-          </div>
-        </section>
+        <footer className="mt-16 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 animate-fadeIn">
+          <p>
+            TecnoTrade PTY · Lunes a Sábado de 10:00 AM a 7:00 PM · Envíos a todo Panamá
+          </p>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-700 hover:text-black font-medium inline-flex items-center gap-1 transition-colors"
+          >
+            <span>Instagram @tecnotradepty</span>
+            <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
+        </footer>
 
       </main>
 
