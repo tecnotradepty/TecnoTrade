@@ -583,11 +583,14 @@ export default function Home() {
         <div className="max-w-2xl mb-12">
           <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-900 mb-6 leading-[1.08]">
             Proveedor de taller <br />
-            <span className="font-semibold text-zinc-950">y equipos certificados.</span>
+            <span className="font-light text-zinc-950">y equipos </span>
+            <span className="font-cursive-accent font-normal text-zinc-950">certificados.</span>
           </h1>
 
           <p className="animate-fadeIn stagger-2 text-base text-zinc-600 font-normal leading-relaxed mb-8">
-            Suministro de reparaciones especializadas y teléfonos verificados para <strong className="font-semibold text-zinc-900">tiendas, revendedores y clientes directos</strong> en Panamá. Tarifas claras, repuestos en distintas calidades y respuesta inmediata.
+            Suministro de reparaciones especializadas y teléfonos verificados para{" "}
+            <strong className="font-semibold text-zinc-900">tiendas, revendedores y clientes directos</strong> en Panamá.
+            Tarifas con <span className="font-cursive-accent text-zinc-900 font-medium">garantía de taller</span>, repuestos en distintas calidades y respuesta inmediata.
           </p>
 
           {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
@@ -600,7 +603,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Catálogo de Reparaciones
+              Catálogo de <span className="font-cursive-accent text-sm">Reparaciones</span>
             </button>
             <button
               onClick={() => setActiveTab("productos")}
@@ -610,7 +613,7 @@ export default function Home() {
                   : "text-zinc-500 hover:text-zinc-900"
               }`}
             >
-              Equipos en Venta ({filteredDevices.length})
+              Equipos en <span className="font-cursive-accent text-sm">Venta</span> ({filteredDevices.length})
             </button>
           </div>
         </div>
@@ -627,10 +630,10 @@ export default function Home() {
               <div className="flex items-baseline justify-between pb-6 border-b border-black/[0.06] mb-8">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
-                    Cotizador de Servicio Técnico
+                    Cotizador de <span className="font-cursive-accent font-normal">Servicio Técnico</span>
                   </h2>
                   <p className="text-xs text-zinc-600 mt-1">
-                    Busca tu modelo arriba o selecciona marca y pieza abajo para armar tu orden
+                    Busca tu modelo arriba o selecciona marca y pieza con <span className="font-cursive-accent text-zinc-800">instalación profesional</span>
                   </p>
                 </div>
 
@@ -902,10 +905,10 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
               <div>
                 <h2 className="text-2xl font-semibold text-zinc-900">
-                  Stock de Dispositivos Verificados
+                  Stock de Dispositivos <span className="font-cursive-accent font-normal text-zinc-950">Verificados</span>
                 </h2>
                 <p className="text-xs text-zinc-600 mt-1">
-                  Disponibles por unidad para cliente final o para tiendas y revendedores
+                  Disponibles por unidad o lote con <span className="font-cursive-accent text-zinc-800">garantía de 6 meses</span>
                 </p>
               </div>
 
@@ -1017,7 +1020,9 @@ export default function Home() {
                               />
                             ))}
                           </div>
-                          <span className="text-xs text-zinc-500 ml-auto">100% Verificado</span>
+                          <span className="text-xs text-zinc-500 ml-auto">
+                          100% <span className="font-cursive-accent text-zinc-700">Verificado</span>
+                        </span>
                         </div>
                       </div>
 
@@ -1091,7 +1096,7 @@ export default function Home() {
         {/* ============================================================== */}
         <footer className="mt-16 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 animate-fadeIn">
           <p>
-            TecnoTrade PTY · Lunes a Sábado de 10:00 AM a 7:00 PM · Envíos a todo Panamá
+            TecnoTrade PTY · <span className="font-cursive-accent text-zinc-600">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
           </p>
           <a
             href={INSTAGRAM_URL}
@@ -1116,7 +1121,7 @@ export default function Home() {
             <div className="flex items-center justify-between pb-5 border-b border-black/[0.06]">
               <div>
                 <h3 className="font-semibold text-lg text-zinc-900">
-                  Resumen del Pedido
+                  Resumen del <span className="font-cursive-accent font-normal">Pedido</span>
                 </h3>
                 <span className="text-xs text-zinc-600">
                   {totalCartCount} {totalCartCount === 1 ? "ítem seleccionado" : "ítems seleccionados"}
@@ -1211,7 +1216,9 @@ export default function Home() {
                 </div>
 
                 <div className="pt-2 flex items-baseline justify-between border-t border-black/[0.04]">
-                  <span className="text-xs text-zinc-600 font-medium">Total estimado</span>
+                  <span className="text-xs text-zinc-600 font-medium">
+                    Total <span className="font-cursive-accent text-zinc-800">estimado</span>
+                  </span>
                   <span className="text-2xl font-bold text-zinc-900 tracking-tight">
                     ${totalCartPrice.toFixed(2)} USD
                   </span>
@@ -1294,10 +1301,14 @@ export default function Home() {
                   </span>
                 </div>
                 <p className="text-xs font-semibold text-zinc-900 leading-snug group-hover:text-emerald-700 transition-colors">
-                  ¡Hey, también compramos tu teléfono! 📱💵
+                  ¡Hey, también compramos tu{" "}
+                  <span className="font-cursive-accent font-semibold text-emerald-800 text-[13px]">
+                    teléfono!
+                  </span>{" "}
+                  📱💵
                 </p>
                 <span className="text-[11px] text-emerald-700 font-medium mt-1 inline-flex items-center gap-1">
-                  <span>Cotizar mi equipo</span>
+                  <span className="font-cursive-accent font-semibold text-xs">Cotizar mi equipo</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </div>
