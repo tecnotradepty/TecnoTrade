@@ -1,56 +1,34 @@
 [
   {
-    "id": "dev-ip15p",
+    "id": "prod-1793660694947",
     "category": "iPhone",
-    "name": "iPhone 15 Pro",
-    "subtitle": "Titanio Natural · 128 GB",
-    "battery": "99% Salud",
+    "name": "dsdgdg",
+    "subtitle": "sdfsfsd",
+    "price": 345,
     "grade": "Grado A+",
-    "price": 790,
-    "tag": "Titanium",
-    "colors": ["#9E9689", "#3C3D40", "#E3E4E5"],
-    "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=700&q=80",
+    "battery": "98",
+    "tag": "",
+    "colors": [
+      "#111111"
+    ],
+    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
-    "createdAt": "2026-11-01T12:00:00Z"
-  },
-  {
-    "id": "dev-ip14pm",
-    "category": "iPhone",
-    "name": "iPhone 14 Pro Max",
-    "subtitle": "Deep Purple · 128 GB",
-    "battery": "94% Salud",
-    "grade": "Grado A+",
-    "price": 680,
-    "tag": "Alta Rotación",
-    "colors": ["#483D4F", "#232426", "#F2F1ED"],
-    "image": "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?auto=format&fit=crop&w=700&q=80",
-    "inStock": true,
-    "createdAt": "2026-11-01T12:05:00Z"
-  },
-  {
-    "id": "dev-ip13",
-    "category": "iPhone",
-    "name": "iPhone 13",
-    "subtitle": "Blanco Estrella · 128 GB",
-    "battery": "92% Salud",
-    "grade": "Impecable",
-    "price": 430,
-    "tag": "Más Pedido",
-    "colors": ["#F4F3ED", "#262C3A", "#DF3542"],
-    "image": "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?auto=format&fit=crop&w=700&q=80",
-    "inStock": true,
-    "createdAt": "2026-11-01T12:10:00Z"
+    "createdAt": "2026-11-02T23:04:54.947Z"
   },
   {
     "id": "dev-ip12",
     "category": "iPhone",
-    "name": "iPhone 12",
+    "name": "iPhone 12 pro mini",
     "subtitle": "Black · 64 GB",
     "battery": "89% Salud",
     "grade": "Verificado",
     "price": 310,
     "tag": "Ideal Reventa",
-    "colors": ["#202124", "#F4F3ED", "#35485E"],
+    "colors": [
+      "#202124",
+      "#F4F3ED",
+      "#35485E"
+    ],
     "image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:15:00Z"
@@ -64,7 +42,11 @@
     "grade": "Seminuevo",
     "price": 640,
     "tag": "Flagship",
-    "colors": ["#232426", "#424D41", "#DCD4C6"],
+    "colors": [
+      "#232426",
+      "#424D41",
+      "#DCD4C6"
+    ],
     "image": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:20:00Z"
@@ -78,7 +60,11 @@
     "grade": "Excelente",
     "price": 420,
     "tag": "Serie S",
-    "colors": ["#32463F", "#1D1E22", "#F6F5F3"],
+    "colors": [
+      "#32463F",
+      "#1D1E22",
+      "#F6F5F3"
+    ],
     "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:25:00Z"
@@ -92,7 +78,11 @@
     "grade": "Como Nuevo",
     "price": 220,
     "tag": "Alta Demanda",
-    "colors": ["#2C3033", "#C5D8A4", "#928490"],
+    "colors": [
+      "#2C3033",
+      "#C5D8A4",
+      "#928490"
+    ],
     "image": "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:30:00Z"
@@ -106,7 +96,10 @@
     "grade": "Grado A+",
     "price": 490,
     "tag": "512 GB",
-    "colors": ["#2D4F3C", "#1F2024"],
+    "colors": [
+      "#2D4F3C",
+      "#1F2024"
+    ],
     "image": "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:35:00Z"
@@ -120,7 +113,10 @@
     "grade": "Impecable",
     "price": 280,
     "tag": "200 MP",
-    "colors": ["#D8DCE0", "#183059"],
+    "colors": [
+      "#D8DCE0",
+      "#183059"
+    ],
     "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:40:00Z"
@@ -134,7 +130,10 @@
     "grade": "Seminuevo",
     "price": 240,
     "tag": "Stock Rápido",
-    "colors": ["#1B3B30", "#DF7A34"],
+    "colors": [
+      "#1B3B30",
+      "#DF7A34"
+    ],
     "image": "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:45:00Z"
@@ -148,7 +147,10 @@
     "grade": "Grado A+",
     "price": 460,
     "tag": "Carga 120W",
-    "colors": ["#171717", "#879CB0"],
+    "colors": [
+      "#171717",
+      "#879CB0"
+    ],
     "image": "https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:50:00Z"
@@ -162,7 +164,10 @@
     "grade": "Como Nuevo",
     "price": 310,
     "tag": "Curvo 1.5K",
-    "colors": ["#D1C4E9", "#212121"],
+    "colors": [
+      "#D1C4E9",
+      "#212121"
+    ],
     "image": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T12:55:00Z"
@@ -176,7 +181,10 @@
     "grade": "Impecable",
     "price": 270,
     "tag": "Alto Rendimiento",
-    "colors": ["#F9D342", "#1F1F1F"],
+    "colors": [
+      "#F9D342",
+      "#1F1F1F"
+    ],
     "image": "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T13:00:00Z"
@@ -190,7 +198,11 @@
     "grade": "Grado A+",
     "price": 540,
     "tag": "Google AI",
-    "colors": ["#A8C7FA", "#202124", "#E3E3E3"],
+    "colors": [
+      "#A8C7FA",
+      "#202124",
+      "#E3E3E3"
+    ],
     "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T13:05:00Z"
@@ -204,7 +216,10 @@
     "grade": "Excelente",
     "price": 320,
     "tag": "Puro Android",
-    "colors": ["#202124", "#E7E8D1"],
+    "colors": [
+      "#202124",
+      "#E7E8D1"
+    ],
     "image": "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T13:10:00Z"
@@ -217,7 +232,11 @@
     "grade": "Nuevo en caja",
     "price": 18,
     "tag": "MagSafe",
-    "colors": ["#1C1C1E", "#34495E", "#E67E22"],
+    "colors": [
+      "#1C1C1E",
+      "#34495E",
+      "#E67E22"
+    ],
     "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T13:15:00Z"
@@ -230,7 +249,10 @@
     "grade": "Original certificado",
     "price": 25,
     "tag": "Carga Rápida",
-    "colors": ["#FFFFFF", "#000000"],
+    "colors": [
+      "#FFFFFF",
+      "#000000"
+    ],
     "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=700&q=80",
     "inStock": true,
     "createdAt": "2026-11-01T13:20:00Z"
