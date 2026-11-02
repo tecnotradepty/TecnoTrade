@@ -640,24 +640,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA */}
+          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA (SOLO, SIN MARCO, MÁS GRANDE) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end animate-fadeIn stagger-2">
-            <div className="relative w-full max-w-[300px] sm:max-w-[340px] flex items-center justify-center py-4">
-              <div className="relative w-full rounded-[2.5rem] p-3 sm:p-4 bg-gradient-to-b from-zinc-50/80 to-zinc-100/40 border border-black/[0.04] shadow-xs group">
-                <img
-                  src="/hero-iphone.jpg"
-                  alt="iPhone 15 Pro Titanium"
-                  className="w-full h-auto object-contain rounded-3xl drop-shadow-md group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                />
-
-                {/* Badge flotante de certificación */}
-                <div className="absolute -bottom-3 left-6 bg-white/95 backdrop-blur-md border border-black/[0.08] rounded-2xl px-3.5 py-2 shadow-lg flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[11px] font-semibold text-zinc-900 tracking-tight">
-                    Equipos & Pantallas Calibradas
-                  </span>
-                </div>
-              </div>
+            <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[460px] flex items-center justify-center">
+              <img
+                src="/hero-iphone.jpg"
+                alt="iPhone 15 Pro Titanium"
+                className="w-full h-auto object-contain hover:scale-[1.03] transition-transform duration-700 ease-out drop-shadow-xl"
+              />
             </div>
           </div>
 
