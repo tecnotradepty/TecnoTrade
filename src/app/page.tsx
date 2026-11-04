@@ -563,7 +563,11 @@ export default function Home() {
                 {/* RESUMEN COMPACTO CUANDO LOS 3 PASOS ESTÁN SELECCIONADOS Y PLEGADOS */}
                 {selectedBrand && selectedModel && selectedCategory && expandedStep === null ? (
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-fadeIn">
-                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                    <button
+                      onClick={() => setExpandedStep(1)}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      title="Cambiar marca"
+                    >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         <div className="min-w-0">
@@ -571,15 +575,16 @@ export default function Home() {
                           <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedBrand}</span>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setExpandedStep(1)}
-                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
-                      >
-                        Cambiar
-                      </button>
-                    </div>
+                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      </div>
+                    </button>
 
-                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                    <button
+                      onClick={() => setExpandedStep(2)}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      title="Cambiar modelo"
+                    >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         <div className="min-w-0">
@@ -587,15 +592,16 @@ export default function Home() {
                           <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedModel}</span>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setExpandedStep(2)}
-                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
-                      >
-                        Cambiar
-                      </button>
-                    </div>
+                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      </div>
+                    </button>
 
-                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                    <button
+                      onClick={() => setExpandedStep(3)}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      title="Cambiar pieza"
+                    >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         <div className="min-w-0">
@@ -603,19 +609,20 @@ export default function Home() {
                           <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedCategory}</span>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setExpandedStep(3)}
-                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
-                      >
-                        Cambiar
-                      </button>
-                    </div>
+                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      </div>
+                    </button>
                   </div>
                 ) : (
                   <>
                     {/* PASO 1: MARCA */}
                     {selectedBrand && expandedStep !== 1 ? (
-                      <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                      <button
+                        onClick={() => setExpandedStep(1)}
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                        title="Cambiar marca"
+                      >
                         <div className="flex items-center gap-2.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                           <div>
@@ -623,13 +630,10 @@ export default function Home() {
                             <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedBrand}</span>
                           </div>
                         </div>
-                        <button
-                          onClick={() => setExpandedStep(1)}
-                          className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
-                        >
-                          Cambiar
-                        </button>
-                      </div>
+                        <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
+                          <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                        </div>
+                      </button>
                     ) : (
                       <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
                         <div className="flex items-center justify-between mb-3">
@@ -672,7 +676,11 @@ export default function Home() {
                     {/* PASO 2: MODELO */}
                     {selectedBrand && (
                       selectedModel && expandedStep !== 2 ? (
-                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <button
+                          onClick={() => setExpandedStep(2)}
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                          title="Cambiar modelo"
+                        >
                           <div className="flex items-center gap-2.5">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                             <div>
@@ -680,13 +688,10 @@ export default function Home() {
                               <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedModel}</span>
                             </div>
                           </div>
-                          <button
-                            onClick={() => setExpandedStep(2)}
-                            className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
-                          >
-                            Cambiar
-                          </button>
-                        </div>
+                          <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
+                            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                          </div>
+                        </button>
                       ) : (
                         <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
                           <div className="flex items-center justify-between mb-3">
@@ -735,7 +740,11 @@ export default function Home() {
                     {/* PASO 3: REPUESTO / SERVICIO */}
                     {selectedModel && (
                       selectedCategory && expandedStep !== 3 ? (
-                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <button
+                          onClick={() => setExpandedStep(3)}
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                          title="Cambiar pieza"
+                        >
                           <div className="flex items-center gap-2.5">
                             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                             <div>
@@ -743,13 +752,10 @@ export default function Home() {
                               <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedCategory}</span>
                             </div>
                           </div>
-                          <button
-                            onClick={() => setExpandedStep(3)}
-                            className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
-                          >
-                            Cambiar
-                          </button>
-                        </div>
+                          <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
+                            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                          </div>
+                        </button>
                       ) : (
                         <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
                           <div className="flex items-center justify-between mb-3">
