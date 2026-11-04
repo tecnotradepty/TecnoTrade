@@ -29,7 +29,6 @@ export const REPAIR_CATALOG: RepairItem[] = [
 
   { id: "ip-scr-11-incell", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Incell", price: 35, cost: 13 },
   { id: "ip-scr-11-ori", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Original", price: 50, cost: 23 },
-  { id: "ip-scr-11-orieq", brand: "Apple", category: "Pantallas", model: "iPhone 11", quality: "Original de equipo", price: 55, cost: 28 },
 
   { id: "ip-scr-11p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro", quality: "Incell", price: 35, cost: 16 },
   { id: "ip-scr-11p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 11 Pro", quality: "OLED", price: 55, cost: 30 },
@@ -44,30 +43,30 @@ export const REPAIR_CATALOG: RepairItem[] = [
 
   { id: "ip-scr-12-incell", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "Incell", price: 35, cost: 16 },
   { id: "ip-scr-12-oled", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "OLED", price: 65, cost: 36 },
-  { id: "ip-scr-12-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "Original", price: 85, cost: 56 },
+  { id: "ip-scr-12-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 / 12 Pro", quality: "Original", price: 85, cost: 46 },
 
   { id: "ip-scr-12pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "Incell", price: 37.5, cost: 17 },
   { id: "ip-scr-12pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "OLED", price: 75, cost: 48 },
-  { id: "ip-scr-12pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "Original", price: 130, cost: 90 },
+  { id: "ip-scr-12pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 12 Pro Max", quality: "Original", price: 130, cost: 62 },
 
   { id: "ip-scr-13m-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 mini", quality: "Incell", price: 40, cost: 20 },
   { id: "ip-scr-13m-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 mini", quality: "OLED", price: 90, cost: 65 },
 
   { id: "ip-scr-13-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "Incell", price: 40, cost: 19 },
   { id: "ip-scr-13-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "OLED", price: 65, cost: 38 },
-  { id: "ip-scr-13-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "Original", price: 90, cost: 66 },
+  { id: "ip-scr-13-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13", quality: "Original", price: 90, cost: 55 },
 
   { id: "ip-scr-13p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "Incell", price: 40, cost: 21 },
   { id: "ip-scr-13p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "OLED", price: 75, cost: 44 },
-  { id: "ip-scr-13p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "Original de equipo", price: 140, cost: 125 },
+  { id: "ip-scr-13p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro", quality: "Original", price: 140, cost: 70 },
 
   { id: "ip-scr-13pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "Incell", price: 50, cost: 23 },
   { id: "ip-scr-13pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "OLED", price: 80, cost: 50 },
-  { id: "ip-scr-13pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "Original", price: 125, cost: 70 },
+  { id: "ip-scr-13pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 13 Pro Max", quality: "Original", price: 125, cost: 73 },
 
   { id: "ip-scr-14-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "Incell", price: 45, cost: 21 },
   { id: "ip-scr-14-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "OLED", price: 65, cost: 38 },
-  { id: "ip-scr-14-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "Original de equipo", price: 150, cost: 130 },
+  { id: "ip-scr-14-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14", quality: "Original", price: 150, cost: 58 },
 
   { id: "ip-scr-14plus-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14 Plus", quality: "Incell", price: 50, cost: 25 },
   { id: "ip-scr-14plus-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14 Plus", quality: "OLED", price: 90, cost: 60 },
@@ -78,18 +77,18 @@ export const REPAIR_CATALOG: RepairItem[] = [
 
   { id: "ip-scr-14pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "Incell", price: 55, cost: 22 },
   { id: "ip-scr-14pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "OLED", price: 90, cost: 50 },
-  { id: "ip-scr-14pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "Original", price: 150, cost: 150 },
+  { id: "ip-scr-14pm-ori", brand: "Apple", category: "Pantallas", model: "iPhone 14 Pro Max", quality: "Original", price: 150, cost: 80 },
 
   { id: "ip-scr-15-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "Incell", price: 55, cost: 30 },
   { id: "ip-scr-15-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "OLED", price: 120, cost: 55 },
-  { id: "ip-scr-15-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "Original", price: 215, cost: 175 },
+  { id: "ip-scr-15-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15", quality: "Original", price: 150, cost: 95 },
 
   { id: "ip-scr-15plus-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Plus", quality: "Incell", price: 60, cost: 25 },
   { id: "ip-scr-15plus-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Plus", quality: "OLED", price: 125, cost: 96 },
 
   { id: "ip-scr-15p-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "Incell", price: 55, cost: 28 },
   { id: "ip-scr-15p-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "OLED", price: 125, cost: 62 },
-  { id: "ip-scr-15p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "Original", price: 160, cost: 168 },
+  { id: "ip-scr-15p-ori", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro", quality: "Original", price: 160, cost: 108 },
 
   { id: "ip-scr-15pm-incell", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro Max", quality: "Incell", price: 60, cost: 25 },
   { id: "ip-scr-15pm-oled", brand: "Apple", category: "Pantallas", model: "iPhone 15 Pro Max", quality: "OLED", price: 115, cost: 55 },
