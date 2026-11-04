@@ -25,7 +25,7 @@ import {
   ExternalLink,
   Settings
 } from "lucide-react";
-import { REPAIR_CATALOG, POPULAR_MODELS } from "@/data/repairCatalog";
+import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch } from "@/data/repairCatalog";
 import INITIAL_INVENTORY from "@/data/inventory.json";
 import { InventoryProduct } from "@/types/inventory";
 
@@ -160,20 +160,11 @@ export default function Home() {
 
   // Construye una línea puramente de texto indicando si hay pantalla (y sus calidades), tapa y puerto
   const buildTextSummaryForModel = (modelName: string, brandHint: string): string => {
-    const cleanTarget = modelName.toLowerCase();
-    const words = cleanTarget
-      .replace(/galaxy|honor|pixel|iphone|\/|\+/g, " ")
-      .trim()
-      .split(/\s+/)
-      .filter((w) => w.length >= 2);
-
     // Calidades de pantalla disponibles
     const screenQualities = REPAIR_CATALOG.filter((item) => {
       if (item.category !== "Pantallas") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
-      const cleanItem = item.model.toLowerCase();
-      if (cleanItem.includes(cleanTarget) || cleanTarget.includes(cleanItem)) return true;
-      return words.length > 0 && words.every((w) => cleanItem.includes(w));
+      return isModelMatch(item.model, modelName, brandHint);
     }).map((s) => s.quality);
 
     const uniqueQualities = Array.from(new Set(screenQualities));
@@ -182,15 +173,14 @@ export default function Home() {
     const hasBackCover = REPAIR_CATALOG.some((item) => {
       if (item.category !== "Tapas Traseras") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
-      const cleanItem = item.model.toLowerCase();
-      if (cleanItem.includes(cleanTarget) || cleanTarget.includes(cleanItem)) return true;
-      return words.length > 0 && words.some((w) => cleanItem.includes(w));
+      return isModelMatch(item.model, modelName, brandHint);
     });
 
     // Verificar si hay puerto de carga
     const hasPort = REPAIR_CATALOG.some((item) => {
       if (item.category !== "Puertos de Carga") return false;
-      return item.brand.toLowerCase() === brandHint.toLowerCase();
+      if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
+      return isModelMatch(item.model, modelName, brandHint);
     });
 
     const partsText: string[] = [];
@@ -233,14 +223,11 @@ export default function Home() {
   const matchingRepairs = useMemo(() => {
     if (!selectedBrand || !selectedModel || !selectedCategory) return [];
 
-    const cleanModel = selectedModel.toLowerCase();
-
     return REPAIR_CATALOG.filter((item) => {
       if (item.brand !== selectedBrand) return false;
       if (item.category !== selectedCategory) return false;
 
-      const parts = cleanModel.replace(/galaxy|honor|pixel|iphone|\/|\+/g, " ").trim().split(/\s+/);
-      return parts.some((p) => p.length >= 2 && (item.model || "").toLowerCase().includes(p));
+      return isModelMatch(item.model, selectedModel, selectedBrand);
     });
   }, [selectedBrand, selectedModel, selectedCategory]);
 

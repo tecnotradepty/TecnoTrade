@@ -290,6 +290,10 @@ export const REPAIR_CATALOG: RepairItem[] = [
   { id: "ch-ip-15", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15", quality: "Original", price: 50, cost: 28 },
   { id: "ch-ip-15p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15 Pro", quality: "Original", price: 55, cost: 32 },
   { id: "ch-ip-15pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 15 Pro Max", quality: "Original", price: 60, cost: 38 },
+  { id: "ch-ip-16", brand: "Apple", category: "Puertos de Carga", model: "iPhone 16", quality: "Original", price: 50, cost: 28 },
+  { id: "ch-ip-16plus", brand: "Apple", category: "Puertos de Carga", model: "iPhone 16 Plus", quality: "Original", price: 55, cost: 32 },
+  { id: "ch-ip-16p", brand: "Apple", category: "Puertos de Carga", model: "iPhone 16 Pro", quality: "Original", price: 55, cost: 32 },
+  { id: "ch-ip-16pm", brand: "Apple", category: "Puertos de Carga", model: "iPhone 16 Pro Max", quality: "Original", price: 60, cost: 38 },
 
   { id: "ch-sam-a", brand: "Samsung", category: "Puertos de Carga", model: "Galaxy Series A (A12, A14, A15, A54, A55)", quality: "Original", price: 31, cost: 8 },
   { id: "ch-sam-s-std", brand: "Samsung", category: "Puertos de Carga", model: "Galaxy Series S (S20, S21, S22 Base / Plus)", quality: "Original", price: 32, cost: 10 },
@@ -393,3 +397,70 @@ export const POPULAR_MODELS: Record<string, string[]> = {
     "Pixel 6 / 6A"
   ]
 };
+
+/**
+ * Validador estricto para asegurar que una pieza corresponde al modelo seleccionado
+ * Evita falsos positivos como asociar repuestos del iPhone 11 o 12 al seleccionar iPhone 16 Pro.
+ */
+export function isModelMatch(itemModel: string, selectedModel: string, _brand?: string): boolean {
+  if (!itemModel || !selectedModel) return false;
+
+  const itemLower = itemModel.toLowerCase().trim();
+  const selLower = selectedModel.toLowerCase().trim();
+
+  // 1. Coincidencia directa o tras retirar marca
+  if (itemLower === selLower) return true;
+
+  const stripBrand = (s: string) => s.toLowerCase().replace(/iphone|galaxy|honor|pixel|xiaomi|poco|redmi/gi, "").trim();
+  const cleanAlphaNum = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  const itemClean = stripBrand(itemLower);
+  const selClean = stripBrand(selLower);
+  if (cleanAlphaNum(itemClean) && cleanAlphaNum(itemClean) === cleanAlphaNum(selClean)) return true;
+
+  // 2. Tokenizar listas compuestas (ej: "12 / 12 Pro", "S22 / S22+", "iPhone X / XR / XS / XS Max")
+  const itemParts = itemLower.split(/\s*[\/,]\s*/).map((p) => cleanAlphaNum(stripBrand(p))).filter(Boolean);
+  const selParts = selLower.split(/\s*[\/,]\s*/).map((p) => cleanAlphaNum(stripBrand(p))).filter(Boolean);
+
+  for (const ip of itemParts) {
+    for (const sp of selParts) {
+      if (ip === sp) return true;
+    }
+  }
+
+  // 3. Agrupaciones con paréntesis en el catálogo:
+  // ej: "Galaxy Series A (A12, A14, A15, A54, A55)"
+  // ej: "Galaxy Series S (S20, S21, S22 Base / Plus)"
+  // ej: "Galaxy Series S (S22, S23, S24 Ultra)"
+  const parenMatch = itemLower.match(/\(([^)]+)\)/);
+  if (parenMatch) {
+    const isSelUltra = selLower.includes("ultra");
+    if (itemLower.includes("ultra") && !isSelUltra) return false;
+    if (!itemLower.includes("ultra") && isSelUltra) return false;
+
+    const insideTokens = parenMatch[1]
+      .split(/[\s,\/]+/)
+      .map((t) => cleanAlphaNum(t))
+      .filter((t) => t.length >= 2 && t !== "base" && t !== "plus" && t !== "ultra");
+
+    const selTokens = selLower
+      .split(/[\s,\/]+/)
+      .map((t) => cleanAlphaNum(t))
+      .filter((t) => t.length >= 2);
+
+    for (const inTok of insideTokens) {
+      if (selTokens.includes(inTok)) {
+        return true;
+      }
+    }
+  }
+
+  // 4. Repuestos universales de series completas (Honor Series X, Redmi Note & Poco)
+  if (itemLower.includes("honor series x") && (selLower.includes("honor x") || selLower.startsWith("x"))) return true;
+  if (itemLower.includes("magic lite") && selLower.includes("magic") && selLower.includes("lite")) return true;
+  if (itemLower.includes("redmi note") && selLower.includes("redmi note")) return true;
+  if (itemLower.includes("poco series") && selLower.includes("poco")) return true;
+
+  return false;
+}
+
