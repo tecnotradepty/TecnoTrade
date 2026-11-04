@@ -1365,9 +1365,9 @@ export default function Home() {
       {/* ============================================================== */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5">
         
-        {/* Burbuja de mensaje estilo WhatsApp (Verde oscuro #005C4B + tipografía simple unificada) */}
+        {/* Burbuja de mensaje estilo Clay 3D con color propio de WhatsApp */}
         {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
-          <div className="animate-chatPop relative bg-[#005C4B] text-white clay-whatsapp-bubble rounded-2xl rounded-br-xs p-4 pr-8 max-w-[260px] text-left shadow-xl shadow-emerald-950/25 font-sans">
+          <div className="animate-chatPop relative bg-[#DDF7E6] text-[#0A2918] clay-whatsapp-bubble rounded-2xl rounded-br-xs p-4 pr-8 max-w-[260px] text-left shadow-xl shadow-emerald-950/15 border border-[#16A34A]/25">
             
             <button
               onClick={(e) => {
@@ -1375,33 +1375,37 @@ export default function Home() {
                 setChatBubbleStep("dismissed");
               }}
               aria-label="Cerrar mensaje"
-              className="absolute top-2.5 right-2.5 text-white/60 hover:text-white p-0.5 rounded-full transition-colors"
+              className="absolute top-2.5 right-2.5 text-emerald-800/60 hover:text-emerald-950 p-0.5 rounded-full transition-colors"
             >
               <X className="w-3.5 h-3.5" />
             </button>
 
             {chatBubbleStep === "typing" ? (
               <div className="flex items-center gap-1.5 py-1.5 px-2">
-                <span className="w-2 h-2 rounded-full bg-[#25D366] typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-[#25D366] typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-[#25D366] typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
               </div>
             ) : (
               <div 
                 onClick={handleSellPhoneWhatsApp}
                 className="cursor-pointer group"
               >
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#25D366] shrink-0" />
-                  <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider font-sans">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="w-2 h-2 rounded-full bg-[#16A34A]" />
+                  <span className="text-[10px] font-extrabold text-emerald-900 uppercase tracking-wider">
                     TecnoTrade · Trade-In
                   </span>
                 </div>
-                <p className="text-xs sm:text-[13px] font-normal text-white leading-snug group-hover:text-emerald-100 transition-colors font-sans">
-                  ¡Hey, también compramos tu teléfono! 📱💵
+                <p className="text-xs sm:text-[13px] font-bold text-[#0A2918] leading-snug group-hover:text-emerald-800 transition-colors">
+                  ¡Hey, también compramos tu{" "}
+                  <span className="font-cursive-accent font-bold text-emerald-800 text-sm">
+                    teléfono!
+                  </span>{" "}
+                  📱💵
                 </p>
-                <span className="text-[11px] text-[#25D366] font-semibold mt-2 inline-flex items-center gap-1 group-hover:text-emerald-300 transition-colors font-sans">
-                  <span>Cotizar mi equipo</span>
+                <span className="text-[11px] text-emerald-900 font-bold mt-1.5 inline-flex items-center gap-1 bg-white/60 px-2.5 py-0.5 rounded-full">
+                  <span className="font-cursive-accent font-bold text-xs">Cotizar mi equipo</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </div>
