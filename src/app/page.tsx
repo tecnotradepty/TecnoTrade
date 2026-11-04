@@ -25,7 +25,7 @@ import {
   ExternalLink,
   Settings
 } from "lucide-react";
-import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch } from "@/data/repairCatalog";
+import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch, RepairItem } from "@/data/repairCatalog";
 import INITIAL_INVENTORY from "@/data/inventory.json";
 import { InventoryProduct } from "@/types/inventory";
 
@@ -54,6 +54,7 @@ export default function Home() {
 
   // Inventario dinámico sincronizado con la base de datos y panel admin
   const [products, setProducts] = useState<InventoryProduct[]>(INITIAL_INVENTORY as InventoryProduct[]);
+  const [repairs, setRepairs] = useState<RepairItem[]>(REPAIR_CATALOG);
 
   useEffect(() => {
     fetch("/api/products")
@@ -64,6 +65,15 @@ export default function Home() {
         }
       })
       .catch((err) => console.error("Error al sincronizar inventario en vivo:", err));
+
+    fetch("/api/repairs")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setRepairs(data);
+        }
+      })
+      .catch((err) => console.error("Error al sincronizar reparaciones en vivo:", err));
   }, []);
 
   // Barra de búsqueda superior unificada en Taller
@@ -144,7 +154,7 @@ export default function Home() {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
 
-  // Lista plana de todos los modelos conocidos
+  // Lista plana de todos los modelos conocidos (incluyendo los añadidos desde /admin)
   const allKnownModels = useMemo(() => {
     const list: { model: string; brand: "Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google" }[] = [];
     Object.entries(POPULAR_MODELS).forEach(([brand, models]) => {
@@ -155,13 +165,25 @@ export default function Home() {
         })
       );
     });
+
+    // Agregar modelos personalizados creados en el panel de admin que no estén aún cubiertos
+    repairs.forEach((r) => {
+      if (/series|&|\(/i.test(r.model) || r.model.split("/").length > 3) return;
+      const alreadyExists = list.some(
+        (existing) => existing.brand === r.brand && isModelMatch(r.model, existing.model, r.brand)
+      );
+      if (!alreadyExists) {
+        list.push({ model: r.model, brand: r.brand });
+      }
+    });
+
     return list;
-  }, []);
+  }, [repairs]);
 
   // Construye una línea puramente de texto indicando si hay pantalla (y sus calidades), tapa y puerto
   const buildTextSummaryForModel = (modelName: string, brandHint: string): string => {
     // Calidades de pantalla disponibles
-    const screenQualities = REPAIR_CATALOG.filter((item) => {
+    const screenQualities = repairs.filter((item) => {
       if (item.category !== "Pantallas") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       return isModelMatch(item.model, modelName, brandHint);
@@ -170,14 +192,14 @@ export default function Home() {
     const uniqueQualities = Array.from(new Set(screenQualities));
 
     // Verificar si hay tapa trasera
-    const hasBackCover = REPAIR_CATALOG.some((item) => {
+    const hasBackCover = repairs.some((item) => {
       if (item.category !== "Tapas Traseras") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       return isModelMatch(item.model, modelName, brandHint);
     });
 
     // Verificar si hay puerto de carga
-    const hasPort = REPAIR_CATALOG.some((item) => {
+    const hasPort = repairs.some((item) => {
       if (item.category !== "Puertos de Carga") return false;
       if (item.brand.toLowerCase() !== brandHint.toLowerCase()) return false;
       return isModelMatch(item.model, modelName, brandHint);
@@ -211,25 +233,34 @@ export default function Home() {
       brand: m.brand,
       summaryLine: buildTextSummaryForModel(m.model, m.brand)
     }));
-  }, [directSearchQuery, allKnownModels]);
+  }, [directSearchQuery, allKnownModels, repairs]);
 
   // Modelos disponibles según la marca seleccionada en los filtros
   const availableModels = useMemo(() => {
     if (!selectedBrand) return [];
-    return POPULAR_MODELS[selectedBrand] || [];
-  }, [selectedBrand]);
+    const baseModels = [...(POPULAR_MODELS[selectedBrand] || [])];
+    repairs.forEach((r) => {
+      if (r.brand !== selectedBrand) return;
+      if (/series|&|\(/i.test(r.model) || r.model.split("/").length > 3) return;
+      const alreadyExists = baseModels.some((m) => isModelMatch(r.model, m, selectedBrand));
+      if (!alreadyExists) {
+        baseModels.unshift(r.model);
+      }
+    });
+    return baseModels;
+  }, [selectedBrand, repairs]);
 
   // Reparaciones coincidentes cuando se completan los 3 filtros
   const matchingRepairs = useMemo(() => {
     if (!selectedBrand || !selectedModel || !selectedCategory) return [];
 
-    return REPAIR_CATALOG.filter((item) => {
+    return repairs.filter((item) => {
       if (item.brand !== selectedBrand) return false;
       if (item.category !== selectedCategory) return false;
 
       return isModelMatch(item.model, selectedModel, selectedBrand);
     });
-  }, [selectedBrand, selectedModel, selectedCategory]);
+  }, [selectedBrand, selectedModel, selectedCategory, repairs]);
 
   // Dispositivos filtrados y ordenados para el Showroom
   const filteredDevices = useMemo(() => {
