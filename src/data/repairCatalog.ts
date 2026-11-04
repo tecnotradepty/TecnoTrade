@@ -399,68 +399,71 @@ export const POPULAR_MODELS: Record<string, string[]> = {
 };
 
 /**
- * Validador estricto para asegurar que una pieza corresponde al modelo seleccionado
- * Evita falsos positivos como asociar repuestos del iPhone 11 o 12 al seleccionar iPhone 16 Pro.
+ * Validador estricto para asegurar que una pieza corresponde al modelo seleccionado.
+ * Evita falsos positivos como asociar repuestos del iPhone 11 o del Redmi Note 10
+ * al seleccionar iPhone 16 Pro o Redmi Note 14.
  */
+const BRAND_WORDS = /\b(iphone|galaxy|honor|pixel|google|xiaomi|poco|redmi|samsung|apple)\b/g;
+
+const normalizeVariant = (s: string) => s.toLowerCase().replace(/\+/g, "plus").replace(/[^a-z0-9]/g, "");
+
+/**
+ * Expande un nombre de modelo en sus variantes completas.
+ * ej: "Redmi Note 14 / 14 Pro" -> ["note14", "note14pro"]
+ *     "iPhone X / XR / XS / XS Max" -> ["x", "xr", "xs", "xsmax"]
+ *     "Galaxy A16 4G / 5G" -> ["a16"]
+ */
+export function expandModelVariants(model: string): string[] {
+  const base = model
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/\b[45]g\b/g, " ")
+    .replace(BRAND_WORDS, " ");
+  const parts = base.split(/[\/,]/).map((p) => p.trim().replace(/\s+/g, " ")).filter(Boolean);
+  if (!parts.length) return [];
+
+  // Prefijo de familia (ej: "note" en "Redmi Note 14") para heredarlo en variantes como "14 Pro"
+  const words = parts[0].split(" ");
+  const idx = words.findIndex((w) => /\d/.test(w));
+  const prefix = idx > 0 ? words.slice(0, idx).join(" ") : "";
+
+  return parts
+    .map((p, i) => normalizeVariant(i > 0 && prefix && /^\d/.test(p) ? `${prefix} ${p}` : p))
+    .filter(Boolean);
+}
+
 export function isModelMatch(itemModel: string, selectedModel: string, _brand?: string): boolean {
   if (!itemModel || !selectedModel) return false;
 
   const itemLower = itemModel.toLowerCase().trim();
   const selLower = selectedModel.toLowerCase().trim();
-
-  // 1. Coincidencia directa o tras retirar marca
   if (itemLower === selLower) return true;
 
-  const stripBrand = (s: string) => s.toLowerCase().replace(/iphone|galaxy|honor|pixel|xiaomi|poco|redmi/gi, "").trim();
-  const cleanAlphaNum = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const selVariants = expandModelVariants(selectedModel);
 
-  const itemClean = stripBrand(itemLower);
-  const selClean = stripBrand(selLower);
-  if (cleanAlphaNum(itemClean) && cleanAlphaNum(itemClean) === cleanAlphaNum(selClean)) return true;
-
-  // 2. Tokenizar listas compuestas (ej: "12 / 12 Pro", "S22 / S22+", "iPhone X / XR / XS / XS Max")
-  const itemParts = itemLower.split(/\s*[\/,]\s*/).map((p) => cleanAlphaNum(stripBrand(p))).filter(Boolean);
-  const selParts = selLower.split(/\s*[\/,]\s*/).map((p) => cleanAlphaNum(stripBrand(p))).filter(Boolean);
-
-  for (const ip of itemParts) {
-    for (const sp of selParts) {
-      if (ip === sp) return true;
-    }
+  // Agrupaciones con paréntesis: "Galaxy Series A (A12, A14, A15, A54, A55)"
+  const paren = itemModel.match(/\(([^)]+)\)/);
+  if (paren) {
+    const groupUltra = itemLower.includes("ultra");
+    if (groupUltra !== selLower.includes("ultra")) return false;
+    const tokens = paren[1]
+      .split(/[\s,\/]+/)
+      .map(normalizeVariant)
+      .filter((t) => t.length >= 2 && /\d/.test(t));
+    const selBases = selVariants.map((v) => v.replace(/(plus|ultra|fe)$/, ""));
+    return tokens.some((t) => selBases.includes(t));
   }
 
-  // 3. Agrupaciones con paréntesis en el catálogo:
-  // ej: "Galaxy Series A (A12, A14, A15, A54, A55)"
-  // ej: "Galaxy Series S (S20, S21, S22 Base / Plus)"
-  // ej: "Galaxy Series S (S22, S23, S24 Ultra)"
-  const parenMatch = itemLower.match(/\(([^)]+)\)/);
-  if (parenMatch) {
-    const isSelUltra = selLower.includes("ultra");
-    if (itemLower.includes("ultra") && !isSelUltra) return false;
-    if (!itemLower.includes("ultra") && isSelUltra) return false;
-
-    const insideTokens = parenMatch[1]
-      .split(/[\s,\/]+/)
-      .map((t) => cleanAlphaNum(t))
-      .filter((t) => t.length >= 2 && t !== "base" && t !== "plus" && t !== "ultra");
-
-    const selTokens = selLower
-      .split(/[\s,\/]+/)
-      .map((t) => cleanAlphaNum(t))
-      .filter((t) => t.length >= 2);
-
-    for (const inTok of insideTokens) {
-      if (selTokens.includes(inTok)) {
-        return true;
-      }
-    }
+  // Repuestos universales de series completas (Honor Series X & Magic Lite, Redmi Note & Poco Series)
+  if (/series|&/i.test(itemModel)) {
+    if (itemLower.includes("honor series x") && /\bx\d/.test(selLower)) return true;
+    if (itemLower.includes("magic lite") && selLower.includes("magic") && selLower.includes("lite")) return true;
+    if (itemLower.includes("redmi note") && selLower.includes("redmi note")) return true;
+    if (itemLower.includes("poco series") && selLower.includes("poco")) return true;
+    return false;
   }
 
-  // 4. Repuestos universales de series completas (Honor Series X, Redmi Note & Poco)
-  if (itemLower.includes("honor series x") && (selLower.includes("honor x") || selLower.startsWith("x"))) return true;
-  if (itemLower.includes("magic lite") && selLower.includes("magic") && selLower.includes("lite")) return true;
-  if (itemLower.includes("redmi note") && selLower.includes("redmi note")) return true;
-  if (itemLower.includes("poco series") && selLower.includes("poco")) return true;
-
-  return false;
+  // Coincidencia exacta de al menos una variante completa
+  const itemVariants = expandModelVariants(itemModel);
+  return itemVariants.some((v) => selVariants.includes(v));
 }
-
