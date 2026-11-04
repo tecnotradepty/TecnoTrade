@@ -337,16 +337,16 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#111111] pb-32 font-sans selection:bg-[#111111] selection:text-white">
+    <div className="min-h-screen bg-white text-[#0D1017] pb-32 font-sans selection:bg-[#1452F0] selection:text-white">
       
       {/* ============================================================== */}
-      {/* HEADER MINIMALISTA EDITORIAL */}
+      {/* HEADER MINIMALISTA EDITORIAL CON IDENTIDAD DEL LOGO TECNOTRADE */}
       {/* ============================================================== */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-black/[0.05]">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-[#1452F0]/[0.08]">
         <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
           
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-2xl overflow-hidden bg-zinc-50 border border-black/[0.06] flex items-center justify-center p-1 transition-transform duration-300 hover:scale-105">
+            <div className="w-11 h-11 rounded-2xl overflow-hidden bg-white border border-[#1452F0]/20 shadow-xs shadow-[#1452F0]/10 flex items-center justify-center p-0.5 transition-transform duration-300 hover:scale-105">
               <img 
                 src="/logo.jpg" 
                 alt="TecnoTrade" 
@@ -354,10 +354,15 @@ export default function Home() {
               />
             </div>
             <div>
-              <span className="text-base font-semibold tracking-tight text-zinc-900 block leading-tight">
-                TecnoTrade
-              </span>
-              <span className="text-xs text-zinc-500 font-normal block">
+              <div className="flex items-center gap-1.5">
+                <span className="text-base font-bold tracking-tight text-[#0D1017] leading-tight">
+                  TecnoTrade
+                </span>
+                <span className="text-[#1452F0] text-xs leading-none" title="Certificado TecnoTrade">
+                  ✦
+                </span>
+              </div>
+              <span className="text-xs text-slate-500 font-normal block">
                 Proveedor Técnico & Móviles · Panamá
               </span>
             </div>
@@ -369,20 +374,20 @@ export default function Home() {
               href={GOOGLE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-700 hover:text-zinc-950 bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:text-[#1452F0] bg-[#F5F7FC] hover:bg-[#EEF4FF] border border-[#1452F0]/10 px-3.5 py-2.5 rounded-full transition-all btn-tactile"
             >
-              <MapPin className="w-3.5 h-3.5 text-zinc-700" />
+              <MapPin className="w-3.5 h-3.5 text-[#1452F0]" />
               <span>Cómo llegar</span>
             </a>
 
             <button
               onClick={() => setIsCartOpen(true)}
-              className="bg-zinc-900 hover:bg-black text-white text-xs font-medium px-4 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm btn-tactile"
+              className="bg-[#0D1017] hover:bg-[#1452F0] text-white text-xs font-medium px-4 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm shadow-[#1452F0]/15 btn-tactile"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               <span>Pedido</span>
               {totalCartCount > 0 && (
-                <span className="bg-white text-zinc-900 text-[11px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center">
+                <span className="bg-[#1452F0] text-white text-[11px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center border border-white/20">
                   {totalCartCount}
                 </span>
               )}
@@ -393,15 +398,15 @@ export default function Home() {
 
       {/* AVISO FLOTANTE DE ELEMENTO AÑADIDO */}
       {addedItemNotification && (
-        <div className="fixed top-22 right-6 z-50 bg-zinc-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-slideDown border border-white/10">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="fixed top-22 right-6 z-50 bg-[#0D1017] text-white px-4 py-3 rounded-2xl shadow-xl shadow-[#1452F0]/15 flex items-center gap-3 animate-slideDown border border-[#1452F0]/30">
+          <CheckCircle2 className="w-4 h-4 text-[#4A80FF] shrink-0" />
           <div className="text-xs">
             <p className="font-semibold">{addedItemNotification}</p>
-            <p className="text-zinc-400 text-[11px]">Añadido al pedido</p>
+            <p className="text-slate-400 text-[11px]">Añadido al pedido</p>
           </div>
           <button 
             onClick={() => setIsCartOpen(true)}
-            className="text-xs text-white font-semibold underline ml-2"
+            className="text-xs text-[#6B9BFF] hover:text-white font-semibold underline ml-2"
           >
             Ver
           </button>
@@ -416,58 +421,69 @@ export default function Home() {
           
           {/* COLUMNA IZQUIERDA: TITULO, LEYENDA Y SELECTOR */}
           <div className="lg:col-span-7">
-            <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-zinc-950 mb-6 leading-[1.14]">
+            <div className="animate-fadeIn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EEF4FF] border border-[#1452F0]/15 text-[#1452F0] text-[11px] font-semibold tracking-wide mb-5">
+              <span>✦</span>
+              <span>Tecnología & Mano de Obra Certificada · Panamá</span>
+            </div>
+
+            <h1 className="animate-fadeIn text-4xl sm:text-6xl font-light tracking-tight text-[#0D1017] mb-6 leading-[1.14]">
               <span>Proveedor de </span>
-              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block pr-1">
+              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-[#1452F0] inline-block pr-1">
                 taller
               </span>
               <br />
               <span>y equipos </span>
-              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-zinc-900 inline-block">
+              <span className="font-corporate-cursive font-semibold text-5xl sm:text-7xl text-[#0D1017] inline-block">
                 certificados.
               </span>
             </h1>
 
-            <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-zinc-600 font-normal leading-relaxed mb-8 max-w-xl">
+            <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-slate-600 font-normal leading-relaxed mb-8 max-w-xl">
               Suministro de{" "}
-              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              <span className="font-corporate-cursive text-[#0D1017] font-semibold text-lg sm:text-xl">
                 reparaciones especializadas
               </span>{" "}
               y teléfonos verificados para{" "}
-              <strong className="font-semibold text-zinc-900">
+              <strong className="font-semibold text-[#0D1017]">
                 tiendas, revendedores y clientes directos
               </strong>{" "}
               en Panamá. Tarifas con{" "}
-              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              <span className="font-corporate-cursive text-[#1452F0] font-semibold text-lg sm:text-xl">
                 garantía de taller
               </span>
               , repuestos en distintas calidades y{" "}
-              <span className="font-corporate-cursive text-zinc-950 font-semibold text-lg sm:text-xl">
+              <span className="font-corporate-cursive text-[#0D1017] font-semibold text-lg sm:text-xl">
                 respuesta inmediata.
               </span>
             </p>
 
             {/* BIFURCADOR SUPERIOR (Taller vs Teléfonos) */}
-            <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F4F4F6] rounded-full border border-black/[0.04]">
+            <div className="animate-fadeIn stagger-3 inline-flex p-1.5 bg-[#F5F7FC] rounded-full border border-[#1452F0]/12">
               <button
                 onClick={() => setActiveTab("taller")}
-                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
+                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile flex items-center gap-2 ${
                   activeTab === "taller"
-                    ? "bg-white text-zinc-950 shadow-sm font-semibold"
-                    : "text-zinc-500 hover:text-zinc-900"
+                    ? "bg-[#0D1017] text-white shadow-md shadow-[#1452F0]/15 font-semibold"
+                    : "text-slate-600 hover:text-[#0D1017]"
                 }`}
               >
-                Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
+                <span className={`w-1.5 h-1.5 rounded-full ${activeTab === "taller" ? "bg-[#3B76FF]" : "bg-transparent"}`} />
+                <span>
+                  Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
+                </span>
               </button>
               <button
                 onClick={() => setActiveTab("productos")}
-                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile ${
+                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-all btn-tactile flex items-center gap-2 ${
                   activeTab === "productos"
-                    ? "bg-white text-zinc-950 shadow-sm font-semibold"
-                    : "text-zinc-500 hover:text-zinc-900"
+                    ? "bg-[#0D1017] text-white shadow-md shadow-[#1452F0]/15 font-semibold"
+                    : "text-slate-600 hover:text-[#0D1017]"
                 }`}
               >
-                Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
+                <span className={`w-1.5 h-1.5 rounded-full ${activeTab === "productos" ? "bg-[#3B76FF]" : "bg-transparent"}`} />
+                <span>
+                  Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
+                </span>
               </button>
             </div>
           </div>
@@ -500,16 +516,16 @@ export default function Home() {
         {activeTab === "taller" && (
           <div className="space-y-10 animate-fadeIn stagger-2 mb-20">
             
-            <div className="bg-[#FAF9F8] rounded-[2.5rem] p-6 sm:p-10 border border-black/[0.04] transition-all">
+            <div className="bg-[#F5F7FC] rounded-[2.5rem] p-6 sm:p-10 border border-[#1452F0]/[0.09] shadow-xs shadow-[#1452F0]/[0.02] transition-all">
               
               {/* Cabecera del Cotizador */}
-              <div className="flex items-baseline justify-between pb-6 border-b border-black/[0.06] mb-8">
+              <div className="flex items-baseline justify-between pb-6 border-b border-[#1452F0]/[0.08] mb-8">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-zinc-900 tracking-tight">
-                    Cotizador de <span className="font-cursive-accent font-normal">Servicio Técnico</span>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-[#0D1017] tracking-tight">
+                    Cotizador de <span className="font-cursive-accent font-normal text-[#1452F0]">Servicio Técnico</span>
                   </h2>
-                  <p className="text-xs text-zinc-600 mt-1">
-                    Busca tu modelo arriba o selecciona marca y pieza con <span className="font-cursive-accent text-zinc-800">instalación profesional</span>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Busca tu modelo arriba o selecciona marca y pieza con <span className="font-cursive-accent text-[#0D1017]">instalación profesional</span>
                   </p>
                 </div>
 
@@ -522,7 +538,7 @@ export default function Home() {
                       setDirectSearchQuery("");
                       setExpandedStep(1);
                     }}
-                    className="text-xs text-zinc-600 hover:text-zinc-900 flex items-center gap-1 font-medium transition-colors shrink-0"
+                    className="text-xs text-[#1452F0] hover:text-[#0C3BC4] flex items-center gap-1 font-semibold transition-colors shrink-0"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Limpiar</span>
@@ -532,19 +548,19 @@ export default function Home() {
 
               {/* 1. BARRA DE BÚSQUEDA ARRIBA CON SUGERENCIAS DE SOLO TEXTO */}
               <div className="relative mb-10">
-                <div className="bg-white rounded-2xl px-5 py-3.5 flex items-center gap-3.5 border border-black/[0.08] shadow-xs focus-within:border-black/30 transition-all">
-                  <Search className="w-4 h-4 text-zinc-400 shrink-0" />
+                <div className="bg-white rounded-2xl px-5 py-3.5 flex items-center gap-3.5 border border-[#1452F0]/15 shadow-xs focus-within:border-[#1452F0] focus-within:ring-4 focus-within:ring-[#1452F0]/10 transition-all">
+                  <Search className="w-4 h-4 text-[#1452F0] shrink-0" />
                   <input 
                     type="text"
                     value={directSearchQuery}
                     onChange={(e) => setDirectSearchQuery(e.target.value)}
                     placeholder="Buscar modelo rápido (ej: iPhone 13, Galaxy S23, Honor 90, Redmi Note 13)..."
-                    className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 focus:outline-none placeholder:text-zinc-400"
+                    className="w-full bg-transparent text-xs sm:text-sm text-[#0D1017] focus:outline-none placeholder:text-slate-400"
                   />
                   {directSearchQuery && (
                     <button 
                       onClick={() => setDirectSearchQuery("")} 
-                      className="text-zinc-400 hover:text-zinc-900 p-1"
+                      className="text-slate-400 hover:text-[#0D1017] p-1"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -553,28 +569,28 @@ export default function Home() {
 
                 {/* Lista desplegable minimalista de sugerencias en SOLO TEXTO */}
                 {directSearchQuery.trim() && (
-                  <div className="mt-2 bg-white rounded-2xl border border-black/[0.08] shadow-lg overflow-hidden divide-y divide-black/[0.04] animate-fadeIn">
+                  <div className="mt-2 bg-white rounded-2xl border border-[#1452F0]/15 shadow-xl shadow-[#1452F0]/5 overflow-hidden divide-y divide-slate-100 animate-fadeIn">
                     {textSuggestions.length > 0 ? (
                       textSuggestions.map((sug) => (
                         <button
                           key={sug.model}
                           onClick={() => handleSelectSuggestion(sug)}
-                          className="w-full px-5 py-3 text-left hover:bg-[#FAF9F8] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-1"
+                          className="w-full px-5 py-3 text-left hover:bg-[#EEF4FF]/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-1"
                         >
-                          <span className="text-xs sm:text-sm font-semibold text-zinc-900">
+                          <span className="text-xs sm:text-sm font-semibold text-[#0D1017]">
                             {sug.model}
                           </span>
-                          <span className="text-[11px] sm:text-xs text-zinc-500 font-normal">
+                          <span className="text-[11px] sm:text-xs text-[#1452F0] font-medium">
                             {sug.summaryLine}
                           </span>
                         </button>
                       ))
                     ) : (
-                      <div className="px-5 py-3.5 flex items-center justify-between text-xs text-zinc-600">
+                      <div className="px-5 py-3.5 flex items-center justify-between text-xs text-slate-600">
                         <span>Sin coincidencias exactas para &ldquo;{directSearchQuery}&rdquo;</span>
                         <button
                           onClick={() => handleConsultWhatsApp(directSearchQuery)}
-                          className="font-semibold text-zinc-900 underline hover:text-black"
+                          className="font-semibold text-[#1452F0] underline hover:text-[#0C3BC4]"
                         >
                           Consultar por WhatsApp
                         </button>
@@ -592,52 +608,52 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-fadeIn">
                     <button
                       onClick={() => setExpandedStep(1)}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group btn-tactile"
                       title="Cambiar marca"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                         <div className="min-w-0">
-                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">1. Marca</span>
-                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedBrand}</span>
+                          <span className="text-[10px] text-slate-400 uppercase font-semibold block">1. Marca</span>
+                          <span className="text-xs sm:text-sm font-semibold text-[#0D1017] truncate block">{selectedBrand}</span>
                         </div>
                       </div>
-                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
-                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                       </div>
                     </button>
 
                     <button
                       onClick={() => setExpandedStep(2)}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group btn-tactile"
                       title="Cambiar modelo"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                         <div className="min-w-0">
-                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">2. Modelo</span>
-                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedModel}</span>
+                          <span className="text-[10px] text-slate-400 uppercase font-semibold block">2. Modelo</span>
+                          <span className="text-xs sm:text-sm font-semibold text-[#0D1017] truncate block">{selectedModel}</span>
                         </div>
                       </div>
-                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
-                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                       </div>
                     </button>
 
                     <button
                       onClick={() => setExpandedStep(3)}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group btn-tactile"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group btn-tactile"
                       title="Cambiar pieza"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                         <div className="min-w-0">
-                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">3. Pieza</span>
-                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedCategory}</span>
+                          <span className="text-[10px] text-slate-400 uppercase font-semibold block">3. Pieza</span>
+                          <span className="text-xs sm:text-sm font-semibold text-[#0D1017] truncate block">{selectedCategory}</span>
                         </div>
                       </div>
-                      <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 ml-2 transition-colors">
-                        <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                      <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 ml-2 transition-colors">
+                        <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                       </div>
                     </button>
                   </div>
@@ -647,30 +663,30 @@ export default function Home() {
                     {selectedBrand && expandedStep !== 1 ? (
                       <button
                         onClick={() => setExpandedStep(1)}
-                        className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
                         title="Cambiar marca"
                       >
                         <div className="flex items-center gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                           <div>
-                            <span className="text-[10px] text-zinc-400 uppercase font-semibold block">1. Marca seleccionada</span>
-                            <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedBrand}</span>
+                            <span className="text-[10px] text-slate-400 uppercase font-semibold block">1. Marca seleccionada</span>
+                            <span className="text-xs sm:text-sm font-semibold text-[#0D1017]">{selectedBrand}</span>
                           </div>
                         </div>
-                        <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
-                          <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                        <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 transition-colors">
+                          <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                         </div>
                       </button>
                     ) : (
-                      <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                      <div className="bg-white p-5 rounded-2xl border border-[#1452F0]/12 shadow-2xs animate-fadeIn">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                          <span className="text-xs font-semibold text-[#0D1017] uppercase tracking-wider">
                             1. Selecciona la Marca
                           </span>
                           {selectedBrand && (
                             <button
                               onClick={() => setExpandedStep(selectedModel ? (selectedCategory ? null : 3) : 2)}
-                              className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                              className="text-xs text-[#1452F0] hover:text-[#0C3BC4] font-medium flex items-center gap-1"
                             >
                               <span>Plegar</span>
                               <ChevronUp className="w-3.5 h-3.5" />
@@ -689,8 +705,8 @@ export default function Home() {
                               }}
                               className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
                                 selectedBrand === brand
-                                  ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
-                                  : "bg-[#FAF9F8] text-zinc-700 border-black/[0.05] hover:border-black/20"
+                                  ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold shadow-sm shadow-[#1452F0]/15"
+                                  : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35 hover:bg-[#EEF4FF]/60"
                               }`}
                             >
                               {brand}
@@ -705,34 +721,34 @@ export default function Home() {
                       selectedModel && expandedStep !== 2 ? (
                         <button
                           onClick={() => setExpandedStep(2)}
-                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
                           title="Cambiar modelo"
                         >
                           <div className="flex items-center gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                             <div>
-                              <span className="text-[10px] text-zinc-400 uppercase font-semibold block">2. Modelo seleccionado</span>
-                              <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedModel}</span>
+                              <span className="text-[10px] text-slate-400 uppercase font-semibold block">2. Modelo seleccionado</span>
+                              <span className="text-xs sm:text-sm font-semibold text-[#0D1017]">{selectedModel}</span>
                             </div>
                           </div>
-                          <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
-                            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                          <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 transition-colors">
+                            <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                           </div>
                         </button>
                       ) : (
-                        <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <div className="bg-white p-5 rounded-2xl border border-[#1452F0]/12 shadow-2xs animate-fadeIn">
                           <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                            <span className="text-xs font-semibold text-[#0D1017] uppercase tracking-wider">
                               2. Modelo de {selectedBrand}
                             </span>
                             <div className="flex items-center gap-3">
-                              <span className="text-xs text-zinc-500">
+                              <span className="text-xs text-slate-500">
                                 {availableModels.length} disponibles
                               </span>
                               {selectedModel && (
                                 <button
                                   onClick={() => setExpandedStep(selectedCategory ? null : 3)}
-                                  className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                                  className="text-xs text-[#1452F0] hover:text-[#0C3BC4] font-medium flex items-center gap-1"
                                 >
                                   <span>Plegar</span>
                                   <ChevronUp className="w-3.5 h-3.5" />
@@ -752,8 +768,8 @@ export default function Home() {
                                 }}
                                 className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
                                   selectedModel === model
-                                    ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
-                                    : "bg-[#FAF9F8] text-zinc-700 border-black/[0.05] hover:border-black/20"
+                                    ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold shadow-sm shadow-[#1452F0]/15"
+                                    : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35 hover:bg-[#EEF4FF]/60"
                                 }`}
                               >
                                 {model}
@@ -769,30 +785,30 @@ export default function Home() {
                       selectedCategory && expandedStep !== 3 ? (
                         <button
                           onClick={() => setExpandedStep(3)}
-                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs hover:border-black/20 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#1452F0]/15 shadow-2xs hover:border-[#1452F0]/45 hover:shadow-xs transition-all text-left group animate-fadeIn btn-tactile"
                           title="Cambiar pieza"
                         >
                           <div className="flex items-center gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#1452F0] shrink-0" />
                             <div>
-                              <span className="text-[10px] text-zinc-400 uppercase font-semibold block">3. Pieza seleccionada</span>
-                              <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedCategory}</span>
+                              <span className="text-[10px] text-slate-400 uppercase font-semibold block">3. Pieza seleccionada</span>
+                              <span className="text-xs sm:text-sm font-semibold text-[#0D1017]">{selectedCategory}</span>
                             </div>
                           </div>
-                          <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-200/80 flex items-center justify-center shrink-0 transition-colors">
-                            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-black" />
+                          <div className="w-7 h-7 rounded-full bg-[#EEF4FF] group-hover:bg-[#1452F0] flex items-center justify-center shrink-0 transition-colors">
+                            <ChevronDown className="w-4 h-4 text-[#1452F0] group-hover:text-white transition-colors" />
                           </div>
                         </button>
                       ) : (
-                        <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <div className="bg-white p-5 rounded-2xl border border-[#1452F0]/12 shadow-2xs animate-fadeIn">
                           <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                            <span className="text-xs font-semibold text-[#0D1017] uppercase tracking-wider">
                               3. Pieza requerida para {selectedModel}
                             </span>
                             {selectedCategory && (
                               <button
                                 onClick={() => setExpandedStep(null)}
-                                className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                                className="text-xs text-[#1452F0] hover:text-[#0C3BC4] font-medium flex items-center gap-1"
                               >
                                 <span>Plegar</span>
                                 <ChevronUp className="w-3.5 h-3.5" />
@@ -815,12 +831,12 @@ export default function Home() {
                                   }}
                                   className={`p-4 sm:p-5 rounded-2xl border text-left transition-all btn-tactile ${
                                     isSelected
-                                      ? "bg-zinc-900 text-white border-zinc-900 shadow-xs"
-                                      : "bg-[#FAF9F8] text-zinc-800 border-black/[0.05] hover:border-black/20"
+                                      ? "bg-[#0D1017] text-white border-[#1452F0] shadow-sm shadow-[#1452F0]/15"
+                                      : "bg-[#F5F7FC] text-[#0D1017] border-[#1452F0]/[0.08] hover:border-[#1452F0]/35 hover:bg-[#EEF4FF]/60"
                                   }`}
                                 >
                                   <p className="font-semibold text-sm">{cat.title}</p>
-                                  <p className={`text-xs mt-1 ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
+                                  <p className={`text-xs mt-1 ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
                                     {cat.desc}
                                   </p>
                                 </button>
@@ -835,12 +851,12 @@ export default function Home() {
 
                 {/* RESULTADOS REVELADOS AL ESPECIFICAR LOS 3 PASOS */}
                 {selectedBrand && selectedModel && selectedCategory && (
-                  <div className="pt-8 border-t border-black/[0.06] animate-fadeIn">
+                  <div className="pt-8 border-t border-[#1452F0]/10 animate-fadeIn">
                     <div className="mb-5">
-                      <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold block">
-                        Cotización para {selectedModel}
+                      <span className="text-xs text-[#1452F0] uppercase tracking-wider font-semibold block">
+                        ✦ Cotización para {selectedModel}
                       </span>
-                      <h3 className="text-lg font-semibold text-zinc-900 mt-0.5">
+                      <h3 className="text-lg font-semibold text-[#0D1017] mt-0.5">
                         Calidades disponibles · {selectedCategory}
                       </h3>
                     </div>
@@ -850,30 +866,36 @@ export default function Home() {
                         {matchingRepairs.map((item) => (
                           <div 
                             key={item.id}
-                            className="bg-white rounded-3xl p-6 border border-black/[0.06] shadow-xs flex flex-col justify-between minimal-card-hover animate-scaleIn"
+                            className="bg-white rounded-3xl p-6 border border-[#1452F0]/12 shadow-xs flex flex-col justify-between minimal-card-hover animate-scaleIn"
                           >
                             <div>
                               <div className="flex items-center justify-between mb-3">
-                                <span className="bg-zinc-100 text-zinc-800 text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
+                                <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
+                                  item.quality === "Original" || item.quality === "Servipack"
+                                    ? "bg-[#EEF4FF] text-[#1452F0] border border-[#1452F0]/20"
+                                    : item.quality === "OLED"
+                                    ? "bg-[#0D1017] text-white"
+                                    : "bg-slate-100 text-slate-700"
+                                }`}>
                                   {item.quality}
                                 </span>
-                                <span className="text-[11px] text-zinc-500">
+                                <span className="text-[11px] text-slate-500">
                                   Incluye instalación
                                 </span>
                               </div>
 
-                              <h4 className="font-semibold text-base text-zinc-900 mb-1">
+                              <h4 className="font-semibold text-base text-[#0D1017] mb-1">
                                 {item.model}
                               </h4>
-                              <p className="text-xs text-zinc-500 mb-5">
+                              <p className="text-xs text-slate-500 mb-5">
                                 Repuesto verificado con garantía de taller.
                               </p>
                             </div>
 
-                            <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between">
+                            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                               <div>
-                                <span className="text-[10px] text-zinc-500 block uppercase font-medium">Tarifa</span>
-                                <span className="text-2xl font-bold text-zinc-900 tracking-tight">
+                                <span className="text-[10px] text-slate-400 block uppercase font-semibold">Tarifa</span>
+                                <span className="text-2xl font-bold text-[#0D1017] tracking-tight">
                                   ${item.price.toFixed(2)}
                                 </span>
                               </div>
@@ -885,7 +907,7 @@ export default function Home() {
                                   subtitle: `Calidad: ${item.quality}`,
                                   price: item.price
                                 })}
-                                className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-xs btn-tactile"
+                                className="bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm shadow-[#1452F0]/20 btn-tactile"
                               >
                                 <Plus className="w-3.5 h-3.5" />
                                 <span>Añadir</span>
@@ -895,11 +917,11 @@ export default function Home() {
                         ))}
                       </div>
                     ) : (
-                      <div className="p-8 rounded-3xl bg-white border border-black/[0.06] text-center text-zinc-600 text-xs animate-scaleIn">
+                      <div className="p-8 rounded-3xl bg-white border border-[#1452F0]/12 text-center text-slate-600 text-xs animate-scaleIn">
                         <p>Esta pieza específica se maneja bajo pedido directo en almacén.</p>
                         <button
                           onClick={() => handleConsultWhatsApp(`${selectedModel} - ${selectedCategory}`)}
-                          className="mt-4 bg-zinc-900 text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5 btn-tactile"
+                          className="mt-4 bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs font-semibold px-5 py-2.5 rounded-full inline-flex items-center gap-1.5 shadow-sm shadow-[#1452F0]/20 btn-tactile"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>Consultar disponibilidad en WhatsApp</span>
@@ -911,7 +933,7 @@ export default function Home() {
 
                 {/* AVISO CUANDO AÚN NO SE HA SELECCIONADO LA PIEZA */}
                 {(!selectedBrand || !selectedModel || !selectedCategory) && (
-                  <div className="bg-white/80 rounded-2xl p-5 text-center text-zinc-500 text-xs border border-black/[0.03]">
+                  <div className="bg-white/80 rounded-2xl p-5 text-center text-slate-500 text-xs border border-[#1452F0]/[0.06]">
                     <p>
                       Especifica el equipo y la pieza para mostrar las tarifas exactas y añadirlas a tu pedido.
                     </p>
@@ -934,24 +956,24 @@ export default function Home() {
             {/* Título de la Sección */}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
               <div>
-                <h2 className="text-2xl font-semibold text-zinc-900">
-                  Stock de Dispositivos <span className="font-cursive-accent font-normal text-zinc-950">Verificados</span>
+                <h2 className="text-2xl font-semibold text-[#0D1017]">
+                  Stock de Dispositivos <span className="font-cursive-accent font-normal text-[#1452F0]">Verificados</span>
                 </h2>
-                <p className="text-xs text-zinc-600 mt-1">
-                  Disponibles por unidad o lote con <span className="font-cursive-accent text-zinc-800">garantía de 6 meses</span>
+                <p className="text-xs text-slate-600 mt-1">
+                  Disponibles por unidad o lote con <span className="font-cursive-accent text-[#0D1017]">garantía de 6 meses</span>
                 </p>
               </div>
 
               {/* Selector de ordenamiento: menor a mayor / mayor a menor */}
-              <div className="flex items-center gap-2 self-start md:self-auto bg-[#F4F4F6] p-1.5 rounded-2xl border border-black/[0.04]">
-                <ArrowUpDown className="w-3.5 h-3.5 text-zinc-500 ml-2" />
-                <span className="text-xs text-zinc-600 font-medium">Precio:</span>
+              <div className="flex items-center gap-2 self-start md:self-auto bg-[#F5F7FC] p-1.5 rounded-2xl border border-[#1452F0]/10">
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#1452F0] ml-2" />
+                <span className="text-xs text-slate-600 font-medium">Precio:</span>
                 <button
                   onClick={() => setDevicePriceSort("default")}
                   className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "default"
-                      ? "bg-white text-zinc-900 font-semibold shadow-2xs"
-                      : "text-zinc-600 hover:text-black"
+                      ? "bg-white text-[#0D1017] font-semibold shadow-2xs border border-[#1452F0]/15"
+                      : "text-slate-600 hover:text-[#0D1017]"
                   }`}
                 >
                   Destacados
@@ -960,8 +982,8 @@ export default function Home() {
                   onClick={() => setDevicePriceSort("asc")}
                   className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "asc"
-                      ? "bg-white text-zinc-900 font-semibold shadow-2xs"
-                      : "text-zinc-600 hover:text-black"
+                      ? "bg-white text-[#0D1017] font-semibold shadow-2xs border border-[#1452F0]/15"
+                      : "text-slate-600 hover:text-[#0D1017]"
                   }`}
                 >
                   Menor a Mayor
@@ -970,8 +992,8 @@ export default function Home() {
                   onClick={() => setDevicePriceSort("desc")}
                   className={`px-3 py-1.5 rounded-xl text-xs transition-all btn-tactile ${
                     devicePriceSort === "desc"
-                      ? "bg-white text-zinc-900 font-semibold shadow-2xs"
-                      : "text-zinc-600 hover:text-black"
+                      ? "bg-white text-[#0D1017] font-semibold shadow-2xs border border-[#1452F0]/15"
+                      : "text-slate-600 hover:text-[#0D1017]"
                   }`}
                 >
                   Mayor a Menor
@@ -990,8 +1012,8 @@ export default function Home() {
                   }}
                   className={`px-4 py-2.5 rounded-2xl text-xs font-medium transition-all border btn-tactile ${
                     deviceBrandFilter.toLowerCase() === cat.toLowerCase()
-                      ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-sm"
-                      : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
+                      ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold shadow-sm shadow-[#1452F0]/15"
+                      : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35 hover:bg-[#EEF4FF]/60"
                   }`}
                 >
                   {cat}
@@ -1000,9 +1022,9 @@ export default function Home() {
 
               <button
                 onClick={() => handleConsultWhatsApp()}
-                className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80 hover:bg-emerald-100 transition-all shadow-2xs btn-tactile"
+                className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-[#EEF4FF] text-[#1452F0] border border-[#1452F0]/20 hover:bg-[#1452F0] hover:text-white transition-all shadow-2xs btn-tactile"
               >
-                <MessageCircle className="w-3.5 h-3.5 fill-current text-emerald-600" />
+                <MessageCircle className="w-3.5 h-3.5 fill-current" />
                 <span>Consultar otro modelo o lote en WhatsApp</span>
               </button>
             </div>
@@ -1014,21 +1036,21 @@ export default function Home() {
                   {displayedDevices.map((dev) => (
                     <div 
                       key={dev.id}
-                      className="bg-[#FAF9F8] rounded-[2rem] p-6 border border-black/[0.04] flex flex-col justify-between minimal-card-hover animate-scaleIn group"
+                      className="bg-[#F5F7FC] rounded-[2rem] p-6 border border-[#1452F0]/[0.08] flex flex-col justify-between minimal-card-hover animate-scaleIn group"
                     >
-                      <div className="relative h-64 rounded-2xl bg-[#EBECEF]/60 overflow-hidden mb-6 flex items-center justify-center">
+                      <div className="relative h-64 rounded-2xl bg-white border border-[#1452F0]/[0.06] overflow-hidden mb-6 flex items-center justify-center">
                         <img 
                           src={dev.image || "/logo.jpg"} 
                           alt={dev.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                         {dev.grade && (
-                          <span className="absolute top-3.5 left-3.5 bg-white/95 text-zinc-900 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                          <span className="absolute top-3.5 left-3.5 bg-white/95 text-[#0D1017] border border-[#1452F0]/15 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                             {dev.grade}
                           </span>
                         )}
                         {dev.battery && (
-                          <span className="absolute top-3.5 right-3.5 bg-zinc-900 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                          <span className="absolute top-3.5 right-3.5 bg-[#0D1017] text-white text-xs font-semibold px-2.5 py-1 rounded-full border border-[#1452F0]/30">
                             {dev.battery}
                           </span>
                         )}
@@ -1036,15 +1058,15 @@ export default function Home() {
 
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[11px] text-zinc-600 font-medium">{dev.category}</span>
+                          <span className="text-[11px] text-slate-600 font-medium">{dev.category}</span>
                           {dev.tag && (
-                            <span className="text-[10px] bg-zinc-200/70 text-zinc-700 px-2 py-0.5 rounded-full font-medium">
+                            <span className="text-[10px] bg-[#EEF4FF] text-[#1452F0] border border-[#1452F0]/15 px-2.5 py-0.5 rounded-full font-semibold">
                               {dev.tag}
                             </span>
                           )}
                         </div>
-                        <h3 className="font-semibold text-lg text-zinc-900">{dev.name}</h3>
-                        <p className="text-xs text-zinc-600 mb-4">{dev.subtitle || dev.category}</p>
+                        <h3 className="font-semibold text-lg text-[#0D1017]">{dev.name}</h3>
+                        <p className="text-xs text-slate-600 mb-4">{dev.subtitle || dev.category}</p>
 
                         <div className="flex items-center gap-1.5 mb-6">
                           {dev.colors && dev.colors.length > 0 && (
@@ -1058,9 +1080,9 @@ export default function Home() {
                               ))}
                             </div>
                           )}
-                          <span className="text-xs text-zinc-500 ml-auto">
+                          <span className="text-xs text-slate-500 ml-auto">
                             {dev.inStock !== false ? (
-                              <>Stock <span className="font-cursive-accent text-zinc-700">Disponible</span></>
+                              <>Stock <span className="font-cursive-accent text-[#1452F0] font-semibold">Disponible</span></>
                             ) : (
                               <span className="text-amber-600 font-medium">Agotado</span>
                             )}
@@ -1068,10 +1090,10 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-black/[0.05] flex items-center justify-between mt-auto">
+                      <div className="pt-4 border-t border-[#1452F0]/[0.08] flex items-center justify-between mt-auto">
                         <div>
-                          <span className="text-[10px] text-zinc-500 block uppercase font-medium">Precio</span>
-                          <span className="text-2xl font-bold text-zinc-900 tracking-tight">${dev.price}</span>
+                          <span className="text-[10px] text-slate-500 block uppercase font-medium">Precio</span>
+                          <span className="text-2xl font-bold text-[#0D1017] tracking-tight">${dev.price}</span>
                         </div>
 
                         <button
@@ -1081,7 +1103,7 @@ export default function Home() {
                             subtitle: `${dev.subtitle || dev.category} · ${dev.grade || "Garantizado"}`,
                             price: dev.price
                           })}
-                          className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm btn-tactile"
+                          className="bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-sm shadow-[#1452F0]/20 btn-tactile"
                         >
                           <Plus className="w-3.5 h-3.5" />
                           <span>Añadir</span>
@@ -1096,7 +1118,7 @@ export default function Home() {
                   <div className="mt-10 text-center animate-fadeIn">
                     <button
                       onClick={() => setShowFullCatalog((prev) => !prev)}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold bg-zinc-900 hover:bg-black text-white shadow-sm transition-all btn-tactile"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold bg-[#0D1017] hover:bg-[#1452F0] text-white shadow-sm shadow-[#1452F0]/15 transition-all btn-tactile"
                     >
                       <span>
                         {showFullCatalog
@@ -1113,16 +1135,16 @@ export default function Home() {
                 )}
               </>
             ) : (
-              <div className="bg-[#FAF9F8] rounded-[2rem] p-12 text-center border border-black/[0.04] animate-scaleIn">
-                <p className="text-sm font-semibold text-zinc-900 mb-2">
+              <div className="bg-[#F5F7FC] rounded-[2rem] p-12 text-center border border-[#1452F0]/[0.08] animate-scaleIn">
+                <p className="text-sm font-semibold text-[#0D1017] mb-2">
                   Sin unidades listadas en esta marca por el momento
                 </p>
-                <p className="text-xs text-zinc-600 max-w-md mx-auto mb-6">
+                <p className="text-xs text-slate-600 max-w-md mx-auto mb-6">
                   Consulta directamente por WhatsApp el stock del día para revendedores y clientes finales.
                 </p>
                 <button
                   onClick={() => handleConsultWhatsApp(deviceBrandFilter !== "Todos" ? deviceBrandFilter : undefined)}
-                  className="bg-zinc-900 text-white text-xs font-semibold px-6 py-3 rounded-full inline-flex items-center gap-2 btn-tactile"
+                  className="bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs font-semibold px-6 py-3 rounded-full inline-flex items-center gap-2 shadow-sm shadow-[#1452F0]/20 btn-tactile"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Consultar en WhatsApp</span>
@@ -1136,23 +1158,26 @@ export default function Home() {
         {/* ============================================================== */}
         {/* PIE DE PÁGINA MINIMALISTA */}
         {/* ============================================================== */}
-        <footer className="mt-16 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 animate-fadeIn">
-          <p>
-            TecnoTrade PTY · <span className="font-cursive-accent text-zinc-600">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
+        <footer className="mt-16 pt-8 border-t border-[#1452F0]/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 animate-fadeIn">
+          <p className="flex items-center gap-1.5">
+            <span className="text-[#1452F0]">✦</span>
+            <span>
+              TecnoTrade PTY · <span className="font-cursive-accent text-[#0D1017] font-medium">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
+            </span>
           </p>
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
-              className="text-zinc-500 hover:text-zinc-950 font-medium inline-flex items-center gap-1.5 transition-colors text-[11px] bg-zinc-100 hover:bg-zinc-200/80 px-3 py-1.5 rounded-lg border border-black/[0.04]"
+              className="text-slate-600 hover:text-[#1452F0] font-medium inline-flex items-center gap-1.5 transition-colors text-[11px] bg-[#F5F7FC] hover:bg-[#EEF4FF] px-3 py-1.5 rounded-lg border border-[#1452F0]/10"
             >
-              <Settings className="w-3 h-3" />
+              <Settings className="w-3 h-3 text-[#1452F0]" />
               <span>Panel Inventario</span>
             </Link>
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-700 hover:text-black font-medium inline-flex items-center gap-1 transition-colors"
+              className="text-slate-700 hover:text-[#1452F0] font-medium inline-flex items-center gap-1 transition-colors"
             >
               <span>Instagram @tecnotradepty</span>
               <ExternalLink className="w-3 h-3 opacity-60" />
@@ -1166,21 +1191,21 @@ export default function Home() {
       {/* DRAWER / MODAL DEL CARRITO & RECIBO A WHATSAPP */}
       {/* ============================================================== */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex justify-end animate-fadeIn">
-          <div className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col p-6 sm:p-8 animate-slideLeft border-l border-black/[0.06]">
+        <div className="fixed inset-0 z-50 bg-[#0D1017]/40 backdrop-blur-xs flex justify-end animate-fadeIn">
+          <div className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col p-6 sm:p-8 animate-slideLeft border-l border-[#1452F0]/10">
             
-            <div className="flex items-center justify-between pb-5 border-b border-black/[0.06]">
+            <div className="flex items-center justify-between pb-5 border-b border-[#1452F0]/10">
               <div>
-                <h3 className="font-semibold text-lg text-zinc-900">
-                  Resumen del <span className="font-cursive-accent font-normal">Pedido</span>
+                <h3 className="font-semibold text-lg text-[#0D1017]">
+                  Resumen del <span className="font-cursive-accent font-normal text-[#1452F0]">Pedido</span>
                 </h3>
-                <span className="text-xs text-zinc-600">
+                <span className="text-xs text-slate-600">
                   {totalCartCount} {totalCartCount === 1 ? "ítem seleccionado" : "ítems seleccionados"}
                 </span>
               </div>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 hover:text-black transition-colors"
+                className="w-8 h-8 rounded-full bg-[#F5F7FC] flex items-center justify-center text-slate-500 hover:text-[#0D1017] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1189,10 +1214,10 @@ export default function Home() {
             {/* Lista de Items */}
             <div className="flex-1 overflow-y-auto py-5 space-y-3">
               {cart.length === 0 ? (
-                <div className="text-center py-24 text-zinc-400">
-                  <ShoppingCart className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-semibold text-zinc-700">Tu pedido está vacío</p>
-                  <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
+                <div className="text-center py-24 text-slate-400">
+                  <ShoppingCart className="w-10 h-10 mx-auto mb-3 text-[#1452F0]/30" />
+                  <p className="text-sm font-semibold text-[#0D1017]">Tu pedido está vacío</p>
+                  <p className="text-xs text-slate-600 mt-1 max-w-xs mx-auto">
                     Agrega reparaciones o dispositivos del catálogo para generar tu recibo hacia WhatsApp.
                   </p>
                 </div>
@@ -1200,27 +1225,27 @@ export default function Home() {
                 cart.map((item) => (
                   <div 
                     key={item.id}
-                    className="p-4 rounded-2xl bg-[#FAF9F8] border border-black/[0.04] flex items-center justify-between gap-3 animate-scaleIn"
+                    className="p-4 rounded-2xl bg-[#F5F7FC] border border-[#1452F0]/[0.08] flex items-center justify-between gap-3 animate-scaleIn"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-zinc-900 truncate">{item.title}</p>
-                      <p className="text-[11px] text-zinc-600 truncate mt-0.5">{item.subtitle}</p>
-                      <p className="text-xs font-bold text-zinc-900 mt-1">
+                      <p className="text-xs font-semibold text-[#0D1017] truncate">{item.title}</p>
+                      <p className="text-[11px] text-slate-600 truncate mt-0.5">{item.subtitle}</p>
+                      <p className="text-xs font-bold text-[#1452F0] mt-1">
                         ${(item.price * item.quantity).toFixed(2)} USD
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-black/[0.06]">
+                    <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-xl border border-[#1452F0]/12">
                       <button 
                         onClick={() => updateQuantity(item.id, -1)}
-                        className="w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-black"
+                        className="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-[#0D1017]"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
                       <span className="text-xs font-semibold px-1">{item.quantity}</span>
                       <button 
                         onClick={() => updateQuantity(item.id, 1)}
-                        className="w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-black"
+                        className="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-[#0D1017]"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -1228,7 +1253,7 @@ export default function Home() {
 
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="text-zinc-400 hover:text-red-500 p-1"
+                      className="text-slate-400 hover:text-red-500 p-1"
                       title="Eliminar"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -1240,9 +1265,9 @@ export default function Home() {
 
             {/* Formulario y Botón de Enviar a WhatsApp */}
             {cart.length > 0 && (
-              <div className="pt-4 border-t border-black/[0.06] space-y-3.5">
+              <div className="pt-4 border-t border-[#1452F0]/10 space-y-3.5">
                 <div>
-                  <label className="text-xs font-medium text-zinc-600 block mb-1">
+                  <label className="text-xs font-medium text-slate-600 block mb-1">
                     Nombre o Tienda (opcional)
                   </label>
                   <input 
@@ -1250,11 +1275,11 @@ export default function Home() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Ej: Carlos / Tienda Aliada"
-                    className="w-full bg-[#FAF9F8] px-4 py-2.5 rounded-xl text-xs text-zinc-900 focus:outline-none border border-black/[0.04]"
+                    className="w-full bg-[#F5F7FC] px-4 py-2.5 rounded-xl text-xs text-[#0D1017] focus:outline-none border border-[#1452F0]/10 focus:border-[#1452F0]"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-zinc-600 block mb-1">
+                  <label className="text-xs font-medium text-slate-600 block mb-1">
                     Notas del pedido (opcional)
                   </label>
                   <input 
@@ -1262,22 +1287,22 @@ export default function Home() {
                     value={customerNote}
                     onChange={(e) => setCustomerNote(e.target.value)}
                     placeholder="Ej: Para entrega hoy / Color del repuesto"
-                    className="w-full bg-[#FAF9F8] px-4 py-2.5 rounded-xl text-xs text-zinc-900 focus:outline-none border border-black/[0.04]"
+                    className="w-full bg-[#F5F7FC] px-4 py-2.5 rounded-xl text-xs text-[#0D1017] focus:outline-none border border-[#1452F0]/10 focus:border-[#1452F0]"
                   />
                 </div>
 
-                <div className="pt-2 flex items-baseline justify-between border-t border-black/[0.04]">
-                  <span className="text-xs text-zinc-600 font-medium">
-                    Total <span className="font-cursive-accent text-zinc-800">estimado</span>
+                <div className="pt-2 flex items-baseline justify-between border-t border-[#1452F0]/[0.08]">
+                  <span className="text-xs text-slate-600 font-medium">
+                    Total <span className="font-cursive-accent text-[#1452F0]">estimado</span>
                   </span>
-                  <span className="text-2xl font-bold text-zinc-900 tracking-tight">
+                  <span className="text-2xl font-bold text-[#0D1017] tracking-tight">
                     ${totalCartPrice.toFixed(2)} USD
                   </span>
                 </div>
 
                 <button
                   onClick={handleCheckoutWhatsApp}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-3.5 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20 btn-tactile"
+                  className="w-full bg-[#1452F0] hover:bg-[#0C3BC4] text-white font-bold py-3.5 rounded-full text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-[#1452F0]/25 btn-tactile"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
                   <span>Enviar Pedido a WhatsApp</span>
@@ -1296,20 +1321,20 @@ export default function Home() {
         <div className="fixed bottom-6 left-6 sm:left-1/2 sm:-translate-x-1/2 z-40 animate-slideUp">
           <button
             onClick={() => setIsCartOpen(true)}
-            className="bg-zinc-950 hover:bg-black text-white rounded-full px-5 sm:px-6 py-3.5 shadow-2xl flex items-center gap-3 border border-white/15 transition-all hover:scale-105 active:scale-95 group"
+            className="bg-[#0D1017] hover:bg-[#1452F0] text-white rounded-full px-5 sm:px-6 py-3.5 shadow-2xl shadow-[#1452F0]/25 flex items-center gap-3 border border-[#1452F0]/40 transition-all hover:scale-105 active:scale-95 group"
           >
             <div className="relative">
               <ShoppingCart className="w-4 h-4 text-white" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#4A80FF]" />
             </div>
             <span className="text-xs font-semibold tracking-tight">
               Ver Pedido ({totalCartCount})
             </span>
-            <span className="text-xs text-zinc-500 font-normal">·</span>
-            <span className="text-xs font-bold text-emerald-400">
+            <span className="text-xs text-slate-500 font-normal">·</span>
+            <span className="text-xs font-bold text-[#6B9BFF] group-hover:text-white">
               ${totalCartPrice.toFixed(2)}
             </span>
-            <ChevronRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
       )}
@@ -1321,7 +1346,7 @@ export default function Home() {
         
         {/* Burbuja de mensaje estilo chat de WhatsApp */}
         {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
-          <div className="animate-chatPop relative bg-white rounded-2xl rounded-br-xs p-3.5 pr-8 shadow-xl border border-black/[0.08] max-w-[250px] text-left">
+          <div className="animate-chatPop relative bg-white rounded-2xl rounded-br-xs p-3.5 pr-8 shadow-xl shadow-[#1452F0]/10 border border-[#1452F0]/15 max-w-[250px] text-left">
             
             <button
               onClick={(e) => {
@@ -1329,16 +1354,16 @@ export default function Home() {
                 setChatBubbleStep("dismissed");
               }}
               aria-label="Cerrar mensaje"
-              className="absolute top-2.5 right-2.5 text-zinc-400 hover:text-zinc-800 p-0.5 rounded-full transition-colors"
+              className="absolute top-2.5 right-2.5 text-slate-400 hover:text-[#0D1017] p-0.5 rounded-full transition-colors"
             >
               <X className="w-3.5 h-3.5" />
             </button>
 
             {chatBubbleStep === "typing" ? (
               <div className="flex items-center gap-1.5 py-1.5 px-2">
-                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-zinc-400 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-[#1452F0] typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-[#1452F0] typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-[#1452F0] typing-dot" />
               </div>
             ) : (
               <div 
@@ -1346,19 +1371,19 @@ export default function Home() {
                 className="cursor-pointer group"
               >
                 <div className="flex items-center gap-1.5 mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1452F0]" />
+                  <span className="text-[10px] font-semibold text-[#1452F0] uppercase tracking-wider">
                     TecnoTrade · Trade-In
                   </span>
                 </div>
-                <p className="text-xs font-semibold text-zinc-900 leading-snug group-hover:text-emerald-700 transition-colors">
+                <p className="text-xs font-semibold text-[#0D1017] leading-snug group-hover:text-[#1452F0] transition-colors">
                   ¡Hey, también compramos tu{" "}
-                  <span className="font-cursive-accent font-semibold text-emerald-800 text-[13px]">
+                  <span className="font-cursive-accent font-semibold text-[#1452F0] text-[13px]">
                     teléfono!
                   </span>{" "}
                   📱💵
                 </p>
-                <span className="text-[11px] text-emerald-700 font-medium mt-1 inline-flex items-center gap-1">
+                <span className="text-[11px] text-[#1452F0] font-semibold mt-1 inline-flex items-center gap-1">
                   <span className="font-cursive-accent font-semibold text-xs">Cotizar mi equipo</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>

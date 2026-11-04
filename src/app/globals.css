@@ -3,10 +3,12 @@
 
 :root {
   --background: #FFFFFF;
-  --foreground: #111111;
-  --accent-blue: #1D58F6;
-  --card-bg: #F8F8FA;
-  --card-border: rgba(0, 0, 0, 0.05);
+  --foreground: #0D1017;
+  --accent-blue: #1452F0;
+  --accent-blue-bright: #1D58F6;
+  --accent-blue-soft: #EEF4FF;
+  --card-bg: #F5F7FC;
+  --card-border: rgba(20, 82, 240, 0.08);
 }
 
 @theme inline {
@@ -154,11 +156,11 @@ body {
 .stagger-3 { animation-delay: 180ms; }
 .stagger-4 { animation-delay: 240ms; }
 
-/* Sombras y acabados del diseño minimalista de alta gama */
+/* Sombras y acabados del diseño minimalista de alta gama (Identidad TecnoTrade) */
 .minimal-card {
   background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(13, 16, 23, 0.06);
+  box-shadow: 0 4px 24px -2px rgba(13, 16, 23, 0.03);
 }
 
 .minimal-card-hover {
@@ -169,8 +171,8 @@ body {
 
 .minimal-card-hover:hover {
   transform: translateY(-3px);
-  border-color: rgba(0, 0, 0, 0.14);
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.07);
+  border-color: rgba(20, 82, 240, 0.24);
+  box-shadow: 0 16px 36px -6px rgba(20, 82, 240, 0.09);
 }
 
 /* Micro-interacción táctil en botones */
