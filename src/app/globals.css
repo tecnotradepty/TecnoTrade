@@ -156,11 +156,11 @@ body {
 .stagger-3 { animation-delay: 180ms; }
 .stagger-4 { animation-delay: 240ms; }
 
-/* Sombras y acabados del diseño minimalista de alta gama (Identidad TecnoTrade) */
+/* Sombras y acabados del diseño minimalista (usado en /admin) */
 .minimal-card {
   background: #FFFFFF;
-  border: 1px solid rgba(13, 16, 23, 0.06);
-  box-shadow: 0 4px 24px -2px rgba(13, 16, 23, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.03);
 }
 
 .minimal-card-hover {
@@ -171,8 +171,161 @@ body {
 
 .minimal-card-hover:hover {
   transform: translateY(-3px);
-  border-color: rgba(20, 82, 240, 0.24);
-  box-shadow: 0 16px 36px -6px rgba(20, 82, 240, 0.09);
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.07);
+}
+
+/* ============================================================
+   SISTEMA CLAYMORPHISM 3D + FLAT (PANEL DEL CLIENTE TECNOTRADE)
+   Volumen mate 3D sin bordes iluminados artificiales
+   ============================================================ */
+
+/* Superficie contenedora principal tipo arcilla mate suave */
+.clay-surface {
+  background: #F2F4F8;
+  border: none;
+  box-shadow:
+    0 22px 44px -16px rgba(15, 23, 42, 0.08),
+    0 4px 12px -2px rgba(15, 23, 42, 0.04),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -4px 8px rgba(15, 23, 42, 0.05);
+}
+
+/* Tarjeta 3D blanca moldeada (Clay Card) */
+.clay-card {
+  background: #FFFFFF;
+  border: none;
+  box-shadow:
+    0 12px 26px -8px rgba(15, 23, 42, 0.08),
+    0 4px 10px -3px rgba(15, 23, 42, 0.04),
+    inset 0 2px 3px rgba(255, 255, 255, 1),
+    inset 0 -3px 6px rgba(15, 23, 42, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 36px -10px rgba(15, 23, 42, 0.12),
+    0 6px 14px -4px rgba(15, 23, 42, 0.06),
+    inset 0 2px 3px rgba(255, 255, 255, 1),
+    inset 0 -4px 8px rgba(15, 23, 42, 0.07);
+}
+
+/* Cavidad hundida 3D (para buscadores, inputs y rieles de pestañas) */
+.clay-inset {
+  background: #E7ECF3;
+  border: none;
+  box-shadow:
+    inset 0 3px 6px rgba(15, 23, 42, 0.09),
+    inset 0 1px 2px rgba(15, 23, 42, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Pastilla 3D clara (botones secundarios, filtros no activos) */
+.clay-pill {
+  background: #FFFFFF;
+  border: none;
+  box-shadow:
+    0 5px 12px -3px rgba(15, 23, 42, 0.07),
+    0 2px 4px -1px rgba(15, 23, 42, 0.04),
+    inset 0 2px 2px rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              background-color 0.2s ease;
+}
+
+.clay-pill:hover {
+  transform: translateY(-1.5px);
+  background: #FAFBFD;
+  box-shadow:
+    0 8px 16px -4px rgba(15, 23, 42, 0.1),
+    0 3px 6px -2px rgba(15, 23, 42, 0.05),
+    inset 0 2px 2px rgba(255, 255, 255, 1),
+    inset 0 -3px 5px rgba(15, 23, 42, 0.07);
+}
+
+.clay-pill:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Botón 3D Azul TecnoTrade (volumen mate plástico/arcilla como el aro del logo) */
+.clay-btn-blue {
+  background: #1B57F2;
+  color: #FFFFFF;
+  border: none;
+  box-shadow:
+    0 10px 20px -6px rgba(27, 87, 242, 0.38),
+    0 3px 6px -2px rgba(27, 87, 242, 0.22),
+    inset 0 2px 3px rgba(255, 255, 255, 0.38),
+    inset 0 -3px 6px rgba(10, 32, 115, 0.42);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              background-color 0.2s ease;
+}
+
+.clay-btn-blue:hover {
+  background: #154BE0;
+  transform: translateY(-1.5px);
+  box-shadow:
+    0 14px 24px -6px rgba(27, 87, 242, 0.46),
+    0 4px 8px -2px rgba(27, 87, 242, 0.26),
+    inset 0 2px 4px rgba(255, 255, 255, 0.42),
+    inset 0 -3px 6px rgba(8, 26, 96, 0.48);
+}
+
+.clay-btn-blue:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Botón 3D Carbón Mate (como el smartphone y traje del logo) */
+.clay-btn-dark {
+  background: #171A24;
+  color: #FFFFFF;
+  border: none;
+  box-shadow:
+    0 10px 20px -6px rgba(15, 23, 42, 0.3),
+    0 3px 6px -2px rgba(15, 23, 42, 0.18),
+    inset 0 2px 3px rgba(255, 255, 255, 0.22),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease,
+              background-color 0.2s ease;
+}
+
+.clay-btn-dark:hover {
+  background: #202432;
+  transform: translateY(-1.5px);
+  box-shadow:
+    0 14px 24px -6px rgba(15, 23, 42, 0.36),
+    0 4px 8px -2px rgba(15, 23, 42, 0.22),
+    inset 0 2px 3px rgba(255, 255, 255, 0.26),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.clay-btn-dark:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Bloques de iconos 3D (Flat + 3D Clay Badges) */
+.clay-badge-blue {
+  background: #1B57F2;
+  color: #FFFFFF;
+  box-shadow:
+    0 6px 12px -3px rgba(27, 87, 242, 0.35),
+    inset 0 2px 2px rgba(255, 255, 255, 0.38),
+    inset 0 -2px 4px rgba(10, 32, 115, 0.4);
+}
+
+.clay-badge-soft {
+  background: #E8EEF9;
+  color: #1B57F2;
+  box-shadow:
+    0 4px 8px -2px rgba(27, 87, 242, 0.08),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(27, 87, 242, 0.1);
 }
 
 /* Micro-interacción táctil en botones */

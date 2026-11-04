@@ -480,17 +480,17 @@ export default function AdminPage() {
   }, [filteredRepairs]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FC] text-[#0D1017] font-sans pb-24 selection:bg-[#1452F0] selection:text-white">
+    <div className="min-h-screen bg-[#F8F8FA] text-[#111111] font-sans pb-24 selection:bg-[#111111] selection:text-white">
       
       {/* NOTIFICACIÓN FLOTANTE */}
       {notification && (
         <div className={`fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-slideDown border ${
           notification.type === "success" 
-            ? "bg-[#0D1017] text-white border-[#1452F0]/30" 
+            ? "bg-zinc-900 text-white border-white/10" 
             : "bg-red-600 text-white border-red-500"
         }`}>
           {notification.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 text-[#4A80FF] shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           ) : (
             <AlertCircle className="w-4 h-4 text-white shrink-0" />
           )}
@@ -499,44 +499,39 @@ export default function AdminPage() {
       )}
 
       {/* HEADER DEL PANEL */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-[#1452F0]/[0.08]">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-black/[0.05]">
         <div className="max-w-6xl mx-auto px-6 h-18 flex items-center justify-between">
           
           <div className="flex items-center gap-4">
             <Link 
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 hover:text-[#1452F0] bg-[#F5F7FC] hover:bg-[#EEF4FF] border border-[#1452F0]/10 px-3.5 py-2 rounded-full transition-all btn-tactile"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-600 hover:text-black bg-[#F4F4F6] hover:bg-zinc-200/70 px-3.5 py-2 rounded-full transition-all btn-tactile"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#1452F0]" />
+              <ArrowLeft className="w-3.5 h-3.5" />
               <span>Volver a la Tienda</span>
             </Link>
 
-            <div className="hidden sm:block w-px h-5 bg-[#1452F0]/15" />
+            <div className="hidden sm:block w-px h-5 bg-black/[0.08]" />
 
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl overflow-hidden bg-white border border-[#1452F0]/20 p-0.5 hidden sm:flex items-center justify-center">
-                <img src="/logo.jpg" alt="TecnoTrade" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-base font-bold tracking-tight text-[#0D1017] block leading-tight">
-                    TecnoTrade
-                  </span>
-                  <span className="text-[10px] bg-[#EEF4FF] text-[#1452F0] border border-[#1452F0]/20 font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    ✦ Admin
-                  </span>
-                </div>
-                <span className="text-xs text-slate-500 font-normal block">
-                  Gestión de equipos en venta y tarifas de taller
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-bold tracking-tight text-zinc-900 block leading-tight">
+                  TecnoTrade
+                </span>
+                <span className="text-[10px] bg-zinc-900 text-white font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  Admin
                 </span>
               </div>
+              <span className="text-xs text-zinc-500 font-normal block">
+                Gestión de equipos en venta y tarifas de taller
+              </span>
             </div>
           </div>
 
           {adminTab === "inventario" ? (
             <button
               onClick={handleOpenCreate}
-              className="bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm shadow-[#1452F0]/20 btn-tactile"
+              className="bg-zinc-900 hover:bg-black text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm btn-tactile"
             >
               <Plus className="w-4 h-4" />
               <span>Publicar Producto</span>
@@ -544,7 +539,7 @@ export default function AdminPage() {
           ) : (
             <button
               onClick={handleOpenCreateRepair}
-              className="bg-[#1452F0] hover:bg-[#0C3BC4] text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm shadow-[#1452F0]/20 btn-tactile"
+              className="bg-zinc-900 hover:bg-black text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-sm btn-tactile"
             >
               <Plus className="w-4 h-4" />
               <span>Nueva Reparación</span>
@@ -558,27 +553,27 @@ export default function AdminPage() {
 
         {/* SELECTOR DE MÓDULO (INVENTARIO DE VENTA VS CATÁLOGO DE REPARACIONES) */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <div className="inline-flex p-1.5 bg-white rounded-full border border-[#1452F0]/12 shadow-2xs">
+          <div className="inline-flex p-1.5 bg-white rounded-full border border-black/[0.06] shadow-2xs">
             <button
               onClick={() => setAdminTab("inventario")}
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all btn-tactile ${
                 adminTab === "inventario"
-                  ? "bg-[#0D1017] text-white shadow-sm shadow-[#1452F0]/15"
-                  : "text-slate-600 hover:text-[#0D1017]"
+                  ? "bg-zinc-900 text-white shadow-xs"
+                  : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <Smartphone className={`w-4 h-4 ${adminTab === "inventario" ? "text-[#4A80FF]" : ""}`} />
+              <Smartphone className="w-4 h-4" />
               <span>Equipos en Venta ({products.length})</span>
             </button>
             <button
               onClick={() => setAdminTab("reparaciones")}
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all btn-tactile ${
                 adminTab === "reparaciones"
-                  ? "bg-[#0D1017] text-white shadow-sm shadow-[#1452F0]/15"
-                  : "text-slate-600 hover:text-[#0D1017]"
+                  ? "bg-zinc-900 text-white shadow-xs"
+                  : "text-zinc-600 hover:text-zinc-950"
               }`}
             >
-              <Wrench className={`w-4 h-4 ${adminTab === "reparaciones" ? "text-[#4A80FF]" : ""}`} />
+              <Wrench className="w-4 h-4" />
               <span>Catálogo de Reparaciones ({repairs.length})</span>
             </button>
           </div>
@@ -619,18 +614,18 @@ export default function AdminPage() {
             </div>
 
             {/* BARRA DE FILTROS Y BÚSQUEDA */}
-            <div className="bg-white p-6 rounded-3xl border border-[#1452F0]/[0.08] shadow-xs mb-8 space-y-4">
-              <div className="bg-[#F5F7FC] rounded-2xl px-4 py-3 flex items-center gap-3 border border-[#1452F0]/10 focus-within:border-[#1452F0] transition-all">
-                <Search className="w-4 h-4 text-[#1452F0] shrink-0" />
+            <div className="bg-white p-6 rounded-3xl border border-black/[0.05] shadow-xs mb-8 space-y-4">
+              <div className="bg-[#FAF9F8] rounded-2xl px-4 py-3 flex items-center gap-3 border border-black/[0.05] focus-within:border-black/20 transition-all">
+                <Search className="w-4 h-4 text-zinc-400 shrink-0" />
                 <input 
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar por nombre, modelo, capacidad o categoría..."
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#0D1017] focus:outline-none"
+                  className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 focus:outline-none"
                 />
                 {searchQuery && (
-                  <button onClick={() => setSearchQuery("")} className="text-slate-400 hover:text-[#0D1017]">
+                  <button onClick={() => setSearchQuery("")} className="text-zinc-400 hover:text-black">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -643,8 +638,8 @@ export default function AdminPage() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all border btn-tactile ${
                       selectedCategory === cat
-                        ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold shadow-2xs"
-                        : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35"
+                        ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-2xs"
+                        : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
                     }`}
                   >
                     {cat}
@@ -783,19 +778,19 @@ export default function AdminPage() {
             </div>
 
             {/* FILTROS Y REGLA DE MARGEN AUTOMÁTICO */}
-            <div className="bg-white p-6 rounded-3xl border border-[#1452F0]/[0.08] shadow-xs mb-6 space-y-4">
+            <div className="bg-white p-6 rounded-3xl border border-black/[0.05] shadow-xs mb-6 space-y-4">
               {/* Buscador */}
-              <div className="bg-[#F5F7FC] rounded-2xl px-4 py-3 flex items-center gap-3 border border-[#1452F0]/10 focus-within:border-[#1452F0] transition-all">
-                <Search className="w-4 h-4 text-[#1452F0] shrink-0" />
+              <div className="bg-[#FAF9F8] rounded-2xl px-4 py-3 flex items-center gap-3 border border-black/[0.05] focus-within:border-black/20 transition-all">
+                <Search className="w-4 h-4 text-zinc-400 shrink-0" />
                 <input
                   type="text"
                   value={repairSearch}
                   onChange={(e) => setRepairSearch(e.target.value)}
                   placeholder="Buscar modelo o pieza (ej: iPhone 16 Pro, S24 Ultra, Redmi Note 14, OLED)..."
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#0D1017] focus:outline-none"
+                  className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 focus:outline-none"
                 />
                 {repairSearch && (
-                  <button onClick={() => setRepairSearch("")} className="text-slate-400 hover:text-[#0D1017]">
+                  <button onClick={() => setRepairSearch("")} className="text-zinc-400 hover:text-black">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -804,15 +799,15 @@ export default function AdminPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
                 {/* Filtro por Marca */}
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase mr-1">Marca:</span>
+                  <span className="text-[11px] font-semibold text-zinc-400 uppercase mr-1">Marca:</span>
                   {["Todas", ...REPAIR_BRANDS].map((brand) => (
                     <button
                       key={brand}
                       onClick={() => setRepairBrandFilter(brand)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all border btn-tactile ${
                         repairBrandFilter === brand
-                          ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold"
-                          : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35"
+                          ? "bg-zinc-900 text-white border-zinc-900 font-semibold"
+                          : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
                       }`}
                     >
                       {brand}
@@ -822,15 +817,15 @@ export default function AdminPage() {
 
                 {/* Filtro por Categoría */}
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase mr-1">Pieza:</span>
+                  <span className="text-[11px] font-semibold text-zinc-400 uppercase mr-1">Pieza:</span>
                   {["Todas", ...REPAIR_CATEGORIES].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setRepairCategoryFilter(cat)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all border btn-tactile ${
                         repairCategoryFilter === cat
-                          ? "bg-[#0D1017] text-white border-[#1452F0] font-semibold"
-                          : "bg-[#F5F7FC] text-slate-700 border-[#1452F0]/[0.08] hover:border-[#1452F0]/35"
+                          ? "bg-zinc-900 text-white border-zinc-900 font-semibold"
+                          : "bg-[#FAF9F8] text-zinc-700 border-black/[0.04] hover:border-black/20"
                       }`}
                     >
                       {cat}
@@ -840,36 +835,36 @@ export default function AdminPage() {
               </div>
 
               {/* Regla Automática de Margen */}
-              <div className="pt-3 border-t border-[#1452F0]/[0.08] flex items-center justify-between flex-wrap gap-3">
+              <div className="pt-3 border-t border-black/[0.05] flex items-center justify-between flex-wrap gap-3">
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={autoMarginRule}
                     onChange={(e) => setAutoMarginRule(e.target.checked)}
-                    className="w-4 h-4 rounded accent-[#1452F0] cursor-pointer"
+                    className="w-4 h-4 rounded accent-zinc-900 cursor-pointer"
                   />
-                  <span className="text-xs text-slate-700">
-                    <strong className="font-semibold text-[#0D1017]">Regla automática de margen:</strong> si el costo de la pieza sube, sumar la diferencia exacta al precio del cliente; si baja, mantener el precio igual.
+                  <span className="text-xs text-zinc-700">
+                    <strong className="font-semibold text-zinc-900">Regla automática de margen:</strong> si el costo de la pieza sube, sumar la diferencia exacta al precio del cliente; si baja, mantener el precio igual.
                   </span>
                 </label>
 
-                <span className="text-xs text-slate-400">
-                  Mostrando <strong className="text-[#0D1017]">{filteredRepairs.length}</strong> resultados
+                <span className="text-xs text-zinc-400">
+                  Mostrando <strong className="text-zinc-700">{filteredRepairs.length}</strong> resultados
                 </span>
               </div>
             </div>
 
             {/* TABLA DE REPARACIONES EDITABLE */}
             {isLoadingRepairs ? (
-              <div className="bg-white rounded-3xl p-16 text-center border border-[#1452F0]/[0.08]">
-                <p className="text-xs text-slate-500">Cargando catálogo de reparaciones...</p>
+              <div className="bg-white rounded-3xl p-16 text-center border border-black/[0.05]">
+                <p className="text-xs text-zinc-500">Cargando catálogo de reparaciones...</p>
               </div>
             ) : filteredRepairs.length > 0 ? (
-              <div className="bg-white rounded-3xl border border-[#1452F0]/[0.08] shadow-xs overflow-hidden">
+              <div className="bg-white rounded-3xl border border-black/[0.05] shadow-xs overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-[#1452F0]/10 bg-[#F5F7FC] text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                      <tr className="border-b border-black/[0.06] bg-[#FAF9F8] text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
                         <th className="py-3.5 px-5">Marca / Modelo</th>
                         <th className="py-3.5 px-4">Pieza</th>
                         <th className="py-3.5 px-4">Calidad</th>
@@ -879,7 +874,7 @@ export default function AdminPage() {
                         <th className="py-3.5 px-5 text-right">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                    <tbody className="divide-y divide-black/[0.04] text-xs sm:text-sm">
                       {filteredRepairs.map((item) => {
                         const isInline = inlineEditId === item.id;
                         const currentCost = isInline ? parseFloat(inlineCost) || 0 : item.cost ?? 0;
@@ -890,19 +885,19 @@ export default function AdminPage() {
                           <tr
                             key={item.id}
                             className={`transition-colors ${
-                              isInline ? "bg-[#EEF4FF]/60" : "hover:bg-[#F5F7FC]/80"
+                              isInline ? "bg-amber-50/50" : "hover:bg-[#FAF9F8]/80"
                             }`}
                           >
                             {/* Marca y Modelo */}
                             <td className="py-3.5 px-5">
-                              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block">
+                              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
                                 {item.brand}
                               </span>
-                              <span className="font-semibold text-[#0D1017]">{item.model}</span>
+                              <span className="font-semibold text-zinc-900">{item.model}</span>
                             </td>
 
                             {/* Categoría */}
-                            <td className="py-3.5 px-4 text-slate-600 font-medium">
+                            <td className="py-3.5 px-4 text-zinc-600 font-medium">
                               {item.category}
                             </td>
 
@@ -911,10 +906,10 @@ export default function AdminPage() {
                               <span
                                 className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                                   item.quality === "Original" || item.quality === "Servipack"
-                                    ? "bg-[#EEF4FF] text-[#1452F0] border border-[#1452F0]/20"
+                                    ? "bg-zinc-900 text-white"
                                     : item.quality === "OLED"
-                                    ? "bg-[#0D1017] text-white"
-                                    : "bg-slate-100 text-slate-600"
+                                    ? "bg-zinc-200 text-zinc-900"
+                                    : "bg-zinc-100 text-zinc-600"
                                 }`}
                               >
                                 {item.quality}
