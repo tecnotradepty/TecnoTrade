@@ -73,6 +73,7 @@ export default function Home() {
   const [selectedBrand, setSelectedBrand] = useState<"Apple" | "Samsung" | "Honor" | "Xiaomi" | "Google" | null>(null);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<"Pantallas" | "Tapas Traseras" | "Puertos de Carga" | null>(null);
+  const [expandedStep, setExpandedStep] = useState<1 | 2 | 3 | null>(1);
 
   // Filtros de Móviles en Venta
   const [deviceBrandFilter, setDeviceBrandFilter] = useState<string>("Todos");
@@ -271,6 +272,7 @@ export default function Home() {
     setSelectedModel(suggestion.model);
     setSelectedCategory(null);
     setDirectSearchQuery("");
+    setExpandedStep(3);
   };
 
   // Enviar carrito como recibo formateado a WhatsApp
@@ -491,6 +493,7 @@ export default function Home() {
                       setSelectedModel(null);
                       setSelectedCategory(null);
                       setDirectSearchQuery("");
+                      setExpandedStep(1);
                     }}
                     className="text-xs text-zinc-600 hover:text-zinc-900 flex items-center gap-1 font-medium transition-colors shrink-0"
                   >
@@ -554,100 +557,247 @@ export default function Home() {
                 )}
               </div>
 
-              {/* 2. FILTROS DEBAJO DE LA BARRA DE BÚSQUEDA */}
-              <div className="space-y-8">
-                
-                {/* PASO 1: MARCA */}
-                <div>
-                  <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-3.5">
-                    1. Marca
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {(["Apple", "Samsung", "Honor", "Xiaomi", "Google"] as const).map((brand) => (
+              {/* 2. FILTROS RETRÁCTILES UNIFICADOS */}
+              <div className="space-y-4">
+
+                {/* RESUMEN COMPACTO CUANDO LOS 3 PASOS ESTÁN SELECCIONADOS Y PLEGADOS */}
+                {selectedBrand && selectedModel && selectedCategory && expandedStep === null ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-fadeIn">
+                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="min-w-0">
+                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">1. Marca</span>
+                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedBrand}</span>
+                        </div>
+                      </div>
                       <button
-                        key={brand}
-                        onClick={() => {
-                          setSelectedBrand(brand);
-                          setSelectedModel(null);
-                          setSelectedCategory(null);
-                        }}
-                        className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
-                          selectedBrand === brand
-                            ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
-                            : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
-                        }`}
+                        onClick={() => setExpandedStep(1)}
+                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
                       >
-                        {brand}
+                        Cambiar
                       </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* PASO 2: MODELO */}
-                {selectedBrand && (
-                  <div className="animate-fadeIn">
-                    <div className="flex items-center justify-between mb-3.5">
-                      <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
-                        2. Modelo de {selectedBrand}
-                      </span>
-                      <span className="text-xs text-zinc-500">
-                        {availableModels.length} modelos
-                      </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto p-0.5 scrollbar-thin">
-                      {availableModels.map((model) => (
+                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="min-w-0">
+                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">2. Modelo</span>
+                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedModel}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setExpandedStep(2)}
+                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
+                      >
+                        Cambiar
+                      </button>
+                    </div>
+
+                    <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="min-w-0">
+                          <span className="text-[10px] text-zinc-400 uppercase font-semibold block">3. Pieza</span>
+                          <span className="text-xs sm:text-sm font-semibold text-zinc-900 truncate block">{selectedCategory}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setExpandedStep(3)}
+                        className="text-[11px] font-semibold text-zinc-600 hover:text-black px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 transition-colors shrink-0 ml-2 btn-tactile"
+                      >
+                        Cambiar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* PASO 1: MARCA */}
+                    {selectedBrand && expandedStep !== 1 ? (
+                      <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <div className="flex items-center gap-2.5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <div>
+                            <span className="text-[10px] text-zinc-400 uppercase font-semibold block">1. Marca seleccionada</span>
+                            <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedBrand}</span>
+                          </div>
+                        </div>
                         <button
-                          key={model}
-                          onClick={() => {
-                            setSelectedModel(model);
-                            setSelectedCategory(null);
-                          }}
-                          className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
-                            selectedModel === model
-                              ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
-                              : "bg-white text-zinc-700 border-black/[0.05] hover:border-black/20"
-                          }`}
+                          onClick={() => setExpandedStep(1)}
+                          className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
                         >
-                          {model}
+                          Cambiar
                         </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                      </div>
+                    ) : (
+                      <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                            1. Selecciona la Marca
+                          </span>
+                          {selectedBrand && (
+                            <button
+                              onClick={() => setExpandedStep(selectedModel ? (selectedCategory ? null : 3) : 2)}
+                              className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                            >
+                              <span>Plegar</span>
+                              <ChevronUp className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {(["Apple", "Samsung", "Honor", "Xiaomi", "Google"] as const).map((brand) => (
+                            <button
+                              key={brand}
+                              onClick={() => {
+                                setSelectedBrand(brand);
+                                setSelectedModel(null);
+                                setSelectedCategory(null);
+                                setExpandedStep(2);
+                              }}
+                              className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all border btn-tactile ${
+                                selectedBrand === brand
+                                  ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
+                                  : "bg-[#FAF9F8] text-zinc-700 border-black/[0.05] hover:border-black/20"
+                              }`}
+                            >
+                              {brand}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                {/* PASO 3: REPUESTO / SERVICIO */}
-                {selectedModel && (
-                  <div className="animate-fadeIn">
-                    <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider block mb-3.5">
-                      3. Pieza requerida para {selectedModel}
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[
-                        { id: "Pantallas", title: "Pantalla", desc: "Calidades Incell, OLED y Original" },
-                        { id: "Tapas Traseras", title: "Tapa Trasera", desc: "Reemplazo de cristal posterior" },
-                        { id: "Puertos de Carga", title: "Puerto de Carga", desc: "Flex de carga y micrófono" },
-                      ].map((cat) => {
-                        const isSelected = selectedCategory === cat.id;
-                        return (
+                    {/* PASO 2: MODELO */}
+                    {selectedBrand && (
+                      selectedModel && expandedStep !== 2 ? (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                          <div className="flex items-center gap-2.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <div>
+                              <span className="text-[10px] text-zinc-400 uppercase font-semibold block">2. Modelo seleccionado</span>
+                              <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedModel}</span>
+                            </div>
+                          </div>
                           <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id as any)}
-                            className={`p-4 sm:p-5 rounded-2xl border text-left transition-all btn-tactile ${
-                              isSelected
-                                ? "bg-zinc-900 text-white border-zinc-900 shadow-xs"
-                                : "bg-white text-zinc-800 border-black/[0.05] hover:border-black/20"
-                            }`}
+                            onClick={() => setExpandedStep(2)}
+                            className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
                           >
-                            <p className="font-semibold text-sm">{cat.title}</p>
-                            <p className={`text-xs mt-1 ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
-                              {cat.desc}
-                            </p>
+                            Cambiar
                           </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                        </div>
+                      ) : (
+                        <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                              2. Modelo de {selectedBrand}
+                            </span>
+                            <div className="flex items-center gap-3">
+                              <span className="text-xs text-zinc-500">
+                                {availableModels.length} disponibles
+                              </span>
+                              {selectedModel && (
+                                <button
+                                  onClick={() => setExpandedStep(selectedCategory ? null : 3)}
+                                  className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                                >
+                                  <span>Plegar</span>
+                                  <ChevronUp className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 max-h-52 overflow-y-auto p-0.5 scrollbar-thin">
+                            {availableModels.map((model) => (
+                              <button
+                                key={model}
+                                onClick={() => {
+                                  setSelectedModel(model);
+                                  setSelectedCategory(null);
+                                  setExpandedStep(3);
+                                }}
+                                className={`text-xs px-4 py-2.5 rounded-xl transition-all border btn-tactile ${
+                                  selectedModel === model
+                                    ? "bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs"
+                                    : "bg-[#FAF9F8] text-zinc-700 border-black/[0.05] hover:border-black/20"
+                                }`}
+                              >
+                                {model}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    )}
+
+                    {/* PASO 3: REPUESTO / SERVICIO */}
+                    {selectedModel && (
+                      selectedCategory && expandedStep !== 3 ? (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-black/[0.06] shadow-2xs animate-fadeIn">
+                          <div className="flex items-center gap-2.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <div>
+                              <span className="text-[10px] text-zinc-400 uppercase font-semibold block">3. Pieza seleccionada</span>
+                              <span className="text-xs sm:text-sm font-semibold text-zinc-900">{selectedCategory}</span>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setExpandedStep(3)}
+                            className="text-[11px] font-semibold text-zinc-600 hover:text-black px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 transition-colors btn-tactile"
+                          >
+                            Cambiar
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="bg-white p-5 rounded-2xl border border-black/[0.06] shadow-2xs animate-fadeIn">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+                              3. Pieza requerida para {selectedModel}
+                            </span>
+                            {selectedCategory && (
+                              <button
+                                onClick={() => setExpandedStep(null)}
+                                className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                              >
+                                <span>Plegar</span>
+                                <ChevronUp className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {[
+                              { id: "Pantallas", title: "Pantalla", desc: "Calidades Incell, OLED y Original" },
+                              { id: "Tapas Traseras", title: "Tapa Trasera", desc: "Reemplazo de cristal posterior" },
+                              { id: "Puertos de Carga", title: "Puerto de Carga", desc: "Flex de carga y micrófono" },
+                            ].map((cat) => {
+                              const isSelected = selectedCategory === cat.id;
+                              return (
+                                <button
+                                  key={cat.id}
+                                  onClick={() => {
+                                    setSelectedCategory(cat.id as any);
+                                    setExpandedStep(null);
+                                  }}
+                                  className={`p-4 sm:p-5 rounded-2xl border text-left transition-all btn-tactile ${
+                                    isSelected
+                                      ? "bg-zinc-900 text-white border-zinc-900 shadow-xs"
+                                      : "bg-[#FAF9F8] text-zinc-800 border-black/[0.05] hover:border-black/20"
+                                  }`}
+                                >
+                                  <p className="font-semibold text-sm">{cat.title}</p>
+                                  <p className={`text-xs mt-1 ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
+                                    {cat.desc}
+                                  </p>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </>
                 )}
 
                 {/* RESULTADOS REVELADOS AL ESPECIFICAR LOS 3 PASOS */}
