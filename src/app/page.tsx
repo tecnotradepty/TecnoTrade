@@ -449,32 +449,32 @@ export default function Home() {
               </span>
             </p>
 
-            {/* BIFURCADOR SUPERIOR EN RIEL HUNDIDO 3D (CLAY INSET) */}
-            <div className="animate-fadeIn stagger-3 inline-flex p-2 clay-inset rounded-full gap-1.5">
+            {/* BIFURCADOR SUPERIOR DE GRAN ESCALA (PC Y MÓVIL) EN BLOQUES 3D */}
+            <div className="animate-fadeIn stagger-3 w-full sm:w-auto inline-grid grid-cols-1 sm:grid-cols-2 gap-3 p-2.5 clay-inset rounded-[2rem]">
               <button
                 onClick={() => setActiveTab("taller")}
-                className={`px-5 py-2.5 rounded-full text-xs transition-all flex items-center gap-2 ${
+                className={`px-7 sm:px-8 py-4 sm:py-4.5 rounded-[1.5rem] text-base sm:text-lg font-extrabold tracking-tight transition-all flex items-center justify-center gap-3 ${
                   activeTab === "taller"
-                    ? "clay-btn-blue font-semibold"
-                    : "text-slate-600 hover:text-[#14171F] font-medium"
+                    ? "clay-btn-blue"
+                    : "clay-pill text-[#14171F] hover:text-[#1B57F2]"
                 }`}
               >
-                <Wrench className="w-3.5 h-3.5" />
+                <Wrench className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 <span>
-                  Catálogo de <span className="font-corporate-cursive text-sm font-semibold">Reparaciones</span>
+                  Catálogo de <span className="font-corporate-cursive text-xl sm:text-2xl font-bold">Reparaciones</span>
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab("productos")}
-                className={`px-5 py-2.5 rounded-full text-xs transition-all flex items-center gap-2 ${
+                className={`px-7 sm:px-8 py-4 sm:py-4.5 rounded-[1.5rem] text-base sm:text-lg font-extrabold tracking-tight transition-all flex items-center justify-center gap-3 ${
                   activeTab === "productos"
-                    ? "clay-btn-blue font-semibold"
-                    : "text-slate-600 hover:text-[#14171F] font-medium"
+                    ? "clay-btn-blue"
+                    : "clay-pill text-[#14171F] hover:text-[#1B57F2]"
                 }`}
               >
-                <Smartphone className="w-3.5 h-3.5" />
+                <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 <span>
-                  Equipos en <span className="font-corporate-cursive text-sm font-semibold">Venta</span> ({filteredDevices.length})
+                  Equipos en <span className="font-corporate-cursive text-xl sm:text-2xl font-bold">Venta</span> ({filteredDevices.length})
                 </span>
               </button>
             </div>
@@ -708,10 +708,10 @@ export default function Home() {
                                 setSelectedCategory(null);
                                 setExpandedStep(2);
                               }}
-                              className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold ${
+                              className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold ${
                                 selectedBrand === brand
                                   ? "clay-btn-blue"
-                                  : "clay-inset text-slate-700 hover:text-[#14171F]"
+                                  : "clay-pill text-[#14171F]"
                               }`}
                             >
                               {brand}
@@ -764,7 +764,7 @@ export default function Home() {
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap gap-2 max-h-56 overflow-y-auto p-1 scrollbar-thin">
+                          <div className="flex flex-wrap gap-2.5 max-h-56 overflow-y-auto p-1 scrollbar-thin">
                             {availableModels.map((model) => (
                               <button
                                 key={model}
@@ -773,10 +773,10 @@ export default function Home() {
                                   setSelectedCategory(null);
                                   setExpandedStep(3);
                                 }}
-                                className={`text-xs px-4 py-2.5 rounded-xl font-semibold ${
+                                className={`text-xs px-4 py-2.5 rounded-xl font-bold ${
                                   selectedModel === model
                                     ? "clay-btn-blue"
-                                    : "clay-inset text-slate-700 hover:text-[#14171F]"
+                                    : "clay-pill text-[#14171F]"
                                 }`}
                               >
                                 {model}
@@ -842,17 +842,17 @@ export default function Home() {
                                   className={`p-5 rounded-2xl text-left transition-all flex items-start gap-3.5 ${
                                     isSelected
                                       ? "clay-btn-blue"
-                                      : "clay-inset text-[#14171F] hover:bg-[#E1E7F0]"
+                                      : "clay-pill text-[#14171F]"
                                   }`}
                                 >
                                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                                    isSelected ? "bg-white/20 text-white" : "clay-card text-[#1B57F2]"
+                                    isSelected ? "bg-white/20 text-white" : "clay-badge-soft"
                                   }`}>
                                     <IconComp className="w-5 h-5" />
                                   </div>
                                   <div>
                                     <p className="font-bold text-sm">{cat.title}</p>
-                                    <p className={`text-xs mt-1 ${isSelected ? "text-blue-100" : "text-slate-500"}`}>
+                                    <p className={`text-xs mt-1 ${isSelected ? "text-blue-100" : "text-slate-600"}`}>
                                       {cat.desc}
                                     </p>
                                   </div>
@@ -1365,9 +1365,9 @@ export default function Home() {
       {/* ============================================================== */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5">
         
-        {/* Burbuja de mensaje estilo Clay 3D */}
+        {/* Burbuja de mensaje estilo Clay 3D con color propio de WhatsApp */}
         {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
-          <div className="animate-chatPop relative clay-card rounded-2xl rounded-br-xs p-4 pr-8 max-w-[250px] text-left">
+          <div className="animate-chatPop relative clay-whatsapp-bubble rounded-2xl rounded-br-xs p-4 pr-8 max-w-[260px] text-left">
             
             <button
               onClick={(e) => {
@@ -1375,16 +1375,16 @@ export default function Home() {
                 setChatBubbleStep("dismissed");
               }}
               aria-label="Cerrar mensaje"
-              className="absolute top-2.5 right-2.5 text-slate-400 hover:text-[#14171F] p-0.5 rounded-full transition-colors"
+              className="absolute top-2.5 right-2.5 text-emerald-800/60 hover:text-emerald-950 p-0.5 rounded-full transition-colors"
             >
               <X className="w-3.5 h-3.5" />
             </button>
 
             {chatBubbleStep === "typing" ? (
               <div className="flex items-center gap-1.5 py-1.5 px-2">
-                <span className="w-2 h-2 rounded-full bg-[#1B57F2] typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-[#1B57F2] typing-dot" />
-                <span className="w-2 h-2 rounded-full bg-[#1B57F2] typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
+                <span className="w-2 h-2 rounded-full bg-emerald-600 typing-dot" />
               </div>
             ) : (
               <div 
@@ -1392,20 +1392,20 @@ export default function Home() {
                 className="cursor-pointer group"
               >
                 <div className="flex items-center gap-1.5 mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#1B57F2]" />
-                  <span className="text-[10px] font-bold text-[#1B57F2] uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-[#16A34A]" />
+                  <span className="text-[10px] font-extrabold text-emerald-900 uppercase tracking-wider">
                     TecnoTrade · Trade-In
                   </span>
                 </div>
-                <p className="text-xs font-bold text-[#14171F] leading-snug group-hover:text-[#1B57F2] transition-colors">
+                <p className="text-xs sm:text-[13px] font-bold text-[#0A2918] leading-snug group-hover:text-emerald-800 transition-colors">
                   ¡Hey, también compramos tu{" "}
-                  <span className="font-cursive-accent font-semibold text-[#1B57F2] text-[13px]">
+                  <span className="font-cursive-accent font-bold text-emerald-800 text-sm">
                     teléfono!
                   </span>{" "}
                   📱💵
                 </p>
-                <span className="text-[11px] text-[#1B57F2] font-bold mt-1 inline-flex items-center gap-1">
-                  <span className="font-cursive-accent font-semibold text-xs">Cotizar mi equipo</span>
+                <span className="text-[11px] text-emerald-900 font-bold mt-1.5 inline-flex items-center gap-1 bg-white/60 px-2.5 py-0.5 rounded-full">
+                  <span className="font-cursive-accent font-bold text-xs">Cotizar mi equipo</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </div>
