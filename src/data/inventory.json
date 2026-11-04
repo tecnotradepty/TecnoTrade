@@ -1,21 +1,5 @@
 [
   {
-    "id": "prod-1793660694947",
-    "category": "iPhone",
-    "name": "dsdgdg",
-    "subtitle": "sdfsfsd",
-    "price": 345,
-    "grade": "Grado A+",
-    "battery": "98",
-    "tag": "",
-    "colors": [
-      "#111111"
-    ],
-    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
-    "inStock": true,
-    "createdAt": "2026-11-02T23:04:54.947Z"
-  },
-  {
     "id": "dev-ip12",
     "category": "iPhone",
     "name": "iPhone 12 pro mini",

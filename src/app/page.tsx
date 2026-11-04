@@ -441,13 +441,22 @@ export default function Home() {
             </div>
           </div>
 
-          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA (TOTALMENTE ESTÁTICO, SIN SOMBRA DE CAJA NI MARCO) */}
+          {/* COLUMNA DERECHA: IPHONE INCLINADO DIAGONAL A LA IZQUIERDA (CAMBIA ENTRE HERRAMIENTAS DE TALLER Y BOLSA DE COMPRA) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end select-none pointer-events-none">
             <div className="relative w-full max-w-[380px] sm:max-w-[440px] lg:max-w-[480px] flex items-center justify-center">
               <img
-                src="/hero-iphone.jpg"
-                alt="iPhone 15 Pro Titanium"
-                className="w-full h-auto object-contain mix-blend-multiply"
+                src="/hero-iphone-taller.jpg"
+                alt="Servicio Técnico Especializado"
+                className={`w-full h-auto object-contain mix-blend-multiply transition-opacity duration-300 ${
+                  activeTab === "taller" ? "opacity-100" : "opacity-0"
+                }`}
+              />
+              <img
+                src="/hero-iphone-ventas.jpg"
+                alt="Equipos Certificados en Venta"
+                className={`absolute inset-0 w-full h-auto object-contain mix-blend-multiply transition-opacity duration-300 ${
+                  activeTab === "productos" ? "opacity-100" : "opacity-0"
+                }`}
               />
             </div>
           </div>
