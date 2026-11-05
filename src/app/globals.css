@@ -353,3 +353,13 @@ body {
 .btn-tactile:active {
   transform: scale(0.96);
 }
+
+
+/* Ocultar barra de scroll en cintas horizontales manteniendo el scroll táctil */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

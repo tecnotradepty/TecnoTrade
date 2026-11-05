@@ -50,7 +50,7 @@ export interface TextSuggestion {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"taller" | "productos">("taller");
+  const [activeTab, setActiveTab] = useState<"taller" | "productos">("productos");
 
   // Inventario dinámico sincronizado con la base de datos y panel admin
   const [products, setProducts] = useState<InventoryProduct[]>([]);
@@ -973,87 +973,70 @@ export default function Home() {
           <div className="animate-fadeIn mb-20">
             
             {/* Título de la Sección */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-              <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-2xl clay-badge-blue flex items-center justify-center shrink-0">
-                  <Smartphone className="w-5 h-5 text-white" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-4">
+              <div className="flex items-center gap-2.5 sm:gap-3.5">
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl clay-badge-blue flex items-center justify-center shrink-0">
+                  <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[#14171F]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#14171F] leading-tight">
                     Stock de Dispositivos <span className="font-cursive-accent font-normal text-[#1B57F2]">Verificados</span>
                   </h2>
-                  <p className="text-xs text-slate-600 mt-0.5">
-                    Disponibles por unidad o lote con <span className="font-cursive-accent text-[#14171F]">garantía de 6 meses</span>
+                  <p className="text-[11px] sm:text-xs text-slate-600">
+                    Disponibles por unidad o lote · <span className="font-cursive-accent text-[#14171F]">Garantía de 6 meses</span>
                   </p>
                 </div>
               </div>
 
-              {/* Selector de ordenamiento en riel hundido 3D */}
-              <div className="flex items-center gap-1.5 self-start md:self-auto clay-inset p-1.5 rounded-2xl">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#1B57F2] ml-2" />
-                <span className="text-xs text-slate-600 font-semibold mr-1">Precio:</span>
-                <button
-                  onClick={() => setDevicePriceSort("default")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
-                    devicePriceSort === "default"
-                      ? "clay-card text-[#14171F] font-bold"
-                      : "text-slate-600 hover:text-[#14171F] font-medium"
-                  }`}
-                >
-                  Destacados
-                </button>
-                <button
-                  onClick={() => setDevicePriceSort("asc")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
-                    devicePriceSort === "asc"
-                      ? "clay-card text-[#14171F] font-bold"
-                      : "text-slate-600 hover:text-[#14171F] font-medium"
-                  }`}
-                >
-                  Menor a Mayor
-                </button>
-                <button
-                  onClick={() => setDevicePriceSort("desc")}
-                  className={`px-3 py-1.5 rounded-xl text-xs transition-all ${
-                    devicePriceSort === "desc"
-                      ? "clay-card text-[#14171F] font-bold"
-                      : "text-slate-600 hover:text-[#14171F] font-medium"
-                  }`}
-                >
-                  Mayor a Menor
-                </button>
-              </div>
-            </div>
-
-            {/* FILTROS POR MARCA Y CATEGORÍA EN PASTILLAS CLAY 3D */}
-            <div className="flex flex-wrap items-center gap-2.5 mb-8">
-              {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel", "Covers & Fundas", "Accesorios", "Otros"].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setDeviceBrandFilter(cat);
-                    setShowFullCatalog(false);
-                  }}
-                  className={`px-4 py-2.5 rounded-2xl text-xs font-semibold ${
-                    deviceBrandFilter.toLowerCase() === cat.toLowerCase()
-                      ? "clay-btn-blue"
-                      : "clay-pill text-slate-700 hover:text-[#14171F]"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-
+              {/* Botón rápido WhatsApp para lotes especiales */}
               <button
                 onClick={() => handleConsultWhatsApp()}
-                className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold clay-badge-soft hover:bg-[#1B57F2] hover:text-white transition-all"
+                className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold clay-badge-soft hover:bg-[#1B57F2] hover:text-white transition-all cursor-pointer"
               >
-                <MessageCircle className="w-3.5 h-3.5 fill-current" />
-                <span>Consultar otro modelo o lote en WhatsApp</span>
+                <MessageCircle className="w-3 h-3 fill-current" />
+                <span>Consultar por WhatsApp</span>
               </button>
             </div>
 
-            {/* Parrilla de Teléfonos y Productos en bloques Clay 3D */}
+            {/* BARRA DISCRETA DE FILTROS EN CINTA HORIZONTAL Y ORDENAMIENTO */}
+            <div className="flex items-center justify-between gap-2.5 mb-5 sm:mb-7 py-1">
+              {/* Cinta deslizable horizontalmente con el pulgar en móvil (sin scrollbar) */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 flex-1">
+                {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel", "Covers & Fundas", "Accesorios", "Otros"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setDeviceBrandFilter(cat);
+                      setShowFullCatalog(false);
+                    }}
+                    className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                      deviceBrandFilter.toLowerCase() === cat.toLowerCase()
+                        ? "clay-btn-blue text-white shadow-xs"
+                        : "clay-pill text-slate-700 hover:text-[#14171F]"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {/* Ordenamiento por precio discreto */}
+              <div className="shrink-0 flex items-center gap-1 clay-inset px-2.5 py-1 rounded-full text-xs">
+                <ArrowUpDown className="w-3 h-3 text-[#1B57F2] shrink-0" />
+                <select
+                  value={devicePriceSort}
+                  onChange={(e) => setDevicePriceSort(e.target.value as "default" | "asc" | "desc")}
+                  className="bg-transparent text-slate-700 font-semibold text-xs outline-none cursor-pointer pr-1"
+                  aria-label="Ordenar por precio"
+                >
+                  <option value="default">Destacados</option>
+                  <option value="asc">Menor precio</option>
+                  <option value="desc">Mayor precio</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Parrilla de Teléfonos y Productos: 2 columnas en móvil (2 en 2), 3 en tablet, 4 en PC */}
             {isProductsLoading ? (
               <div className="clay-surface rounded-[2.2rem] p-12 text-center animate-pulse">
                 <div className="w-8 h-8 border-3 border-[#1B57F2] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
@@ -1061,57 +1044,62 @@ export default function Home() {
               </div>
             ) : filteredDevices.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
                   {displayedDevices.map((dev) => (
                     <div 
                       key={dev.id}
-                      className="clay-surface rounded-[2.2rem] p-6 flex flex-col justify-between clay-card-interactive animate-scaleIn group"
+                      className="clay-surface rounded-2xl sm:rounded-[2.2rem] p-3 sm:p-5 flex flex-col justify-between clay-card-interactive animate-scaleIn group"
                     >
-                      <div className="relative h-64 rounded-2xl clay-card overflow-hidden mb-6 flex items-center justify-center">
+                      <div className="relative h-36 sm:h-52 md:h-60 rounded-xl sm:rounded-2xl clay-card overflow-hidden mb-3 sm:mb-4 flex items-center justify-center">
                         <img 
                           src={dev.image || "/logo.jpg"} 
                           alt={dev.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                         {dev.grade && (
-                          <span className="absolute top-3.5 left-3.5 clay-pill text-[#14171F] text-xs font-bold px-3 py-1 rounded-full">
+                          <span className="absolute top-2 left-2 sm:top-3.5 sm:left-3.5 clay-pill text-[#14171F] text-[9px] sm:text-xs font-bold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
                             {dev.grade}
                           </span>
                         )}
                         {dev.battery && (
-                          <span className="absolute top-3.5 right-3.5 clay-btn-dark text-xs font-bold px-3 py-1 rounded-full">
+                          <span className="absolute top-2 right-2 sm:top-3.5 sm:right-3.5 clay-btn-dark text-[9px] sm:text-xs font-bold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
                             {dev.battery}
                           </span>
                         )}
                       </div>
 
-                      <div>
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">{dev.category}</span>
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[9px] sm:text-[11px] text-slate-500 font-bold uppercase tracking-wider">{dev.category}</span>
                           {dev.tag && (
-                            <span className="text-[10px] clay-badge-soft px-2.5 py-0.5 rounded-full font-bold">
+                            <span className="text-[9px] sm:text-[10px] clay-badge-soft px-1.5 py-0.5 rounded-full font-bold truncate max-w-[70px] sm:max-w-none">
                               {dev.tag}
                             </span>
                           )}
                         </div>
-                        <h3 className="font-bold text-lg text-[#14171F]">{dev.name}</h3>
-                        <p className="text-xs text-slate-600 mb-4">{dev.subtitle || dev.category}</p>
 
-                        <div className="flex items-center gap-1.5 mb-6">
+                        <h3 className="font-bold text-xs sm:text-base text-[#14171F] line-clamp-1 leading-snug" title={dev.name}>
+                          {dev.name}
+                        </h3>
+                        <p className="text-[10px] sm:text-xs text-slate-500 mb-2 sm:mb-3 line-clamp-1">
+                          {dev.subtitle || dev.category}
+                        </p>
+
+                        <div className="flex items-center gap-1.5 mb-3 sm:mb-4 mt-auto">
                           {dev.colors && dev.colors.length > 0 && (
                             <div className="flex items-center gap-1">
                               {dev.colors.map((c, idx) => (
                                 <span 
                                   key={idx}
                                   style={{ backgroundColor: c }}
-                                  className="w-2.5 h-2.5 rounded-full border border-black/10"
+                                  className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border border-black/10"
                                 />
                               ))}
                             </div>
                           )}
-                          <span className="text-xs text-slate-500 ml-auto font-medium">
+                          <span className="text-[10px] sm:text-xs text-slate-500 ml-auto font-medium">
                             {dev.inStock !== false ? (
-                              <>Stock <span className="font-cursive-accent text-[#1B57F2] font-bold">Disponible</span></>
+                              <span className="text-[#1B57F2] font-bold">En Stock</span>
                             ) : (
                               <span className="text-amber-600 font-semibold">Agotado</span>
                             )}
@@ -1119,10 +1107,10 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-slate-200/70 flex items-center justify-between mt-auto">
+                      <div className="pt-2.5 sm:pt-4 border-t border-slate-200/70 flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-1.5 sm:gap-2">
                         <div>
-                          <span className="text-[10px] text-slate-400 block uppercase font-bold">Precio</span>
-                          <span className="text-2xl font-bold text-[#14171F] tracking-tight">${dev.price}</span>
+                          <span className="text-[9px] sm:text-[10px] text-slate-400 block uppercase font-bold leading-none">Precio</span>
+                          <span className="text-base sm:text-xl font-bold text-[#14171F] tracking-tight leading-tight">${dev.price}</span>
                         </div>
 
                         <button
@@ -1132,9 +1120,9 @@ export default function Home() {
                             subtitle: `${dev.subtitle || dev.category} · ${dev.grade || "Garantizado"}`,
                             price: dev.price
                           })}
-                          className="clay-btn-blue text-xs font-semibold px-4.5 py-2.5 rounded-full flex items-center gap-1.5"
+                          className="clay-btn-blue text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center justify-center gap-1 btn-tactile cursor-pointer"
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           <span>Añadir</span>
                         </button>
                       </div>
