@@ -436,7 +436,7 @@ export default function Home() {
 
             <p className="animate-fadeIn stagger-2 text-base sm:text-lg text-slate-600 font-normal leading-relaxed mb-8 max-w-xl">
               Suministro de{" "}
-              <span className="font-corporate-cursive text-[#14171F] font-semibold text-lg sm:text-xl">
+              <span className="text-[#14171F] font-semibold">
                 reparaciones especializadas
               </span>{" "}
               y teléfonos verificados para{" "}
@@ -444,11 +444,11 @@ export default function Home() {
                 tiendas, revendedores y clientes directos
               </strong>{" "}
               en Panamá. Tarifas con{" "}
-              <span className="font-corporate-cursive text-[#1B57F2] font-semibold text-lg sm:text-xl">
+              <span className="text-[#1B57F2] font-semibold">
                 garantía de taller
               </span>
               , repuestos en distintas calidades y{" "}
-              <span className="font-corporate-cursive text-[#14171F] font-semibold text-lg sm:text-xl">
+              <span className="text-[#14171F] font-semibold">
                 respuesta inmediata.
               </span>
             </p>
@@ -465,7 +465,7 @@ export default function Home() {
               >
                 <Wrench className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 <span>
-                  Catálogo de <span className="font-corporate-cursive text-xl sm:text-2xl font-bold">Reparaciones</span>
+                  Catálogo de Reparaciones
                 </span>
               </button>
               <button
@@ -478,7 +478,7 @@ export default function Home() {
               >
                 <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                 <span>
-                  Equipos en <span className="font-corporate-cursive text-xl sm:text-2xl font-bold">Venta</span> ({filteredDevices.length})
+                  Equipos en Venta ({filteredDevices.length})
                 </span>
               </button>
             </div>
@@ -522,10 +522,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-[#14171F] tracking-tight">
-                      Cotizador de <span className="font-cursive-accent font-normal text-[#1B57F2]">Servicio Técnico</span>
+                      Cotizador de <span className="text-[#1B57F2]">Servicio Técnico</span>
                     </h2>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      Busca tu modelo arriba o selecciona marca y pieza con <span className="font-cursive-accent text-[#14171F]">instalación profesional</span>
+                      Busca tu modelo arriba o selecciona marca y pieza con <span className="font-semibold text-[#14171F]">instalación profesional</span>
                     </p>
                   </div>
                 </div>
@@ -982,10 +982,10 @@ export default function Home() {
                 </div>
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold text-[#14171F] leading-tight">
-                    Stock de Dispositivos <span className="font-cursive-accent font-normal text-[#1B57F2]">Verificados</span>
+                    Stock de Dispositivos <span className="text-[#1B57F2]">Verificados</span>
                   </h2>
                   <p className="text-[11px] sm:text-xs text-slate-600">
-                    Disponibles por unidad o lote · <span className="font-cursive-accent text-[#14171F]">Garantía de 6 meses</span>
+                    Disponibles por unidad o lote · <span className="font-semibold text-[#14171F]">Garantía de 6 meses</span>
                   </p>
                 </div>
               </div>
@@ -1276,7 +1276,7 @@ export default function Home() {
         {/* ============================================================== */}
         <footer className="mt-16 pt-8 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 animate-fadeIn">
           <p>
-            TecnoTrade PTY · <span className="font-cursive-accent text-[#14171F] font-semibold">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
+            TecnoTrade PTY · <span className="font-semibold text-[#14171F]">Servicio y Reestreno</span> de Lunes a Sábado · Envíos a todo Panamá
           </p>
           <div className="flex items-center gap-4">
             <Link
@@ -1310,7 +1310,7 @@ export default function Home() {
             <div className="flex items-center justify-between pb-5 border-b border-slate-200/70">
               <div>
                 <h3 className="font-bold text-lg text-[#14171F]">
-                  Resumen del <span className="font-cursive-accent font-normal text-[#1B57F2]">Pedido</span>
+                  Resumen del Pedido
                 </h3>
                 <span className="text-xs text-slate-500 font-medium">
                   {totalCartCount} {totalCartCount === 1 ? "ítem seleccionado" : "ítems seleccionados"}
@@ -1408,7 +1408,7 @@ export default function Home() {
 
                 <div className="pt-2 flex items-baseline justify-between">
                   <span className="text-xs text-slate-600 font-semibold">
-                    Total <span className="font-cursive-accent text-[#1B57F2]">estimado</span>
+                    Total estimado
                   </span>
                   <span className="text-2xl font-bold text-[#14171F] tracking-tight">
                     ${totalCartPrice.toFixed(2)} USD
