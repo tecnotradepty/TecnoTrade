@@ -148,6 +148,9 @@ export default function AdminPage() {
 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [isSubmittingProduct, setIsSubmittingProduct] = useState(false);
+  const [isSubmittingRepair, setIsSubmittingRepair] = useState(false);
 
   // ==============================================================
   // ESTADO 2: CATÁLOGO DE REPARACIONES

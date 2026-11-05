@@ -37,6 +37,27 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString()
     };
 
+    // Prevenir duplicados accidentales (doble clic o reenvío rápido de red)
+    const now = Date.now();
+    const existingDuplicate = products.find((p) => {
+      const isSameName = p.name.trim().toLowerCase() === newProduct.name.trim().toLowerCase();
+      const isSameCategory = p.category === newProduct.category;
+      const isSamePrice = p.price === newProduct.price;
+      const isSameSubtitle = (p.subtitle || "").trim().toLowerCase() === (newProduct.subtitle || "").trim().toLowerCase();
+      if (!isSameName || !isSameCategory || !isSamePrice || !isSameSubtitle) return false;
+
+      const createdTime = p.createdAt ? new Date(p.createdAt).getTime() : 0;
+      return (now - createdTime) < 15000; // Creado hace menos de 15 segundos
+    });
+
+    if (existingDuplicate) {
+      console.log(`[Products API] Duplicado evitado para: ${newProduct.name}`);
+      return NextResponse.json(existingDuplicate, { 
+        status: 200,
+        headers: NO_CACHE_HEADERS
+      });
+    }
+
     // Agregar al inicio del inventario
     const updated = [newProduct, ...products];
     await saveProducts(updated);
