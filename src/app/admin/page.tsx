@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
@@ -186,7 +186,7 @@ export default function AdminPage() {
   const fetchProducts = async () => {
     try {
       setIsLoadingProducts(true);
-      const res = await fetch("/api/products");
+      const res = await fetch("/api/products", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setProducts(data);
@@ -201,7 +201,7 @@ export default function AdminPage() {
   const fetchRepairs = async () => {
     try {
       setIsLoadingRepairs(true);
-      const res = await fetch("/api/repairs");
+      const res = await fetch("/api/repairs", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setRepairs(data);

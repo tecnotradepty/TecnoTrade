@@ -57,16 +57,16 @@ export default function Home() {
   const [repairs, setRepairs] = useState<RepairItem[]>(REPAIR_CATALOG);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/products", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setProducts(data);
         }
       })
       .catch((err) => console.error("Error al sincronizar inventario en vivo:", err));
 
-    fetch("/api/repairs")
+    fetch("/api/repairs", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {

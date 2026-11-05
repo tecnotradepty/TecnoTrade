@@ -1,44 +1,26 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getRepairs, saveRepairs } from "@/lib/storage";
 import { RepairItem } from "@/data/repairCatalog";
 
-const REPAIRS_FILE = path.join(process.cwd(), "src", "data", "repairs.json");
+const NO_CACHE_HEADERS = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Pragma": "no-cache",
+  "Expires": "0"
+};
 
-function readRepairs(): RepairItem[] {
-  try {
-    if (!fs.existsSync(REPAIRS_FILE)) {
-      return [];
-    }
-    const data = fs.readFileSync(REPAIRS_FILE, "utf-8");
-    return JSON.parse(data) as RepairItem[];
-  } catch (error) {
-    console.error("Error reading repairs:", error);
-    return [];
-  }
-}
-
-function writeRepairs(repairs: RepairItem[]): boolean {
-  try {
-    fs.writeFileSync(REPAIRS_FILE, JSON.stringify(repairs, null, 2), "utf-8");
-    return true;
-  } catch (error) {
-    console.error("Error writing repairs:", error);
-    return false;
-  }
-}
-
-// GET: Obtener todas las reparaciones
-export async function GET() {
-  const repairs = readRepairs();
-  return NextResponse.json(repairs);
+// GET: Obtener todas las reparaciones (recibe request para evaluar dinámicamente)
+export async function GET(_request: Request) {
+  const repairs = await getRepairs();
+  return NextResponse.json(repairs, {
+    headers: NO_CACHE_HEADERS
+  });
 }
 
 // POST: Crear nueva reparación en el catálogo
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const repairs = readRepairs();
+    const repairs = await getRepairs();
 
     const newItem: RepairItem = {
       id: body.id || `rep-${Date.now()}`,
@@ -51,10 +33,14 @@ export async function POST(request: Request) {
     };
 
     const updated = [newItem, ...repairs];
-    writeRepairs(updated);
+    await saveRepairs(updated);
 
-    return NextResponse.json(newItem, { status: 201 });
+    return NextResponse.json(newItem, { 
+      status: 201,
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en POST /api/repairs:", error);
     return NextResponse.json({ error: "Error al crear la reparación" }, { status: 500 });
   }
 }
@@ -67,7 +53,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "ID de reparación requerido" }, { status: 400 });
     }
 
-    const repairs = readRepairs();
+    const repairs = await getRepairs();
     const index = repairs.findIndex((r) => r.id === body.id);
 
     if (index === -1) {
@@ -80,8 +66,7 @@ export async function PUT(request: Request) {
 
     let finalPrice = body.price !== undefined ? Number(body.price) : current.price;
 
-    // Si se solicita aplicar la regla automática de margen al cambiar el costo:
-    // Si el costo sube, subir la diferencia exacta al precio final; si baja, mantener el precio del cliente igual.
+    // Regla de margen automático: si el costo sube, trasladar la subida exacta al cliente; si baja, mantener precio
     if (body.applyMarginRule && body.cost !== undefined) {
       const diff = newCost - oldCost;
       if (diff > 0) {
@@ -102,10 +87,13 @@ export async function PUT(request: Request) {
     };
 
     repairs[index] = updatedItem;
-    writeRepairs(repairs);
+    await saveRepairs(repairs);
 
-    return NextResponse.json(updatedItem);
+    return NextResponse.json(updatedItem, {
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en PUT /api/repairs:", error);
     return NextResponse.json({ error: "Error al actualizar la reparación" }, { status: 500 });
   }
 }
@@ -120,16 +108,19 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "ID requerido" }, { status: 400 });
     }
 
-    const repairs = readRepairs();
+    const repairs = await getRepairs();
     const filtered = repairs.filter((r) => r.id !== id);
 
     if (filtered.length === repairs.length) {
       return NextResponse.json({ error: "Reparación no encontrada" }, { status: 404 });
     }
 
-    writeRepairs(filtered);
-    return NextResponse.json({ success: true });
+    await saveRepairs(filtered);
+    return NextResponse.json({ success: true, deletedId: id }, {
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en DELETE /api/repairs:", error);
     return NextResponse.json({ error: "Error al eliminar la reparación" }, { status: 500 });
   }
 }

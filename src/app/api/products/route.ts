@@ -1,44 +1,26 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { getProducts, saveProducts } from "@/lib/storage";
 import { InventoryProduct } from "@/types/inventory";
 
-const INVENTORY_FILE = path.join(process.cwd(), "src", "data", "inventory.json");
+const NO_CACHE_HEADERS = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Pragma": "no-cache",
+  "Expires": "0"
+};
 
-function readInventory(): InventoryProduct[] {
-  try {
-    if (!fs.existsSync(INVENTORY_FILE)) {
-      return [];
-    }
-    const data = fs.readFileSync(INVENTORY_FILE, "utf-8");
-    return JSON.parse(data) as InventoryProduct[];
-  } catch (error) {
-    console.error("Error reading inventory:", error);
-    return [];
-  }
-}
-
-function writeInventory(products: InventoryProduct[]): boolean {
-  try {
-    fs.writeFileSync(INVENTORY_FILE, JSON.stringify(products, null, 2), "utf-8");
-    return true;
-  } catch (error) {
-    console.error("Error writing inventory:", error);
-    return false;
-  }
-}
-
-// GET: Obtener todos los productos
-export async function GET() {
-  const products = readInventory();
-  return NextResponse.json(products);
+// GET: Obtener todos los productos (recibe request para evaluar dinámicamente)
+export async function GET(_request: Request) {
+  const products = await getProducts();
+  return NextResponse.json(products, {
+    headers: NO_CACHE_HEADERS
+  });
 }
 
 // POST: Crear nuevo producto
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const products = readInventory();
+    const products = await getProducts();
 
     const newProduct: InventoryProduct = {
       id: body.id || `prod-${Date.now()}`,
@@ -57,10 +39,14 @@ export async function POST(request: Request) {
 
     // Agregar al inicio del inventario
     const updated = [newProduct, ...products];
-    writeInventory(updated);
+    await saveProducts(updated);
 
-    return NextResponse.json(newProduct, { status: 201 });
+    return NextResponse.json(newProduct, { 
+      status: 201,
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en POST /api/products:", error);
     return NextResponse.json({ error: "Error al crear el producto" }, { status: 500 });
   }
 }
@@ -73,7 +59,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "ID de producto requerido" }, { status: 400 });
     }
 
-    const products = readInventory();
+    const products = await getProducts();
     const index = products.findIndex((p) => p.id === body.id);
 
     if (index === -1) {
@@ -95,10 +81,13 @@ export async function PUT(request: Request) {
     };
 
     products[index] = updatedProduct;
-    writeInventory(products);
+    await saveProducts(products);
 
-    return NextResponse.json(updatedProduct);
+    return NextResponse.json(updatedProduct, {
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en PUT /api/products:", error);
     return NextResponse.json({ error: "Error al actualizar producto" }, { status: 500 });
   }
 }
@@ -113,16 +102,19 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "ID requerido" }, { status: 400 });
     }
 
-    const products = readInventory();
+    const products = await getProducts();
     const filtered = products.filter((p) => p.id !== id);
 
     if (filtered.length === products.length) {
       return NextResponse.json({ error: "Producto no encontrado" }, { status: 404 });
     }
 
-    writeInventory(filtered);
-    return NextResponse.json({ success: true, deletedId: id });
+    await saveProducts(filtered);
+    return NextResponse.json({ success: true, deletedId: id }, {
+      headers: NO_CACHE_HEADERS
+    });
   } catch (error) {
+    console.error("Error en DELETE /api/products:", error);
     return NextResponse.json({ error: "Error al eliminar producto" }, { status: 500 });
   }
 }
