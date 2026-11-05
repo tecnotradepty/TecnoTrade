@@ -1367,7 +1367,10 @@ export default function Home() {
         
         {/* Burbuja de mensaje estilo Clay 3D con color propio de WhatsApp */}
         {(chatBubbleStep === "typing" || chatBubbleStep === "message") && (
-          <div className="animate-chatPop relative bg-[#075E54] text-white clay-whatsapp-bubble rounded-2xl rounded-br-xs p-4 pr-8 max-w-[260px] text-left shadow-xl shadow-black/20 border border-white/10 font-sans">
+          <div 
+            style={{ backgroundColor: '#075E54', color: '#FFFFFF' }}
+            className="animate-chatPop relative text-white rounded-2xl rounded-br-xs p-4 pr-8 max-w-[260px] text-left shadow-2xl shadow-black/30 border border-white/15 font-sans"
+          >
             
             <button
               onClick={(e) => {
