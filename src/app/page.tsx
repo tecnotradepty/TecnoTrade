@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
@@ -53,7 +53,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"taller" | "productos">("taller");
 
   // Inventario dinámico sincronizado con la base de datos y panel admin
-  const [products, setProducts] = useState<InventoryProduct[]>(INITIAL_INVENTORY as InventoryProduct[]);
+  const [products, setProducts] = useState<InventoryProduct[]>([]);
+  const [isProductsLoading, setIsProductsLoading] = useState(true);
   const [repairs, setRepairs] = useState<RepairItem[]>(REPAIR_CATALOG);
 
   useEffect(() => {
@@ -64,7 +65,8 @@ export default function Home() {
           setProducts(data);
         }
       })
-      .catch((err) => console.error("Error al sincronizar inventario en vivo:", err));
+      .catch((err) => console.error("Error al sincronizar inventario en vivo:", err))
+      .finally(() => setIsProductsLoading(false));
 
     fetch("/api/repairs", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
@@ -1052,7 +1054,12 @@ export default function Home() {
             </div>
 
             {/* Parrilla de Teléfonos y Productos en bloques Clay 3D */}
-            {filteredDevices.length > 0 ? (
+            {isProductsLoading ? (
+              <div className="clay-surface rounded-[2.2rem] p-12 text-center animate-pulse">
+                <div className="w-8 h-8 border-3 border-[#1B57F2] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                <p className="text-xs font-semibold text-slate-500">Sincronizando inventario en vivo...</p>
+              </div>
+            ) : filteredDevices.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {displayedDevices.map((dev) => (
