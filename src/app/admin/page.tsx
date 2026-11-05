@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
@@ -351,11 +351,9 @@ export default function AdminPage() {
     }
     try {
       setIsLoadingProducts(true);
-      for (const prod of products) {
-        await fetch(`/api/products?id=${encodeURIComponent(prod.id)}`, {
-          method: "DELETE"
-        });
-      }
+      await fetch("/api/products?id=all", {
+        method: "DELETE"
+      });
       setProducts([]);
       showNotification("Todos los productos han sido eliminados", "success");
       fetchProducts();

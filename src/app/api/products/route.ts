@@ -92,7 +92,7 @@ export async function PUT(request: Request) {
   }
 }
 
-// DELETE: Eliminar producto
+// DELETE: Eliminar producto (o id=all para vaciar catálogo completo)
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -100,6 +100,13 @@ export async function DELETE(request: Request) {
 
     if (!id) {
       return NextResponse.json({ error: "ID requerido" }, { status: 400 });
+    }
+
+    if (id === "all") {
+      await saveProducts([]);
+      return NextResponse.json({ success: true, message: "Inventario vaciado por completo" }, {
+        headers: NO_CACHE_HEADERS
+      });
     }
 
     const products = await getProducts();
