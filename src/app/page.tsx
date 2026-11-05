@@ -23,7 +23,8 @@ import {
   ChevronUp,
   ArrowUpDown,
   ExternalLink,
-  Settings
+  Settings,
+  SlidersHorizontal
 } from "lucide-react";
 import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch, RepairItem } from "@/data/repairCatalog";
 import INITIAL_INVENTORY from "@/data/inventory.json";
@@ -91,6 +92,7 @@ export default function Home() {
   const [deviceBrandFilter, setDeviceBrandFilter] = useState<string>("Todos");
   const [devicePriceSort, setDevicePriceSort] = useState<"default" | "asc" | "desc">("default");
   const [showFullCatalog, setShowFullCatalog] = useState(false);
+  const [isFilterTabOpen, setIsFilterTabOpen] = useState(false);
 
   // Estado del Carrito
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -998,42 +1000,139 @@ export default function Home() {
               </button>
             </div>
 
-            {/* BARRA DISCRETA DE FILTROS EN CINTA HORIZONTAL Y ORDENAMIENTO */}
-            <div className="flex items-center justify-between gap-2.5 mb-5 sm:mb-7 py-1">
-              {/* Cinta deslizable horizontalmente con el pulgar en móvil (sin scrollbar) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 flex-1">
-                {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel", "Covers & Fundas", "Accesorios", "Otros"].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => {
-                      setDeviceBrandFilter(cat);
-                      setShowFullCatalog(false);
-                    }}
-                    className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                      deviceBrandFilter.toLowerCase() === cat.toLowerCase()
-                        ? "clay-btn-blue text-white shadow-xs"
-                        : "clay-pill text-slate-700 hover:text-[#14171F]"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+            {/* PESTAÑA UNIFICADA DE FILTROS Y ORDENAMIENTO */}
+            <div className="mb-4 sm:mb-6">
+              <div className="flex items-center justify-between gap-2.5">
+                {/* Botón Pestaña de Filtros */}
+                <button
+                  onClick={() => setIsFilterTabOpen((prev) => !prev)}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer btn-tactile ${
+                    isFilterTabOpen || deviceBrandFilter !== "Todos" || devicePriceSort !== "default"
+                      ? "clay-btn-blue text-white shadow-xs"
+                      : "clay-pill text-slate-800 hover:text-black"
+                  }`}
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  <span>Filtros y Ordenar</span>
+                  {(deviceBrandFilter !== "Todos" || devicePriceSort !== "default") && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+                  )}
+                  {isFilterTabOpen ? (
+                    <ChevronUp className="w-3.5 h-3.5 ml-1" />
+                  ) : (
+                    <ChevronDown className="w-3.5 h-3.5 ml-1" />
+                  )}
+                </button>
+
+                {/* Resumen del filtro activo y contador */}
+                <div className="text-right flex items-center gap-2">
+                  {(deviceBrandFilter !== "Todos" || devicePriceSort !== "default") && (
+                    <button
+                      onClick={() => {
+                        setDeviceBrandFilter("Todos");
+                        setDevicePriceSort("default");
+                      }}
+                      className="text-[11px] font-semibold text-[#1B57F2] hover:underline cursor-pointer"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                  <span className="text-[11px] font-semibold text-slate-500">
+                    {filteredDevices.length} {filteredDevices.length === 1 ? "equipo" : "equipos"}
+                    {deviceBrandFilter !== "Todos" && (
+                      <span className="text-[#1B57F2] font-bold"> · {deviceBrandFilter}</span>
+                    )}
+                  </span>
+                </div>
               </div>
 
-              {/* Ordenamiento por precio discreto */}
-              <div className="shrink-0 flex items-center gap-1 clay-inset px-2.5 py-1 rounded-full text-xs">
-                <ArrowUpDown className="w-3 h-3 text-[#1B57F2] shrink-0" />
-                <select
-                  value={devicePriceSort}
-                  onChange={(e) => setDevicePriceSort(e.target.value as "default" | "asc" | "desc")}
-                  className="bg-transparent text-slate-700 font-semibold text-xs outline-none cursor-pointer pr-1"
-                  aria-label="Ordenar por precio"
-                >
-                  <option value="default">Destacados</option>
-                  <option value="asc">Menor precio</option>
-                  <option value="desc">Mayor precio</option>
-                </select>
-              </div>
+              {/* Panel Desplegable: Todos los filtros agrupados en una sola pestaña */}
+              {isFilterTabOpen && (
+                <div className="clay-surface rounded-2xl p-4 sm:p-5 mt-3 border border-black/[0.04] shadow-sm animate-scaleIn space-y-4">
+                  {/* Grupo 1: Marcas y Categorías */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                        Filtrar por Marca / Categoría
+                      </span>
+                      {deviceBrandFilter !== "Todos" && (
+                        <button
+                          onClick={() => setDeviceBrandFilter("Todos")}
+                          className="text-[11px] font-semibold text-[#1B57F2] hover:underline cursor-pointer"
+                        >
+                          Ver todas
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {["Todos", "iPhone", "Samsung", "Honor", "Xiaomi", "Pixel", "Covers & Fundas", "Accesorios", "Otros"].map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => {
+                            setDeviceBrandFilter(cat);
+                            setShowFullCatalog(false);
+                          }}
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                            deviceBrandFilter.toLowerCase() === cat.toLowerCase()
+                              ? "clay-btn-blue text-white shadow-xs"
+                              : "clay-pill text-slate-700 hover:text-black"
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Grupo 2: Ordenar por Precio */}
+                  <div className="pt-3 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+                        Ordenar por Precio
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => setDevicePriceSort("default")}
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                            devicePriceSort === "default"
+                              ? "clay-btn-dark text-white shadow-xs"
+                              : "clay-pill text-slate-700 hover:text-black"
+                          }`}
+                        >
+                          Destacados
+                        </button>
+                        <button
+                          onClick={() => setDevicePriceSort("asc")}
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                            devicePriceSort === "asc"
+                              ? "clay-btn-dark text-white shadow-xs"
+                              : "clay-pill text-slate-700 hover:text-black"
+                          }`}
+                        >
+                          Menor precio
+                        </button>
+                        <button
+                          onClick={() => setDevicePriceSort("desc")}
+                          className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                            devicePriceSort === "desc"
+                              ? "clay-btn-dark text-white shadow-xs"
+                              : "clay-pill text-slate-700 hover:text-black"
+                          }`}
+                        >
+                          Mayor precio
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setIsFilterTabOpen(false)}
+                      className="clay-btn-blue text-xs font-bold text-white px-4 py-1.5 rounded-full shadow-xs cursor-pointer ml-auto"
+                    >
+                      Aplicar y cerrar
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Parrilla de Teléfonos y Productos: 2 columnas en móvil (2 en 2), 3 en tablet, 4 en PC */}
