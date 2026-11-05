@@ -7,16 +7,53 @@ import { RepairItem } from "@/data/repairCatalog";
 // ============================================================================
 // CONEXIÓN CLOUD REDIS (Vercel KV / Upstash Redis)
 // ============================================================================
-// Vercel KV inyecta automáticamente KV_REST_API_URL y KV_REST_API_TOKEN.
-// Upstash Redis en Vercel Marketplace inyecta UPSTASH_REDIS_REST_URL y UPSTASH_REDIS_REST_TOKEN.
-const redisUrl =
-  process.env.KV_REST_API_URL ||
-  process.env.UPSTASH_REDIS_REST_URL ||
-  process.env.KV_URL;
+// Resolver credenciales de Redis independientemente del prefijo que use Vercel
+function resolveRedisCredentials(): { url: string; token: string } {
+  // 1. Verificación directa de nombres habituales
+  const directUrl =
+    process.env.UPSTASH_REDIS_REST_URL ||
+    process.env.KV_REST_API_URL ||
+    process.env.STORAGE_REST_API_URL ||
+    process.env.STORAGE_URL ||
+    process.env.REDIS_URL ||
+    process.env.KV_URL ||
+    "";
 
-const redisToken =
-  process.env.KV_REST_API_TOKEN ||
-  process.env.UPSTASH_REDIS_REST_TOKEN;
+  const directToken =
+    process.env.UPSTASH_REDIS_REST_TOKEN ||
+    process.env.KV_REST_API_TOKEN ||
+    process.env.STORAGE_REST_API_TOKEN ||
+    process.env.STORAGE_TOKEN ||
+    process.env.REDIS_TOKEN ||
+    "";
+
+  if (directUrl && directToken) {
+    return { url: directUrl, token: directToken };
+  }
+
+  // 2. Detección automática inteligente en process.env por si se usó un prefijo personalizado
+  let detectedUrl = directUrl;
+  let detectedToken = directToken;
+
+  for (const [key, val] of Object.entries(process.env)) {
+    if (!val || typeof val !== "string") continue;
+    const upper = key.toUpperCase();
+    if (upper.includes("REDIS") || upper.includes("KV") || upper.includes("UPSTASH") || upper.includes("STORAGE")) {
+      if ((upper.endsWith("_URL") || upper.includes("_REST_API_URL")) && !detectedUrl) {
+        if (val.startsWith("https://") || val.startsWith("rediss://")) {
+          detectedUrl = val;
+        }
+      }
+      if ((upper.endsWith("_TOKEN") || upper.includes("_REST_API_TOKEN")) && !detectedToken) {
+        detectedToken = val;
+      }
+    }
+  }
+
+  return { url: detectedUrl, token: detectedToken };
+}
+
+const { url: redisUrl, token: redisToken } = resolveRedisCredentials();
 
 let redisClient: Redis | null = null;
 
