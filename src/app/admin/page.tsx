@@ -145,6 +145,7 @@ export default function AdminPage() {
   const [formTag, setFormTag] = useState("");
   const [formImage, setFormImage] = useState("");
   const [formInStock, setFormInStock] = useState(true);
+  const [formId, setFormId] = useState("");
 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -22,8 +22,20 @@ export async function POST(request: Request) {
     const body = await request.json();
     const products = await getProducts();
 
+    const productId = body.id || `prod-${Date.now()}`;
+
+    // 1. Verificación por ID único (Idempotencia: si ya existe por ID, no duplicar)
+    const existingById = products.find((p) => p.id === productId);
+    if (existingById) {
+      console.log(`[Products API] Producto ya existente por ID evitado: ${productId}`);
+      return NextResponse.json(existingById, { 
+        status: 200, 
+        headers: NO_CACHE_HEADERS 
+      });
+    }
+
     const newProduct: InventoryProduct = {
-      id: body.id || `prod-${Date.now()}`,
+      id: productId,
       category: body.category || "Otros",
       name: body.name || "Sin nombre",
       subtitle: body.subtitle || "",
