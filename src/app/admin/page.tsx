@@ -177,6 +177,24 @@ export default function AdminPage() {
   // Notificación global
   const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
+  const [dbStatus, setDbStatus] = useState<{
+    cloudDatabaseActive: boolean;
+    diagnosticSource: string;
+    detectedEnvironmentVariables: string[];
+  } | null>(null);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/admin/status", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setDbStatus(data);
+      }
+    } catch {
+      // Silencioso
+    }
+  };
+
   const showNotification = (message: string, type: "success" | "error") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
@@ -324,6 +342,28 @@ export default function AdminPage() {
       }
     } catch {
       showNotification("Error de conexión", "error");
+    }
+  };
+
+  const handleClearAllProducts = async () => {
+    if (!confirm("¿Estás seguro de que deseas eliminar TODOS los productos del catálogo? Esta acción no se puede deshacer.")) {
+      return;
+    }
+    try {
+      setIsLoadingProducts(true);
+      for (const prod of products) {
+        await fetch(`/api/products?id=${encodeURIComponent(prod.id)}`, {
+          method: "DELETE"
+        });
+      }
+      setProducts([]);
+      showNotification("Todos los productos han sido eliminados", "success");
+      fetchProducts();
+      fetchStatus();
+    } catch {
+      showNotification("Error al vaciar productos", "error");
+    } finally {
+      setIsLoadingProducts(false);
     }
   };
 

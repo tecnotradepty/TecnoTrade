@@ -7,53 +7,85 @@ import { RepairItem } from "@/data/repairCatalog";
 // ============================================================================
 // CONEXIÓN CLOUD REDIS (Vercel KV / Upstash Redis)
 // ============================================================================
-// Resolver credenciales de Redis independientemente del prefijo que use Vercel
-function resolveRedisCredentials(): { url: string; token: string } {
-  // 1. Verificación directa de nombres habituales
-  const directUrl =
-    process.env.UPSTASH_REDIS_REST_URL ||
-    process.env.KV_REST_API_URL ||
-    process.env.STORAGE_REST_API_URL ||
-    process.env.STORAGE_URL ||
-    process.env.REDIS_URL ||
-    process.env.KV_URL ||
-    "";
 
-  const directToken =
-    process.env.UPSTASH_REDIS_REST_TOKEN ||
-    process.env.KV_REST_API_TOKEN ||
-    process.env.STORAGE_REST_API_TOKEN ||
-    process.env.STORAGE_TOKEN ||
-    process.env.REDIS_TOKEN ||
-    "";
+/**
+ * Resuelve las credenciales de Redis desde cualquier formato proporcionado por Vercel / Upstash.
+ * Soporta tanto URLs directas REST (https://...) como cadenas de conexión completas (rediss://default:token@host:6379).
+ */
+function resolveRedisCredentials(): { url: string; token: string; source: string } {
+  // 1. Verificación directa de nombres habituales con URL REST
+  const candidateUrls = [
+    { key: "UPSTASH_REDIS_REST_URL", val: process.env.UPSTASH_REDIS_REST_URL },
+    { key: "KV_REST_API_URL", val: process.env.KV_REST_API_URL },
+    { key: "STORAGE_REST_API_URL", val: process.env.STORAGE_REST_API_URL },
+    { key: "UPSTASH_URL", val: process.env.UPSTASH_URL },
+  ].filter((c) => Boolean(c.val)) as { key: string; val: string }[];
 
-  if (directUrl && directToken) {
-    return { url: directUrl, token: directToken };
+  const candidateTokens = [
+    { key: "UPSTASH_REDIS_REST_TOKEN", val: process.env.UPSTASH_REDIS_REST_TOKEN },
+    { key: "KV_REST_API_TOKEN", val: process.env.KV_REST_API_TOKEN },
+    { key: "STORAGE_REST_API_TOKEN", val: process.env.STORAGE_REST_API_TOKEN },
+    { key: "UPSTASH_TOKEN", val: process.env.UPSTASH_TOKEN },
+  ].filter((c) => Boolean(c.val)) as { key: string; val: string }[];
+
+  if (candidateUrls.length > 0 && candidateTokens.length > 0) {
+    let rawUrl = candidateUrls[0].val;
+    if (!rawUrl.startsWith("http")) {
+      rawUrl = `https://${rawUrl}`;
+    }
+    return {
+      url: rawUrl,
+      token: candidateTokens[0].val,
+      source: `${candidateUrls[0].key} + ${candidateTokens[0].key}`,
+    };
   }
 
-  // 2. Detección automática inteligente en process.env por si se usó un prefijo personalizado
-  let detectedUrl = directUrl;
-  let detectedToken = directToken;
+  // 2. Búsqueda automática en todas las variables de entorno
+  let foundRestUrl = "";
+  let foundRestToken = "";
+  let foundConnString = "";
+  let foundSource = "";
 
   for (const [key, val] of Object.entries(process.env)) {
     if (!val || typeof val !== "string") continue;
     const upper = key.toUpperCase();
-    if (upper.includes("REDIS") || upper.includes("KV") || upper.includes("UPSTASH") || upper.includes("STORAGE")) {
-      if ((upper.endsWith("_URL") || upper.includes("_REST_API_URL")) && !detectedUrl) {
-        if (val.startsWith("https://") || val.startsWith("rediss://")) {
-          detectedUrl = val;
-        }
-      }
-      if ((upper.endsWith("_TOKEN") || upper.includes("_REST_API_TOKEN")) && !detectedToken) {
-        detectedToken = val;
-      }
+
+    if (upper.includes("REST_URL") || upper.includes("REST_API_URL")) {
+      foundRestUrl = val.startsWith("http") ? val : `https://${val}`;
+      foundSource = key;
+    }
+    if (upper.includes("REST_TOKEN") || upper.includes("REST_API_TOKEN")) {
+      foundRestToken = val;
+    }
+    if ((upper.endsWith("_URL") || upper.includes("REDIS")) && (val.startsWith("rediss://") || val.startsWith("redis://"))) {
+      foundConnString = val;
     }
   }
 
-  return { url: detectedUrl, token: detectedToken };
+  if (foundRestUrl && foundRestToken) {
+    return { url: foundRestUrl, token: foundRestToken, source: foundSource };
+  }
+
+  // 3. Si solo existe cadena de conexión de Redis (rediss://default:TOKEN@HOST:PORT)
+  if (foundConnString) {
+    try {
+      const parsed = new URL(foundConnString);
+      if (parsed.hostname && parsed.password) {
+        return {
+          url: `https://${parsed.hostname}`,
+          token: parsed.password,
+          source: "Parsed from rediss:// connection string",
+        };
+      }
+    } catch (e) {
+      console.error("[Storage] Error al parsear cadena de conexión de Redis:", e);
+    }
+  }
+
+  return { url: "", token: "", source: "Ninguna variable detectada" };
 }
 
-const { url: redisUrl, token: redisToken } = resolveRedisCredentials();
+const { url: redisUrl, token: redisToken, source: redisSource } = resolveRedisCredentials();
 
 let redisClient: Redis | null = null;
 
@@ -63,12 +95,12 @@ if (redisUrl && redisToken) {
       url: redisUrl,
       token: redisToken,
     });
-    console.log("[Storage] Cloud Redis (Vercel KV / Upstash) inicializado con éxito.");
+    console.log(`[Storage] Cloud Redis inicializado con éxito usando: ${redisSource}`);
   } catch (err) {
     console.error("[Storage] Error al inicializar cliente Redis:", err);
   }
 } else {
-  console.log("[Storage] Sin variables de Redis detectadas. Operando con fallback local/memoria.");
+  console.log(`[Storage] Sin variables de Redis válidas (${redisSource}). Operando con fallback local/memoria.`);
 }
 
 // Claves de almacenamiento en la base de datos Redis
@@ -178,7 +210,7 @@ export async function getProducts(): Promise<InventoryProduct[]> {
         return remote;
       }
 
-      // Si Redis está vacío, sembramos los datos iniciales
+      // Si Redis está vacío (primera ejecución), sembramos con datos iniciales
       const initial = readLocalProducts();
       await redisClient.set(REDIS_PRODUCTS_KEY, initial);
       globalThis.__tecnotrade_products__ = initial;
@@ -212,14 +244,14 @@ export async function saveProducts(products: InventoryProduct[]): Promise<boolea
   try {
     fs.writeFileSync(TMP_INVENTORY_FILE, JSON.stringify(products, null, 2), "utf-8");
   } catch {
-    // En caso de que /tmp no esté disponible en algún entorno
+    // Silencioso si no está disponible
   }
 
   // 4. Intentar escribir en src/data/inventory.json (funciona en localhost dev)
   try {
     fs.writeFileSync(LOCAL_INVENTORY_FILE, JSON.stringify(products, null, 2), "utf-8");
   } catch {
-    // Normal en Vercel (sistema de archivos de solo lectura)
+    // Normal en Vercel
   }
 
   return true;
@@ -277,7 +309,7 @@ export async function saveRepairs(repairs: RepairItem[]): Promise<boolean> {
   try {
     fs.writeFileSync(TMP_REPAIRS_FILE, JSON.stringify(repairs, null, 2), "utf-8");
   } catch {
-    // Ignorar si falla
+    // Silencioso
   }
 
   // 4. src/data/repairs.json (Local dev)
@@ -291,8 +323,13 @@ export async function saveRepairs(repairs: RepairItem[]): Promise<boolean> {
 }
 
 /**
- * Indica si hay una base de datos cloud activa conectada.
+ * Información de estado de la conexión para diagnósticos en el panel Admin.
  */
-export function isCloudStorageConfigured(): boolean {
-  return redisClient !== null;
+export function getStorageDiagnostics() {
+  return {
+    isCloudConfigured: redisClient !== null,
+    source: redisSource,
+    hasUrl: Boolean(redisUrl),
+    hasToken: Boolean(redisToken),
+  };
 }
