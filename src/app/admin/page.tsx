@@ -15,7 +15,10 @@ import {
   Package, 
   Wrench,
   Smartphone,
-  Check
+  Check,
+  Lock,
+  LogOut,
+  KeyRound
 } from "lucide-react";
 import { InventoryProduct, ProductCategory } from "@/types/inventory";
 import { RepairItem, RepairBrand, RepairCategory, RepairQuality } from "@/data/repairCatalog";
@@ -36,6 +39,88 @@ const REPAIR_CATEGORIES: RepairCategory[] = ["Pantallas", "Tapas Traseras", "Pue
 const REPAIR_QUALITIES: RepairQuality[] = ["Incell", "OLED", "Original", "Servipack", "Estándar"];
 
 export default function AdminPage() {
+  // ==============================================================
+  // ESTADO DE SEGURIDAD (PROTECCIÓN POR PIN)
+  // ==============================================================
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [isVerifyingPin, setIsVerifyingPin] = useState(false);
+  const [rememberDevice, setRememberDevice] = useState(true);
+  const pinInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("tt_admin_auth") || sessionStorage.getItem("tt_admin_auth");
+    if (savedToken) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const handlePinSubmit = async (pinValue?: string) => {
+    const pinToVerify = (pinValue !== undefined ? pinValue : pinInput).trim();
+    if (!pinToVerify) return;
+
+    setIsVerifyingPin(true);
+    setPinError("");
+
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: pinToVerify })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (rememberDevice) {
+          localStorage.setItem("tt_admin_auth", data.token);
+        } else {
+          sessionStorage.setItem("tt_admin_auth", data.token);
+        }
+        setIsAuthenticated(true);
+        setPinInput("");
+        setPinError("");
+      } else {
+        setPinError("PIN incorrecto. Inténtalo de nuevo.");
+        setPinInput("");
+      }
+    } catch {
+      setPinError("Error de conexión al verificar PIN");
+    } finally {
+      setIsVerifyingPin(false);
+    }
+  };
+
+  const handlePinDigit = (digit: string) => {
+    if (pinInput.length >= 6) return;
+    const nextPin = pinInput + digit;
+    setPinInput(nextPin);
+    setPinError("");
+    if (nextPin.length === 6) {
+      handlePinSubmit(nextPin);
+    }
+  };
+
+  const handlePinBackspace = () => {
+    setPinInput((prev) => prev.slice(0, -1));
+    setPinError("");
+  };
+
+  const handlePinClear = () => {
+    setPinInput("");
+    setPinError("");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("tt_admin_auth");
+    sessionStorage.removeItem("tt_admin_auth");
+    setIsAuthenticated(false);
+    setPinInput("");
+    setPinError("");
+  };
+
   // Pestaña activa del panel Admin: "inventario" (Equipos en Venta) o "reparaciones" (Taller)
   const [adminTab, setAdminTab] = useState<"inventario" | "reparaciones">("inventario");
 
@@ -478,6 +563,159 @@ export default function AdminPage() {
     );
     return totalMargin / filteredRepairs.length;
   }, [filteredRepairs]);
+
+  // PANTALLA DE CARGA / BLOQUEO POR PIN
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-[#F5F7FC] flex items-center justify-center p-6">
+        <div className="w-8 h-8 border-3 border-zinc-900 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#F5F7FC] flex flex-col items-center justify-center p-6 selection:bg-zinc-900 selection:text-white">
+        <div className="w-full max-w-sm bg-white rounded-[2.5rem] p-8 sm:p-9 shadow-2xl border border-black/[0.06] text-center animate-scaleIn">
+          
+          {/* Logo con insignia de candado */}
+          <div className="relative w-16 h-16 mx-auto mb-5">
+            <div className="w-full h-full rounded-2xl overflow-hidden bg-white border border-black/[0.08] shadow-sm flex items-center justify-center p-1.5">
+              <img src="/logo.jpg" alt="TecnoTrade" className="w-full h-full object-contain" />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-zinc-900 text-white flex items-center justify-center shadow-xs">
+              <Lock className="w-3 h-3" />
+            </div>
+          </div>
+
+          <h1 className="text-xl font-bold tracking-tight text-zinc-950 mb-1">
+            Panel de Administración
+          </h1>
+          <p className="text-xs text-zinc-500 mb-6">
+            Ingresa tu PIN de seguridad para acceder
+          </p>
+
+          {/* Indicadores de 6 dígitos (Círculos) */}
+          <div 
+            onClick={() => pinInputRef.current?.focus()} 
+            className="flex items-center justify-center gap-3.5 mb-6 cursor-pointer"
+          >
+            {[0, 1, 2, 3, 4, 5].map((index) => {
+              const isFilled = index < pinInput.length;
+              return (
+                <div
+                  key={index}
+                  className={`w-3.5 h-3.5 rounded-full transition-all duration-150 ${
+                    isFilled
+                      ? "bg-zinc-950 scale-110 shadow-xs"
+                      : "border-2 border-zinc-300 bg-white"
+                  }`}
+                />
+              );
+            })}
+          </div>
+
+          {/* Input oculto para captura nativa en teclado móvil y PC */}
+          <input
+            ref={pinInputRef}
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={6}
+            value={pinInput}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+              setPinInput(val);
+              setPinError("");
+              if (val.length === 6) {
+                handlePinSubmit(val);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && pinInput.length > 0) {
+                handlePinSubmit();
+              }
+            }}
+            className="opacity-0 absolute -z-10 pointer-events-none"
+            autoFocus
+          />
+
+          {pinError && (
+            <p className="text-xs font-semibold text-red-600 mb-4 animate-shake">
+              {pinError}
+            </p>
+          )}
+
+          {/* Teclado numérico táctil */}
+          <div className="grid grid-cols-3 gap-2.5 mb-6 max-w-[240px] mx-auto">
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((digit) => (
+              <button
+                key={digit}
+                type="button"
+                onClick={() => handlePinDigit(digit)}
+                className="h-12 rounded-2xl bg-[#F5F7FC] hover:bg-zinc-200 text-base font-bold text-zinc-900 transition-all active:scale-95 btn-tactile"
+              >
+                {digit}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={handlePinClear}
+              className="h-12 rounded-2xl text-xs font-semibold text-zinc-500 hover:text-black transition-all active:scale-95"
+            >
+              C
+            </button>
+            <button
+              type="button"
+              onClick={() => handlePinDigit("0")}
+              className="h-12 rounded-2xl bg-[#F5F7FC] hover:bg-zinc-200 text-base font-bold text-zinc-900 transition-all active:scale-95 btn-tactile"
+            >
+              0
+            </button>
+            <button
+              type="button"
+              onClick={handlePinBackspace}
+              className="h-12 rounded-2xl text-xs font-semibold text-zinc-500 hover:text-black transition-all active:scale-95 flex items-center justify-center"
+            >
+              ⌫
+            </button>
+          </div>
+
+          {/* Checkbox de recordar sesión */}
+          <label className="flex items-center justify-center gap-2 text-xs text-zinc-600 cursor-pointer select-none mb-6">
+            <input
+              type="checkbox"
+              checked={rememberDevice}
+              onChange={(e) => setRememberDevice(e.target.checked)}
+              className="w-4 h-4 rounded accent-zinc-900 cursor-pointer"
+            />
+            <span>Recordar sesión en este equipo</span>
+          </label>
+
+          {/* Botón de desbloqueo */}
+          <button
+            onClick={() => handlePinSubmit()}
+            disabled={isVerifyingPin || pinInput.length === 0}
+            className="w-full bg-zinc-950 hover:bg-black text-white text-xs sm:text-sm font-semibold py-3 rounded-2xl transition-all disabled:opacity-40 btn-tactile shadow-md"
+          >
+            {isVerifyingPin ? "Verificando..." : "Desbloquear Panel"}
+          </button>
+
+          {/* Volver a la tienda */}
+          <div className="mt-5 pt-4 border-t border-black/[0.05]">
+            <Link
+              href="/"
+              className="text-xs text-zinc-500 hover:text-zinc-900 font-medium inline-flex items-center gap-1.5 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Volver a la Tienda</span>
+            </Link>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F8FA] text-[#111111] font-sans pb-24 selection:bg-[#111111] selection:text-white">
