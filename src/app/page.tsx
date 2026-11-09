@@ -24,8 +24,10 @@ import {
   ArrowUpDown,
   ExternalLink,
   Settings,
-  SlidersHorizontal
+  SlidersHorizontal,
+  BadgeDollarSign
 } from "lucide-react";
+import SellPhoneSection from "@/components/SellPhoneSection";
 import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch, RepairItem } from "@/data/repairCatalog";
 import INITIAL_INVENTORY from "@/data/inventory.json";
 import { InventoryProduct } from "@/types/inventory";
@@ -51,7 +53,7 @@ export interface TextSuggestion {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"taller" | "productos">("productos");
+  const [activeTab, setActiveTab] = useState<"productos" | "taller" | "vender">("productos");
 
   // Inventario dinámico sincronizado con la base de datos y panel admin
   const [products, setProducts] = useState<InventoryProduct[]>([]);
@@ -454,31 +456,44 @@ export default function Home() {
             </p>
 
             {/* BIFURCADOR SUPERIOR DE GRAN ESCALA (PC Y MÓVIL) EN BLOQUES 3D */}
-            <div className="animate-fadeIn stagger-3 w-full sm:w-auto inline-grid grid-cols-1 sm:grid-cols-2 gap-3 p-2.5 clay-inset rounded-[2rem]">
+            <div className="animate-fadeIn stagger-3 w-full sm:w-auto inline-grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5 p-2 sm:p-2.5 clay-inset rounded-[2rem]">
               <button
-                onClick={() => setActiveTab("taller")}
-                className={`px-7 sm:px-8 py-4 sm:py-4.5 rounded-[1.5rem] text-base sm:text-lg font-extrabold tracking-tight transition-all flex items-center justify-center gap-3 ${
-                  activeTab === "taller"
-                    ? "clay-btn-blue"
+                onClick={() => setActiveTab("productos")}
+                className={`px-5 sm:px-6 py-3.5 sm:py-4 rounded-[1.5rem] text-sm sm:text-base font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 ${
+                  activeTab === "productos"
+                    ? "clay-btn-blue text-white"
                     : "clay-pill text-[#14171F] hover:text-[#1B57F2]"
                 }`}
               >
-                <Wrench className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+                <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                 <span>
-                  Catálogo de Reparaciones
+                  Equipos en Venta ({filteredDevices.length})
                 </span>
               </button>
               <button
-                onClick={() => setActiveTab("productos")}
-                className={`px-7 sm:px-8 py-4 sm:py-4.5 rounded-[1.5rem] text-base sm:text-lg font-extrabold tracking-tight transition-all flex items-center justify-center gap-3 ${
-                  activeTab === "productos"
-                    ? "clay-btn-blue"
+                onClick={() => setActiveTab("taller")}
+                className={`px-5 sm:px-6 py-3.5 sm:py-4 rounded-[1.5rem] text-sm sm:text-base font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 ${
+                  activeTab === "taller"
+                    ? "clay-btn-blue text-white"
                     : "clay-pill text-[#14171F] hover:text-[#1B57F2]"
                 }`}
               >
-                <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+                <Wrench className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                 <span>
-                  Equipos en Venta ({filteredDevices.length})
+                  Taller y Reparaciones
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab("vender")}
+                className={`px-5 sm:px-6 py-3.5 sm:py-4 rounded-[1.5rem] text-sm sm:text-base font-extrabold tracking-tight transition-all flex items-center justify-center gap-2 ${
+                  activeTab === "vender"
+                    ? "clay-btn-blue text-white"
+                    : "clay-pill text-[#14171F] hover:text-[#1B57F2]"
+                }`}
+              >
+                <BadgeDollarSign className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span>
+                  Vende tu Equipo
                 </span>
               </button>
             </div>
@@ -498,7 +513,7 @@ export default function Home() {
                 src="/hero-iphone-ventas.jpg"
                 alt="Equipos Certificados en Venta"
                 className={`absolute inset-0 w-full h-auto object-contain mix-blend-multiply transition-opacity duration-300 ${
-                  activeTab === "productos" ? "opacity-100" : "opacity-0"
+                  activeTab === "productos" || activeTab === "vender" ? "opacity-100" : "opacity-0"
                 }`}
               />
             </div>
@@ -1272,6 +1287,13 @@ export default function Home() {
         )}
 
         {/* ============================================================== */}
+        {/* ============================================================== */}
+        {/* VENDE TU EQUIPO (FORMULARIO COTIZADOR TRADE-IN WHATSAPP) */}
+        {/* ============================================================== */}
+        {activeTab === "vender" && (
+          <SellPhoneSection whatsappNumber={WHATSAPP_NUMBER} />
+        )}
+
         {/* PIE DE PÁGINA */}
         {/* ============================================================== */}
         <footer className="mt-16 pt-8 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 animate-fadeIn">
@@ -1485,7 +1507,10 @@ export default function Home() {
               </div>
             ) : (
               <div 
-                onClick={handleSellPhoneWhatsApp}
+                onClick={() => {
+                  setActiveTab("vender");
+                  window.scrollTo({ top: 380, behavior: "smooth" });
+                }}
                 className="cursor-pointer group"
               >
                 <div className="flex items-center gap-1.5 mb-1.5">
