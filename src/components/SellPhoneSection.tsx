@@ -16,8 +16,7 @@ import {
   ArrowRight,
   RotateCcw,
   BadgeDollarSign,
-  Layers,
-  Sparkles
+  Layers
 } from "lucide-react";
 
 interface SellPhoneSectionProps {
@@ -101,6 +100,9 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
   // Diccionario de errores por campo
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // ID del campo que se ilumina brevemente en rojo
+  const [flashingFieldId, setFlashingFieldId] = useState<string | null>(null);
+
   const selectedConditionObj = CONDITION_SCALE.find((c) => c.level === conditionLevel);
 
   const clearError = (key: string) => {
@@ -129,6 +131,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
     setIssuesText("");
     setOwnerName("");
     setErrors({});
+    setFlashingFieldId(null);
   };
 
   const handleSendToWhatsApp = () => {
@@ -178,7 +181,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
 
     setErrors(newErrors);
 
-    // Si hay errores, scrollear al campo vacío más cercano al inicio
+    // Si hay errores, scrollear e iluminar en rojo el campo vacío más cercano al inicio
     const orderedFields = [
       { key: "deviceType", containerId: "field-device-type", inputId: undefined },
       { key: "deviceName", containerId: "field-device-name", inputId: "sell-device-name-input" },
@@ -197,10 +200,17 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
       if (containerEl) {
         containerEl.scrollIntoView({ behavior: "smooth", block: "center" });
       }
+
+      // Iluminar brevemente en rojo el campo más cercano al inicio
+      setFlashingFieldId(firstFailedField.containerId);
+      setTimeout(() => {
+        setFlashingFieldId((curr) => (curr === firstFailedField.containerId ? null : curr));
+      }, 1750);
+
       if (firstFailedField.inputId) {
         const inputEl = document.getElementById(firstFailedField.inputId);
         if (inputEl) {
-          setTimeout(() => inputEl.focus(), 300);
+          setTimeout(() => inputEl.focus(), 350);
         }
       }
       return;
@@ -290,7 +300,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
 
             <div className={`grid grid-cols-2 gap-3 p-1 rounded-3xl transition-all ${
-              errors["deviceType"] ? "ring-2 ring-red-500/80 bg-red-50/20" : ""
+              flashingFieldId === "field-device-type"
+                ? "animate-red-flash ring-3 ring-red-500"
+                : errors["deviceType"]
+                ? "ring-2 ring-red-500/80 bg-red-50/20"
+                : ""
             }`}>
               <button
                 type="button"
@@ -355,7 +369,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
 
             <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
-              errors["deviceName"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              flashingFieldId === "field-device-name"
+                ? "animate-red-flash ring-3 ring-red-500"
+                : errors["deviceName"]
+                ? "ring-2 ring-red-500 bg-red-50/20"
+                : ""
             }`}>
               <Smartphone className="w-4 h-4 text-[#1B57F2] shrink-0" />
               <input 
@@ -393,7 +411,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsConditionOpen(false);
               }}
               className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
-                errors["storage"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+                flashingFieldId === "field-storage"
+                  ? "animate-red-flash ring-3 ring-red-500"
+                  : errors["storage"]
+                  ? "ring-2 ring-red-500 bg-red-50/20"
+                  : ""
               }`}
             >
               <div className="flex items-center gap-3">
@@ -487,7 +509,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
               </div>
 
               <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
-                errors["batteryHealth"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+                flashingFieldId === "field-battery"
+                  ? "animate-red-flash ring-3 ring-red-500"
+                  : errors["batteryHealth"]
+                  ? "ring-2 ring-red-500 bg-red-50/20"
+                  : ""
               }`}>
                 <Battery className="w-4 h-4 text-[#1B57F2] shrink-0" />
                 <input 
@@ -526,7 +552,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsConditionOpen(false);
               }}
               className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
-                errors["simType"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+                flashingFieldId === "field-sim"
+                  ? "animate-red-flash ring-3 ring-red-500"
+                  : errors["simType"]
+                  ? "ring-2 ring-red-500 bg-red-50/20"
+                  : ""
               }`}
             >
               <div className="flex items-center gap-3">
@@ -602,7 +632,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsSimOpen(false);
               }}
               className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
-                errors["conditionLevel"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+                flashingFieldId === "field-condition"
+                  ? "animate-red-flash ring-3 ring-red-500"
+                  : errors["conditionLevel"]
+                  ? "ring-2 ring-red-500 bg-red-50/20"
+                  : ""
               }`}
             >
               <div className="flex items-center gap-3">
@@ -684,7 +718,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
 
             <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
-              errors["replacedPartsText"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              flashingFieldId === "field-replaced"
+                ? "animate-red-flash ring-3 ring-red-500"
+                : errors["replacedPartsText"]
+                ? "ring-2 ring-red-500 bg-red-50/20"
+                : ""
             }`}>
               <Wrench className="w-4 h-4 text-[#1B57F2] shrink-0" />
               <input 
@@ -715,7 +753,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
 
             <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
-              errors["issuesText"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              flashingFieldId === "field-issues"
+                ? "animate-red-flash ring-3 ring-red-500"
+                : errors["issuesText"]
+                ? "ring-2 ring-red-500 bg-red-50/20"
+                : ""
             }`}>
               <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
               <input 
