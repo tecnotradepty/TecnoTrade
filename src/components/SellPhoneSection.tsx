@@ -8,82 +8,118 @@ import {
   Radio, 
   Wrench, 
   ShieldCheck, 
-  Sparkles, 
   AlertTriangle, 
-  CheckCircle2, 
+  Check, 
+  ChevronDown, 
+  ChevronUp, 
   MessageCircle, 
   ArrowRight,
   RotateCcw,
   BadgeDollarSign,
-  Cpu,
   Layers,
-  HelpCircle
+  Sparkles
 } from "lucide-react";
 
 interface SellPhoneSectionProps {
   whatsappNumber: string;
 }
 
+// Icono Oficial Vectorial de Apple
+function AppleIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 170 170" fill="currentColor" className={className} aria-label="Apple">
+      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.07-7.66-7.85-11.88-14.34-5.9-8.8-10.42-18.77-13.56-29.9-3.14-11.13-4.71-21.73-4.71-31.8 0-14.67 3.84-26.4 11.53-35.18 7.68-8.78 17.18-13.23 28.5-13.35 4.9 0 10.37 1.25 16.42 3.75 6.04 2.5 10.15 3.8 12.33 3.9 1.83 0 6.08-1.35 12.74-4.05 6.67-2.7 12.18-3.9 16.54-3.6 12.63.8 22.82 5.57 30.56 14.32-11.05 6.7-16.49 15.82-16.32 27.35.17 9.17 3.71 16.92 10.63 23.25 6.92 6.33 15.02 9.87 24.3 10.62-2.11 6.57-4.72 13.24-7.84 20.02zM119.22 31.84c0-7.35 2.65-14.28 7.95-20.78 5.3-6.5 11.83-10.45 19.59-11.86.3 1.2.45 2.37.45 3.52 0 7.37-2.8 14.39-8.4 21.05-5.6 6.66-12.24 10.49-19.92 11.49-.1-.95-.17-1.89-.17-2.82z"/>
+    </svg>
+  );
+}
+
+// Icono Oficial Vectorial de Android
+function AndroidIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-label="Android">
+      <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4111 13.8533 8.0833 12 8.0833s-3.5902.3278-5.1369.8664L4.8408 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+    </svg>
+  );
+}
+
+const STORAGE_OPTIONS = [
+  "128 GB",
+  "256 GB",
+  "512 GB",
+  "1 TB",
+  "64 GB",
+  "Otro"
+];
+
+const SIM_OPTIONS = [
+  { label: "Chip Físico (Nano SIM)", desc: "Ranura SIM tradicional" },
+  { label: "Solo eSIM (Digital)", desc: "Sin ranura física (modelos americanos)" },
+  { label: "Ambos (eSIM + Chip Físico)", desc: "Dual SIM" }
+];
+
+const CONDITION_SCALE = [
+  { level: "5", title: "5 / 5 — Impecable", desc: "Como nuevo, sin detalles, pantalla y marco 10/10" },
+  { level: "4", title: "4 / 5 — Excelente", desc: "Marcas mínimas casi imperceptibles por uso de funda" },
+  { level: "3", title: "3 / 5 — Buen estado", desc: "Rayoncitos leves normales del uso diario" },
+  { level: "2", title: "2 / 5 — Regular", desc: "Marcas visibles, desgaste en marco o rayones" },
+  { level: "1", title: "1 / 5 — Deteriorado", desc: "Con golpes fuertes, raspones o trizadura" }
+];
+
 export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionProps) {
-  // 1. Tipo de dispositivo: Android o iPhone
+  // 1. Sistema Operativo (Apple vs Android con iconos oficiales SVG)
   const [deviceType, setDeviceType] = useState<"iphone" | "android">("iphone");
 
-  // 2. Nombre del equipo
+  // 2. Nombre del equipo (sin sugerencias)
   const [deviceName, setDeviceName] = useState("");
 
-  // 3. Espacio / Almacenamiento: 128, 256, 512, 1TB
+  // 3. Espacio / Almacenamiento (un solo botón que abre ventana de selección)
   const [storage, setStorage] = useState<string>("128 GB");
   const [customStorage, setCustomStorage] = useState("");
+  const [isStorageOpen, setIsStorageOpen] = useState(false);
 
-  // 4. Salud de batería (solo para iPhone)
-  const [batteryHealth, setBatteryHealth] = useState<string>("85% - 89%");
-  const [customBattery, setCustomBattery] = useState("");
+  // 4. Batería (casilla en blanco para escribir libremente, sin opciones fijas)
+  const [batteryHealth, setBatteryHealth] = useState("");
 
-  // 5. Problemas o fallas
-  const [hasIssues, setHasIssues] = useState<"no" | "yes">("no");
-  const [issuesDescription, setIssuesDescription] = useState("");
-
-  // 6. Piezas cambiadas
-  const [replacedParts, setReplacedParts] = useState<string>("Ninguna (Todo 100% original)");
-  const [customReplacedParts, setCustomReplacedParts] = useState("");
-
-  // 7. Estado físico
-  const [physicalCondition, setPhysicalCondition] = useState<string>("9/10 Excelente (marcas mínimas de uso)");
-  const [physicalDetails, setPhysicalDetails] = useState("");
-
-  // 8. Tipo de SIM: eSIM o Chip
+  // 5. Conectividad SIM (un solo botón que abre ventana de selección)
   const [simType, setSimType] = useState<string>("Chip Físico (Nano SIM)");
+  const [isSimOpen, setIsSimOpen] = useState(false);
 
-  // 9. Nombre del cliente (opcional)
+  // 6. Estado Físico (un solo botón con lista del 1 al 5)
+  const [conditionLevel, setConditionLevel] = useState<string>("5");
+  const [isConditionOpen, setIsConditionOpen] = useState(false);
+  const [conditionNotes, setConditionNotes] = useState("");
+
+  // 7. Piezas cambiadas (casilla en blanco para que el usuario escriba, sin opciones)
+  const [replacedPartsText, setReplacedPartsText] = useState("");
+
+  // 8. Mencionar algún problema que tenga (casilla libre)
+  const [issuesText, setIssuesText] = useState("");
+
+  // Nombre opcional
   const [ownerName, setOwnerName] = useState("");
 
-  // Estado de validación
+  // Validación
   const [showError, setShowError] = useState(false);
 
-  // Sugerencias rápidas según el tipo
-  const quickModels = deviceType === "iphone"
-    ? ["iPhone 15 Pro Max", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14", "iPhone 13 Pro", "iPhone 13", "iPhone 12", "iPhone 11"]
-    : ["Galaxy S24 Ultra", "Galaxy S23", "Galaxy A54", "Xiaomi 13T", "Redmi Note 13", "Honor 90", "Pixel 8 Pro"];
+  const selectedConditionObj = CONDITION_SCALE.find((c) => c.level === conditionLevel) || CONDITION_SCALE[0];
 
-  // Resetear formulario
   const handleReset = () => {
     setDeviceName("");
     setStorage("128 GB");
     setCustomStorage("");
-    setBatteryHealth("85% - 89%");
-    setCustomBattery("");
-    setHasIssues("no");
-    setIssuesDescription("");
-    setReplacedParts("Ninguna (Todo 100% original)");
-    setCustomReplacedParts("");
-    setPhysicalCondition("9/10 Excelente (marcas mínimas de uso)");
-    setPhysicalDetails("");
+    setIsStorageOpen(false);
+    setBatteryHealth("");
     setSimType("Chip Físico (Nano SIM)");
+    setIsSimOpen(false);
+    setConditionLevel("5");
+    setIsConditionOpen(false);
+    setConditionNotes("");
+    setReplacedPartsText("");
+    setIssuesText("");
     setOwnerName("");
     setShowError(false);
   };
 
-  // Construir y enviar mensaje a WhatsApp
   const handleSendToWhatsApp = () => {
     if (!deviceName.trim()) {
       setShowError(true);
@@ -95,39 +131,35 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
 
     const finalStorage = storage === "Otro" && customStorage.trim() ? customStorage.trim() : storage;
     const finalBattery = deviceType === "iphone" 
-      ? (customBattery.trim() ? `${customBattery.trim()}%` : batteryHealth)
+      ? (batteryHealth.trim() ? batteryHealth.trim() : "No especificada")
       : null;
-    const finalReplaced = replacedParts === "Otra pieza" && customReplacedParts.trim() 
-      ? customReplacedParts.trim() 
-      : replacedParts;
-    const finalIssues = hasIssues === "no" 
-      ? "Ninguno (100% operativo sin fallas)" 
-      : (issuesDescription.trim() || "Presenta detalles a evaluar");
+    const finalReplaced = replacedPartsText.trim() ? replacedPartsText.trim() : "Ninguna (todo original)";
+    const finalIssues = issuesText.trim() ? issuesText.trim() : "Ninguno (100% operativo)";
 
     let message = `📱 *COTIZACIÓN DE VENTA / TRADE-IN · TECNOTRADE*\n`;
     message += `──────────────────────\n`;
     if (ownerName.trim()) {
       message += `👤 *Cliente:* ${ownerName.trim()}\n`;
     }
-    message += `🏷️ *Plataforma:* ${deviceType === "iphone" ? "Apple (iPhone)" : "Android"}\n`;
+    message += `🏷️ *Sistema:* ${deviceType === "iphone" ? "Apple (iPhone)" : "Android"}\n`;
     message += `📲 *Equipo / Modelo:* *${deviceName.trim()}*\n`;
     message += `💾 *Almacenamiento:* ${finalStorage}\n`;
 
     if (deviceType === "iphone" && finalBattery) {
-      message += `🔋 *Salud de Batería:* ${finalBattery}\n`;
+      message += `🔋 *Salud de Batería:* ${finalBattery.includes("%") ? finalBattery : `${finalBattery}%`}\n`;
     }
 
     message += `📶 *Conectividad SIM:* ${simType}\n`;
-    message += `✨ *Estado Físico:* ${physicalCondition}`;
-    if (physicalDetails.trim()) {
-      message += ` (${physicalDetails.trim()})`;
+    message += `⭐ *Estado Físico (1 al 5):* ${selectedConditionObj.title}`;
+    if (conditionNotes.trim()) {
+      message += ` (${conditionNotes.trim()})`;
     }
     message += `\n`;
 
     message += `🔧 *Piezas Cambiadas:* ${finalReplaced}\n`;
-    message += `⚠️ *Fallas o Problemas:* ${finalIssues}\n`;
+    message += `⚠️ *Problemas o Fallas:* ${finalIssues}\n`;
     message += `──────────────────────\n`;
-    message += `📍 *Ubicación:* Mobile Hub Pty, Calle Ricardo Arias 5, Panamá\n\n`;
+    message += `📍 Mobile Hub Pty, Calle Ricardo Arias 5, Panamá\n\n`;
     message += `Hola TecnoTrade 👋 Envío estos datos desde la web para cotizar mi equipo. ¿Cuánto me podrían ofrecer para compra directa o como abono (Trade-In)?`;
 
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -151,7 +183,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 Vende tu Teléfono <span className="text-[#1B57F2]">en TecnoTrade</span>
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Cotización inmediata · Recibe <span className="font-semibold text-[#14171F]">pago en efectivo</span> o úsalo como abono para otro equipo
+                Cotización rápida · Recibe <span className="font-semibold text-[#14171F]">pago en efectivo</span> o úsalo como abono para otro equipo
               </p>
             </div>
           </div>
@@ -167,81 +199,72 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
           </div>
         </div>
 
-        {/* FORMULARIO ESTRUCTURADO */}
-        <div className="space-y-8">
+        {/* FORMULARIO ESTRUCTURADO Y COMPACTO */}
+        <div className="space-y-6">
           
-          {/* PASO 1: SELECCIONE (ANDROID O IPHONE) */}
+          {/* CAMPO 1: SELECCIÓN DE SISTEMA OPERATIVO CON ICONOS OFICIALES SVG */}
           <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">1</span>
-              <span>Selecciona el Sistema Operativo</span>
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-2.5">
+              Selecciona Sistema Operativo
             </label>
 
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => {
-                  setDeviceType("iphone");
-                  if (deviceName.toLowerCase().includes("galaxy") || deviceName.toLowerCase().includes("xiaomi")) {
-                    setDeviceName("");
-                  }
-                }}
-                className={`p-4 sm:p-5 rounded-2xl sm:rounded-3xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
+                onClick={() => setDeviceType("iphone")}
+                className={`p-3.5 sm:p-4 rounded-2xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
                   deviceType === "iphone"
                     ? "clay-btn-dark text-white ring-2 ring-[#1B57F2]/40"
                     : "clay-pill text-slate-800 hover:text-black"
                 }`}
               >
-                <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center text-lg">
-                  🍎
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  deviceType === "iphone" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-800"
+                }`}>
+                  <AppleIcon className="w-5 h-5 fill-current" />
                 </div>
                 <div className="text-left">
-                  <span className="font-bold text-sm sm:text-base block">iPhone</span>
-                  <span className="text-[10px] sm:text-xs opacity-75 block">Apple iOS</span>
+                  <span className="font-bold text-sm block">iPhone</span>
+                  <span className="text-[10px] opacity-75 block">Apple</span>
                 </div>
               </button>
 
               <button
                 type="button"
-                onClick={() => {
-                  setDeviceType("android");
-                  if (deviceName.toLowerCase().includes("iphone")) {
-                    setDeviceName("");
-                  }
-                }}
-                className={`p-4 sm:p-5 rounded-2xl sm:rounded-3xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
+                onClick={() => setDeviceType("android")}
+                className={`p-3.5 sm:p-4 rounded-2xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
                   deviceType === "android"
                     ? "clay-btn-dark text-white ring-2 ring-[#1B57F2]/40"
                     : "clay-pill text-slate-800 hover:text-black"
                 }`}
               >
-                <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center text-lg">
-                  🤖
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                  deviceType === "android" ? "bg-[#3DDC84]/20 text-[#3DDC84]" : "bg-slate-200 text-slate-800"
+                }`}>
+                  <AndroidIcon className="w-5 h-5 fill-current" />
                 </div>
                 <div className="text-left">
-                  <span className="font-bold text-sm sm:text-base block">Android</span>
-                  <span className="text-[10px] sm:text-xs opacity-75 block">Samsung, Xiaomi, etc.</span>
+                  <span className="font-bold text-sm block">Android</span>
+                  <span className="text-[10px] opacity-75 block">Samsung, Xiaomi, etc.</span>
                 </div>
               </button>
             </div>
           </div>
 
-          {/* PASO 2: NOMBRE DE EQUIPO */}
+          {/* CAMPO 2: NOMBRE DE EQUIPO (SIN SUGERENCIAS) */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label htmlFor="sell-device-name-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">2</span>
-                <span>Nombre del Equipo / Modelo</span>
-                <span className="text-red-500">*</span>
+            <div className="flex items-center justify-between mb-1.5">
+              <label htmlFor="sell-device-name-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider">
+                Nombre de Equipo <span className="text-red-500">*</span>
               </label>
               {showError && !deviceName.trim() && (
                 <span className="text-xs text-red-600 font-bold animate-pulse">
-                  Por favor escribe el modelo
+                  Escribe el modelo de tu teléfono
                 </span>
               )}
             </div>
 
-            <div className={`clay-inset rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 flex items-center gap-3 transition-all ${
+            <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
               showError && !deviceName.trim() ? "ring-2 ring-red-500" : ""
             }`}>
               <Smartphone className="w-4 h-4 text-[#1B57F2] shrink-0" />
@@ -253,352 +276,309 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                   setDeviceName(e.target.value);
                   if (showError) setShowError(false);
                 }}
-                placeholder={deviceType === "iphone" ? "Ej: iPhone 14 Pro Max, iPhone 13 128GB, iPhone 11..." : "Ej: Galaxy S24 Ultra, Xiaomi 13T, Redmi Note 13..."}
-                className="w-full bg-transparent text-xs sm:text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
+                placeholder={deviceType === "iphone" ? "Ej: iPhone 14 Pro Max" : "Ej: Galaxy S24 Ultra, Xiaomi 13T..."}
+                className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
               />
-            </div>
-
-            {/* Accesos rápidos sugeridos */}
-            <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] font-semibold text-slate-500 mr-1">Populares:</span>
-              {quickModels.slice(0, 5).map((model) => (
-                <button
-                  key={model}
-                  type="button"
-                  onClick={() => {
-                    setDeviceName(model);
-                    setShowError(false);
-                  }}
-                  className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-all cursor-pointer ${
-                    deviceName === model 
-                      ? "clay-btn-blue text-white shadow-xs" 
-                      : "clay-pill text-slate-700 hover:text-[#1B57F2]"
-                  }`}
-                >
-                  {model}
-                </button>
-              ))}
             </div>
           </div>
 
-          {/* PASO 3: SELECCIONE ESPACIO (128, 256, 512, 1TB) */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">3</span>
-              <span>Capacidad de Almacenamiento</span>
+          {/* CAMPO 3: ALMACENAMIENTO (UN SOLO BOTÓN QUE ABRE VENTANA DE SELECCIÓN) */}
+          <div className="relative">
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+              Espacio de Almacenamiento
             </label>
 
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5">
-              {["64 GB", "128 GB", "256 GB", "512 GB", "1 TB", "Otro"].map((cap) => (
-                <button
-                  key={cap}
-                  type="button"
-                  onClick={() => setStorage(cap)}
-                  className={`py-2.5 sm:py-3 px-3 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer btn-tactile text-center ${
-                    storage === cap
-                      ? "clay-btn-blue text-white shadow-xs"
-                      : "clay-pill text-slate-700 hover:text-black"
-                  }`}
-                >
-                  {cap}
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsStorageOpen((prev) => !prev);
+                setIsSimOpen(false);
+                setIsConditionOpen(false);
+              }}
+              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl clay-badge-blue flex items-center justify-center text-white shrink-0">
+                  <HardDrive className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[11px] text-slate-500 block">Capacidad seleccionada:</span>
+                  <span className="text-sm font-bold text-[#14171F]">
+                    {storage === "Otro" && customStorage.trim() ? customStorage.trim() : storage}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs">
+                <span>Elegir</span>
+                {isStorageOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
 
-            {storage === "Otro" && (
-              <div className="mt-2.5 max-w-xs animate-fadeIn">
-                <input 
-                  type="text"
-                  value={customStorage}
-                  onChange={(e) => setCustomStorage(e.target.value)}
-                  placeholder="Ej: 32 GB, 2 TB..."
-                  className="w-full clay-inset px-4 py-2.5 rounded-xl text-xs font-semibold text-[#14171F] focus:outline-none"
-                />
+            {/* Ventana de selección desplegable */}
+            {isStorageOpen && (
+              <div className="absolute top-full left-0 right-0 z-30 mt-2 p-3 rounded-2xl clay-surface shadow-xl border border-slate-200/80 animate-scaleIn space-y-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {STORAGE_OPTIONS.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => {
+                        setStorage(opt);
+                        if (opt !== "Otro") setIsStorageOpen(false);
+                      }}
+                      className={`p-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between ${
+                        storage === opt
+                          ? "clay-btn-blue text-white shadow-xs"
+                          : "clay-pill text-slate-700 hover:text-black"
+                      }`}
+                    >
+                      <span>{opt}</span>
+                      {storage === opt && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  ))}
+                </div>
+
+                {storage === "Otro" && (
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center gap-2">
+                    <input 
+                      type="text"
+                      value={customStorage}
+                      onChange={(e) => setCustomStorage(e.target.value)}
+                      placeholder="Especifica capacidad (ej: 32 GB, 2 TB)..."
+                      className="flex-1 clay-inset px-3 py-2 rounded-xl text-xs font-semibold text-[#14171F] focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setIsStorageOpen(false)}
+                      className="clay-btn-dark px-3 py-2 rounded-xl text-xs font-bold text-white cursor-pointer"
+                    >
+                      Listo
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          {/* PASO 4: SALUD DE BATERÍA (SOLO APARECE EN CASO DE IPHONE) */}
+          {/* CAMPO 4: SALUD DE BATERÍA (SOLO EN CASO DE IPHONE, CASILLA EN BLANCO PARA ESCRIBIR) */}
           {deviceType === "iphone" && (
-            <div className="animate-fadeIn p-4 sm:p-5 rounded-2xl sm:rounded-3xl clay-card border border-slate-200/70">
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">
-                    4
-                  </div>
-                  <Battery className="w-4 h-4 text-[#1B57F2]" />
-                  <span>Salud de Batería (Condición Apple)</span>
-                </label>
-                <span className="text-[11px] text-slate-500 font-medium">
-                  Ajustes &gt; Batería &gt; Condición
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-3">
-                {["100%", "90% - 99%", "85% - 89%", "80% - 84%", "Menos de 80%"].map((b) => (
-                  <button
-                    key={b}
-                    type="button"
-                    onClick={() => {
-                      setBatteryHealth(b);
-                      setCustomBattery("");
-                    }}
-                    className={`py-2 sm:py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer btn-tactile text-center ${
-                      batteryHealth === b && !customBattery
-                        ? "clay-btn-dark text-white shadow-xs"
-                        : "clay-pill text-slate-700 hover:text-black"
-                    }`}
-                  >
-                    {b}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-semibold text-slate-500">O escribe el porcentaje exacto:</span>
+            <div className="animate-fadeIn">
+              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+                Salud de Batería (%)
+              </label>
+              <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+                <Battery className="w-4 h-4 text-[#1B57F2] shrink-0" />
                 <input 
-                  type="number"
-                  min="50"
-                  max="100"
-                  value={customBattery}
-                  onChange={(e) => setCustomBattery(e.target.value)}
-                  placeholder="Ej: 88"
-                  className="w-24 clay-inset px-3 py-1.5 rounded-xl text-xs font-bold text-[#14171F] focus:outline-none"
+                  type="text"
+                  value={batteryHealth}
+                  onChange={(e) => setBatteryHealth(e.target.value)}
+                  placeholder="Escribe el porcentaje (ej: 87% o 100%)..."
+                  className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
                 />
-                <span className="text-xs font-bold text-slate-600">%</span>
               </div>
             </div>
           )}
 
-          {/* PASO 5: SELECCIONAR SI ES ESIM O CHIP */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">
-                {deviceType === "iphone" ? "5" : "4"}
-              </span>
-              <Radio className="w-4 h-4 text-[#1B57F2]" />
-              <span>Conectividad: ¿eSIM o Chip Físico?</span>
+          {/* CAMPO 5: SELECCIONAR SI ES ESIM O CHIP (UN SOLO BOTÓN QUE ABRE VENTANA DE SELECCIÓN) */}
+          <div className="relative">
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+              Tipo de SIM / Conectividad
             </label>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              {[
-                { label: "Chip Físico (Nano SIM)", desc: "Ranura para chip tradicional" },
-                { label: "Solo eSIM (Digital)", desc: "Modelos americanos sin ranura" },
-                { label: "Ambos (eSIM + Chip Físico)", desc: "Dual SIM compatible" },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => setSimType(item.label)}
-                  className={`p-3.5 rounded-2xl text-left transition-all cursor-pointer btn-tactile ${
-                    simType === item.label
-                      ? "clay-btn-blue text-white shadow-xs"
-                      : "clay-pill text-slate-800 hover:text-black"
-                  }`}
-                >
-                  <span className="font-bold text-xs sm:text-sm block">{item.label}</span>
-                  <span className={`text-[10px] sm:text-[11px] block mt-0.5 ${
-                    simType === item.label ? "text-blue-100" : "text-slate-500"
-                  }`}>
-                    {item.desc}
-                  </span>
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsSimOpen((prev) => !prev);
+                setIsStorageOpen(false);
+                setIsConditionOpen(false);
+              }}
+              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl clay-badge-blue flex items-center justify-center text-white shrink-0">
+                  <Radio className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[11px] text-slate-500 block">Conectividad:</span>
+                  <span className="text-sm font-bold text-[#14171F]">{simType}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs">
+                <span>Cambiar</span>
+                {isSimOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
+
+            {/* Ventana de selección desplegable */}
+            {isSimOpen && (
+              <div className="absolute top-full left-0 right-0 z-30 mt-2 p-2.5 rounded-2xl clay-surface shadow-xl border border-slate-200/80 animate-scaleIn space-y-1.5">
+                {SIM_OPTIONS.map((item) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      setSimType(item.label);
+                      setIsSimOpen(false);
+                    }}
+                    className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between ${
+                      simType === item.label
+                        ? "clay-btn-blue text-white shadow-xs"
+                        : "clay-pill text-slate-800 hover:text-black"
+                    }`}
+                  >
+                    <div>
+                      <span className="font-bold text-xs sm:text-sm block">{item.label}</span>
+                      <span className={`text-[10px] block ${simType === item.label ? "text-blue-100" : "text-slate-500"}`}>
+                        {item.desc}
+                      </span>
+                    </div>
+                    {simType === item.label && <Check className="w-4 h-4 shrink-0" />}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* PASO 6: DESCRIBIR ESTADO FÍSICO */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">
-                {deviceType === "iphone" ? "6" : "5"}
-              </span>
-              <Sparkles className="w-4 h-4 text-[#1B57F2]" />
-              <span>Estado Físico y Estético</span>
+          {/* CAMPO 6: ESTADO FÍSICO (UN SOLO BOTÓN CON LISTA DEL 1 AL 5) */}
+          <div className="relative">
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+              Estado Físico (Escala del 1 al 5)
             </label>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3">
-              {[
-                { label: "10/10 Como nuevo (impecable)", desc: "Sin ningún detalle, siempre con funda y vidrio" },
-                { label: "9/10 Excelente (marcas mínimas de uso)", desc: "Detalles leves casi imperceptibles" },
-                { label: "8/10 Bueno (rayoncitos visibles)", desc: "Marcas o desgaste normal en marco/pantalla" },
-                { label: "Con golpes o trizadura", desc: "Vidrio quebrado, golpe fuerte o detalles mayores" },
-              ].map((cond) => (
-                <button
-                  key={cond.label}
-                  type="button"
-                  onClick={() => setPhysicalCondition(cond.label)}
-                  className={`p-3.5 rounded-2xl text-left transition-all cursor-pointer btn-tactile ${
-                    physicalCondition === cond.label
-                      ? "clay-btn-dark text-white shadow-xs"
-                      : "clay-pill text-slate-800 hover:text-black"
-                  }`}
-                >
-                  <span className="font-bold text-xs sm:text-sm block">{cond.label}</span>
-                  <span className={`text-[10px] sm:text-[11px] block mt-0.5 ${
-                    physicalCondition === cond.label ? "text-slate-300" : "text-slate-500"
-                  }`}>
-                    {cond.desc}
-                  </span>
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsConditionOpen((prev) => !prev);
+                setIsStorageOpen(false);
+                setIsSimOpen(false);
+              }}
+              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl clay-btn-dark flex items-center justify-center text-white shrink-0 font-extrabold text-sm">
+                  {conditionLevel}★
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-[#14171F] block">{selectedConditionObj.title}</span>
+                  <span className="text-[11px] text-slate-500 block">{selectedConditionObj.desc}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs shrink-0 ml-2">
+                <span>Elegir</span>
+                {isConditionOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
+            </button>
 
-            <div className="clay-inset rounded-2xl px-4 py-2.5">
+            {/* Ventana de selección con lista del 1 al 5 */}
+            {isConditionOpen && (
+              <div className="absolute top-full left-0 right-0 z-30 mt-2 p-2.5 rounded-2xl clay-surface shadow-xl border border-slate-200/80 animate-scaleIn space-y-1.5">
+                {CONDITION_SCALE.map((cond) => (
+                  <button
+                    key={cond.level}
+                    type="button"
+                    onClick={() => {
+                      setConditionLevel(cond.level);
+                      setIsConditionOpen(false);
+                    }}
+                    className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                      conditionLevel === cond.level
+                        ? "clay-btn-dark text-white shadow-xs"
+                        : "clay-pill text-slate-800 hover:text-black"
+                    }`}
+                  >
+                    <div>
+                      <span className="font-bold text-xs sm:text-sm block">{cond.title}</span>
+                      <span className={`text-[10px] block ${conditionLevel === cond.level ? "text-slate-300" : "text-slate-500"}`}>
+                        {cond.desc}
+                      </span>
+                    </div>
+                    {conditionLevel === cond.level && <Check className="w-4 h-4 shrink-0 text-emerald-400" />}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Detalle físico adicional opcional */}
+            <div className="mt-2 clay-inset rounded-xl px-3.5 py-2">
               <input 
                 type="text"
-                value={physicalDetails}
-                onChange={(e) => setPhysicalDetails(e.target.value)}
-                placeholder="Detalle estético adicional (opcional: ej. incluye caja, cargador original, cover)..."
+                value={conditionNotes}
+                onChange={(e) => setConditionNotes(e.target.value)}
+                placeholder="Detalle estético adicional (opcional: ej. incluye caja, cargador, cover)..."
                 className="w-full bg-transparent text-xs text-[#14171F] font-medium focus:outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* PASO 7: ¿ALGUNA PIEZA CAMBIADA? */}
+          {/* CAMPO 7: PIEZAS CAMBIADAS (CASILLA EN BLANCO PARA ESCRIBIR LIBREMENTE, SIN OPCIONES) */}
           <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">
-                {deviceType === "iphone" ? "7" : "6"}
-              </span>
-              <Wrench className="w-4 h-4 text-[#1B57F2]" />
-              <span>¿Tiene alguna pieza cambiada o reparada?</span>
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+              ¿Alguna Pieza Cambiada o Reparada?
             </label>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              {[
-                "Ninguna (Todo 100% original)",
-                "Pantalla cambiada",
-                "Batería cambiada",
-                "Tapa trasera cambiada",
-                "Cámara cambiada",
-                "Otra pieza",
-              ].map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setReplacedParts(p)}
-                  className={`p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer btn-tactile text-center ${
-                    replacedParts === p
-                      ? "clay-btn-blue text-white shadow-xs"
-                      : "clay-pill text-slate-700 hover:text-black"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
+            <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+              <Wrench className="w-4 h-4 text-[#1B57F2] shrink-0" />
+              <input 
+                type="text"
+                value={replacedPartsText}
+                onChange={(e) => setReplacedPartsText(e.target.value)}
+                placeholder="Escribe si tiene alguna (ej: Ninguna / Pantalla cambiada / Batería)..."
+                className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
+              />
             </div>
-
-            {replacedParts === "Otra pieza" && (
-              <div className="mt-2.5 animate-fadeIn">
-                <input 
-                  type="text"
-                  value={customReplacedParts}
-                  onChange={(e) => setCustomReplacedParts(e.target.value)}
-                  placeholder="Especifica qué pieza fue cambiada..."
-                  className="w-full clay-inset px-4 py-2.5 rounded-xl text-xs font-semibold text-[#14171F] focus:outline-none"
-                />
-              </div>
-            )}
           </div>
 
-          {/* PASO 8: MENCIONAR ALGÚN PROBLEMA QUE TENGA */}
+          {/* CAMPO 8: MENCIONAR ALGÚN PROBLEMA QUE TENGA (CASILLA LIBRE) */}
           <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-3 flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#1B57F2] text-white text-[11px] font-bold flex items-center justify-center">
-                {deviceType === "iphone" ? "8" : "7"}
-              </span>
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
-              <span>¿Tiene algún problema o falla en su funcionamiento?</span>
+            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
+              Mencionar Algún Problema o Falla
             </label>
-
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <button
-                type="button"
-                onClick={() => {
-                  setHasIssues("no");
-                  setIssuesDescription("");
-                }}
-                className={`p-3.5 rounded-2xl text-center transition-all cursor-pointer btn-tactile ${
-                  hasIssues === "no"
-                    ? "clay-btn-dark text-white ring-2 ring-emerald-500/30"
-                    : "clay-pill text-slate-800 hover:text-black"
-                }`}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span className="font-bold text-xs sm:text-sm">100% Funcional</span>
-                </div>
-                <span className="text-[10px] text-slate-300 block mt-0.5">Sin ningún problema operativo</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setHasIssues("yes")}
-                className={`p-3.5 rounded-2xl text-center transition-all cursor-pointer btn-tactile ${
-                  hasIssues === "yes"
-                    ? "clay-btn-dark text-white ring-2 ring-amber-500/40"
-                    : "clay-pill text-slate-800 hover:text-black"
-                }`}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-400" />
-                  <span className="font-bold text-xs sm:text-sm">Tiene detalles</span>
-                </div>
-                <span className="text-[10px] text-slate-300 block mt-0.5">Falla en alguna función</span>
-              </button>
+            <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+              <input 
+                type="text"
+                value={issuesText}
+                onChange={(e) => setIssuesText(e.target.value)}
+                placeholder="Escribe si tiene falla (ej: Ninguno, Face ID no sirve, detalle en cámara)..."
+                className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
+              />
             </div>
-
-            {hasIssues === "yes" && (
-              <div className="clay-inset rounded-2xl p-4 animate-fadeIn">
-                <textarea 
-                  rows={2}
-                  value={issuesDescription}
-                  onChange={(e) => setIssuesDescription(e.target.value)}
-                  placeholder="Describe la falla (ej: Face ID no funciona, cámara tiembla, no agarra WiFi o señal, etc.)..."
-                  className="w-full bg-transparent text-xs text-[#14171F] font-medium focus:outline-none placeholder:text-slate-400 resize-none"
-                />
-              </div>
-            )}
           </div>
 
-          {/* CAMPO ADICIONAL: NOMBRE (OPCIONAL) */}
-          <div className="pt-4 border-t border-slate-200/60">
-            <div className="max-w-md">
-              <label className="text-xs font-semibold text-slate-600 block mb-1.5">
-                Tu nombre o tienda (opcional)
-              </label>
-              <div className="clay-inset rounded-xl px-4 py-2.5">
-                <input 
-                  type="text"
-                  value={ownerName}
-                  onChange={(e) => setOwnerName(e.target.value)}
-                  placeholder="Ej: David Pérez / Tecno Store"
-                  className="w-full bg-transparent text-xs font-medium text-[#14171F] focus:outline-none placeholder:text-slate-400"
-                />
-              </div>
+          {/* CAMPO 9: NOMBRE (OPCIONAL) */}
+          <div>
+            <label className="text-xs font-semibold text-slate-500 block mb-1">
+              Tu nombre o tienda (opcional)
+            </label>
+            <div className="clay-inset rounded-xl px-4 py-2.5">
+              <input 
+                type="text"
+                value={ownerName}
+                onChange={(e) => setOwnerName(e.target.value)}
+                placeholder="Ej: David Pérez"
+                className="w-full bg-transparent text-xs font-medium text-[#14171F] focus:outline-none placeholder:text-slate-400"
+              />
             </div>
           </div>
 
           {/* BOTÓN PRINCIPAL DE ENVÍO A WHATSAPP */}
-          <div className="pt-6 border-t border-slate-200/70">
-            <div className="clay-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 bg-gradient-to-r from-blue-50/50 via-white to-emerald-50/50">
+          <div className="pt-4 border-t border-slate-200/70">
+            <div className="clay-card rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-blue-50/50 via-white to-emerald-50/50">
               <div className="text-left w-full sm:w-auto">
-                <span className="text-[11px] font-bold text-[#1B57F2] uppercase tracking-wider block mb-0.5">
-                  Cotización Rápida Garantizada
+                <span className="text-[11px] font-bold text-[#1B57F2] uppercase tracking-wider block">
+                  Respuesta Inmediata
                 </span>
                 <h4 className="text-base sm:text-lg font-bold text-[#14171F]">
-                  ¿Listo para recibir oferta por tu teléfono?
+                  ¿Listo para recibir tu oferta?
                 </h4>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Te responderemos al instante con el valor estimado para compra o abono.
+                <p className="text-xs text-slate-500">
+                  Te cotizamos al instante para compra directa en efectivo o abono.
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={handleSendToWhatsApp}
-                className="w-full sm:w-auto px-7 py-4 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-3 shadow-lg shadow-emerald-500/25 transition-all hover:scale-102 active:scale-98 cursor-pointer shrink-0"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all hover:scale-102 active:scale-98 cursor-pointer shrink-0"
               >
                 <MessageCircle className="w-5 h-5 fill-current" />
                 <span>Enviar Cotización a WhatsApp</span>
@@ -612,34 +592,34 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
       </div>
 
       {/* BENEFICIOS DE VENDER EN TECNOTRADE */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="clay-card rounded-2xl p-5 text-center">
-          <div className="w-10 h-10 rounded-xl clay-badge-blue mx-auto mb-3 flex items-center justify-center text-white">
-            <BadgeDollarSign className="w-5 h-5" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div className="clay-card rounded-2xl p-4.5 text-center">
+          <div className="w-9 h-9 rounded-xl clay-badge-blue mx-auto mb-2.5 flex items-center justify-center text-white">
+            <BadgeDollarSign className="w-4.5 h-4.5" />
           </div>
           <h5 className="font-bold text-sm text-[#14171F] mb-1">Pago Inmediato</h5>
-          <p className="text-xs text-slate-500">
-            En efectivo o transferencia instantánea al momento de revisar tu equipo en el local.
+          <p className="text-xs text-slate-500 leading-snug">
+            En efectivo o transferencia instantánea al momento de revisar tu equipo.
           </p>
         </div>
 
-        <div className="clay-card rounded-2xl p-5 text-center">
-          <div className="w-10 h-10 rounded-xl clay-badge-blue mx-auto mb-3 flex items-center justify-center text-white">
-            <Layers className="w-5 h-5" />
+        <div className="clay-card rounded-2xl p-4.5 text-center">
+          <div className="w-9 h-9 rounded-xl clay-badge-blue mx-auto mb-2.5 flex items-center justify-center text-white">
+            <Layers className="w-4.5 h-4.5" />
           </div>
           <h5 className="font-bold text-sm text-[#14171F] mb-1">Trade-In (Abono)</h5>
-          <p className="text-xs text-slate-500">
-            Entrega tu equipo actual como parte de pago para llevarte otro modelo nuevo o seminuevo.
+          <p className="text-xs text-slate-500 leading-snug">
+            Entrega tu teléfono actual como parte de pago para tu próximo equipo.
           </p>
         </div>
 
-        <div className="clay-card rounded-2xl p-5 text-center">
-          <div className="w-10 h-10 rounded-xl clay-badge-blue mx-auto mb-3 flex items-center justify-center text-white">
-            <ShieldCheck className="w-5 h-5" />
+        <div className="clay-card rounded-2xl p-4.5 text-center">
+          <div className="w-9 h-9 rounded-xl clay-badge-blue mx-auto mb-2.5 flex items-center justify-center text-white">
+            <ShieldCheck className="w-4.5 h-4.5" />
           </div>
-          <h5 className="font-bold text-sm text-[#14171F] mb-1">Trato Seguro y Rápido</h5>
-          <p className="text-xs text-slate-500">
-            Sin intermediarios ni riesgos en la calle. Te atendemos en nuestro taller oficial en Mobile Hub Pty.
+          <h5 className="font-bold text-sm text-[#14171F] mb-1">Trato Seguro y Directo</h5>
+          <p className="text-xs text-slate-500 leading-snug">
+            En nuestro local oficial en Mobile Hub Pty, Calle Ricardo Arias 5.
           </p>
         </div>
       </div>
