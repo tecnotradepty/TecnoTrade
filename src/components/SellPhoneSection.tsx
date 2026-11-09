@@ -66,75 +66,149 @@ const CONDITION_SCALE = [
 ];
 
 export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionProps) {
-  // 1. Sistema Operativo (Apple vs Android con iconos oficiales SVG)
-  const [deviceType, setDeviceType] = useState<"iphone" | "android">("iphone");
+  // 1. Sistema Operativo (inicia vacío)
+  const [deviceType, setDeviceType] = useState<"iphone" | "android" | null>(null);
 
-  // 2. Nombre del equipo (sin sugerencias)
+  // 2. Nombre del equipo (inicia vacío)
   const [deviceName, setDeviceName] = useState("");
 
-  // 3. Espacio / Almacenamiento (un solo botón que abre ventana de selección)
-  const [storage, setStorage] = useState<string>("128 GB");
+  // 3. Espacio / Almacenamiento (inicia vacío)
+  const [storage, setStorage] = useState<string>("");
   const [customStorage, setCustomStorage] = useState("");
   const [isStorageOpen, setIsStorageOpen] = useState(false);
 
-  // 4. Batería (casilla en blanco para escribir libremente, sin opciones fijas)
+  // 4. Batería (inicia vacío, obligatorio si es iPhone)
   const [batteryHealth, setBatteryHealth] = useState("");
 
-  // 5. Conectividad SIM (un solo botón que abre ventana de selección)
-  const [simType, setSimType] = useState<string>("Chip Físico (Nano SIM)");
+  // 5. Conectividad SIM (inicia vacío)
+  const [simType, setSimType] = useState<string>("");
   const [isSimOpen, setIsSimOpen] = useState(false);
 
-  // 6. Estado Físico (un solo botón con lista del 1 al 5)
-  const [conditionLevel, setConditionLevel] = useState<string>("5");
+  // 6. Estado Físico 1 al 5 (inicia vacío)
+  const [conditionLevel, setConditionLevel] = useState<string>("");
   const [isConditionOpen, setIsConditionOpen] = useState(false);
   const [conditionNotes, setConditionNotes] = useState("");
 
-  // 7. Piezas cambiadas (casilla en blanco para que el usuario escriba, sin opciones)
+  // 7. Piezas cambiadas (inicia vacío)
   const [replacedPartsText, setReplacedPartsText] = useState("");
 
-  // 8. Mencionar algún problema que tenga (casilla libre)
+  // 8. Mencionar algún problema que tenga (inicia vacío)
   const [issuesText, setIssuesText] = useState("");
 
   // Nombre opcional
   const [ownerName, setOwnerName] = useState("");
 
-  // Validación
-  const [showError, setShowError] = useState(false);
+  // Diccionario de errores por campo
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const selectedConditionObj = CONDITION_SCALE.find((c) => c.level === conditionLevel) || CONDITION_SCALE[0];
+  const selectedConditionObj = CONDITION_SCALE.find((c) => c.level === conditionLevel);
+
+  const clearError = (key: string) => {
+    if (errors[key]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }
+  };
 
   const handleReset = () => {
+    setDeviceType(null);
     setDeviceName("");
-    setStorage("128 GB");
+    setStorage("");
     setCustomStorage("");
     setIsStorageOpen(false);
     setBatteryHealth("");
-    setSimType("Chip Físico (Nano SIM)");
+    setSimType("");
     setIsSimOpen(false);
-    setConditionLevel("5");
+    setConditionLevel("");
     setIsConditionOpen(false);
     setConditionNotes("");
     setReplacedPartsText("");
     setIssuesText("");
     setOwnerName("");
-    setShowError(false);
+    setErrors({});
   };
 
   const handleSendToWhatsApp = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    // 1. Validar Sistema Operativo
+    if (!deviceType) {
+      newErrors["deviceType"] = "Selecciona si es iPhone o Android";
+    }
+
+    // 2. Validar Nombre del Equipo
     if (!deviceName.trim()) {
-      setShowError(true);
-      const inputEl = document.getElementById("sell-device-name-input");
-      if (inputEl) inputEl.focus();
+      newErrors["deviceName"] = "Escribe el nombre o modelo de tu equipo";
+    }
+
+    // 3. Validar Almacenamiento
+    if (!storage) {
+      newErrors["storage"] = "Selecciona la capacidad de almacenamiento";
+    } else if (storage === "Otro" && !customStorage.trim()) {
+      newErrors["storage"] = "Especifica la capacidad en el campo de texto";
+    }
+
+    // 4. Validar Batería (solo si es iPhone)
+    if (deviceType === "iphone" && !batteryHealth.trim()) {
+      newErrors["batteryHealth"] = "Escribe el porcentaje de salud de batería";
+    }
+
+    // 5. Validar SIM
+    if (!simType) {
+      newErrors["simType"] = "Selecciona si es eSIM o Chip físico";
+    }
+
+    // 6. Validar Estado Físico
+    if (!conditionLevel) {
+      newErrors["conditionLevel"] = "Selecciona el estado físico del 1 al 5";
+    }
+
+    // 7. Validar Piezas Cambiadas
+    if (!replacedPartsText.trim()) {
+      newErrors["replacedPartsText"] = "Indica si tiene piezas cambiadas o escribe 'Ninguna'";
+    }
+
+    // 8. Validar Problemas o Fallas
+    if (!issuesText.trim()) {
+      newErrors["issuesText"] = "Menciona si tiene algún problema o escribe 'Ninguno'";
+    }
+
+    setErrors(newErrors);
+
+    // Si hay errores, scrollear al campo vacío más cercano al inicio
+    const orderedFields = [
+      { key: "deviceType", containerId: "field-device-type", inputId: undefined },
+      { key: "deviceName", containerId: "field-device-name", inputId: "sell-device-name-input" },
+      { key: "storage", containerId: "field-storage", inputId: storage === "Otro" ? "sell-custom-storage-input" : undefined },
+      { key: "batteryHealth", containerId: "field-battery", inputId: "sell-battery-input" },
+      { key: "simType", containerId: "field-sim", inputId: undefined },
+      { key: "conditionLevel", containerId: "field-condition", inputId: undefined },
+      { key: "replacedPartsText", containerId: "field-replaced", inputId: "sell-replaced-parts-input" },
+      { key: "issuesText", containerId: "field-issues", inputId: "sell-issues-input" },
+    ];
+
+    const firstFailedField = orderedFields.find((f) => newErrors[f.key]);
+
+    if (firstFailedField) {
+      const containerEl = document.getElementById(firstFailedField.containerId);
+      if (containerEl) {
+        containerEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (firstFailedField.inputId) {
+        const inputEl = document.getElementById(firstFailedField.inputId);
+        if (inputEl) {
+          setTimeout(() => inputEl.focus(), 300);
+        }
+      }
       return;
     }
-    setShowError(false);
 
-    const finalStorage = storage === "Otro" && customStorage.trim() ? customStorage.trim() : storage;
-    const finalBattery = deviceType === "iphone" 
-      ? (batteryHealth.trim() ? batteryHealth.trim() : "No especificada")
-      : null;
-    const finalReplaced = replacedPartsText.trim() ? replacedPartsText.trim() : "Ninguna (todo original)";
-    const finalIssues = issuesText.trim() ? issuesText.trim() : "Ninguno (100% operativo)";
+    // Formulario completamente válido -> Armar mensaje y abrir WhatsApp
+    const finalStorage = storage === "Otro" ? customStorage.trim() : storage;
+    const finalBattery = deviceType === "iphone" ? batteryHealth.trim() : null;
 
     let message = `📱 *COTIZACIÓN DE VENTA / TRADE-IN · TECNOTRADE*\n`;
     message += `──────────────────────\n`;
@@ -150,14 +224,14 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
     }
 
     message += `📶 *Conectividad SIM:* ${simType}\n`;
-    message += `⭐ *Estado Físico (1 al 5):* ${selectedConditionObj.title}`;
+    message += `⭐ *Estado Físico (1 al 5):* ${selectedConditionObj?.title || conditionLevel}`;
     if (conditionNotes.trim()) {
       message += ` (${conditionNotes.trim()})`;
     }
     message += `\n`;
 
-    message += `🔧 *Piezas Cambiadas:* ${finalReplaced}\n`;
-    message += `⚠️ *Problemas o Fallas:* ${finalIssues}\n`;
+    message += `🔧 *Piezas Cambiadas:* ${replacedPartsText.trim()}\n`;
+    message += `⚠️ *Problemas o Fallas:* ${issuesText.trim()}\n`;
     message += `──────────────────────\n`;
     message += `📍 Mobile Hub Pty, Calle Ricardo Arias 5, Panamá\n\n`;
     message += `Hola TecnoTrade 👋 Envío estos datos desde la web para cotizar mi equipo. ¿Cuánto me podrían ofrecer para compra directa o como abono (Trade-In)?`;
@@ -202,16 +276,28 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
         {/* FORMULARIO ESTRUCTURADO Y COMPACTO */}
         <div className="space-y-6">
           
-          {/* CAMPO 1: SELECCIÓN DE SISTEMA OPERATIVO CON ICONOS OFICIALES SVG */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-2.5">
-              Selecciona Sistema Operativo
-            </label>
+          {/* CAMPO 1: SELECCIÓN DE SISTEMA OPERATIVO */}
+          <div id="field-device-type" className="scroll-mt-28">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                Selecciona Sistema Operativo <span className="text-red-500">*</span>
+              </label>
+              {errors["deviceType"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["deviceType"]}
+                </span>
+              )}
+            </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className={`grid grid-cols-2 gap-3 p-1 rounded-3xl transition-all ${
+              errors["deviceType"] ? "ring-2 ring-red-500/80 bg-red-50/20" : ""
+            }`}>
               <button
                 type="button"
-                onClick={() => setDeviceType("iphone")}
+                onClick={() => {
+                  setDeviceType("iphone");
+                  clearError("deviceType");
+                }}
                 className={`p-3.5 sm:p-4 rounded-2xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
                   deviceType === "iphone"
                     ? "clay-btn-dark text-white ring-2 ring-[#1B57F2]/40"
@@ -231,7 +317,11 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
 
               <button
                 type="button"
-                onClick={() => setDeviceType("android")}
+                onClick={() => {
+                  setDeviceType("android");
+                  clearError("deviceType");
+                  clearError("batteryHealth");
+                }}
                 className={`p-3.5 sm:p-4 rounded-2xl flex items-center justify-center gap-3 transition-all cursor-pointer btn-tactile ${
                   deviceType === "android"
                     ? "clay-btn-dark text-white ring-2 ring-[#1B57F2]/40"
@@ -251,21 +341,21 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
           </div>
 
-          {/* CAMPO 2: NOMBRE DE EQUIPO (SIN SUGERENCIAS) */}
-          <div>
+          {/* CAMPO 2: NOMBRE DE EQUIPO */}
+          <div id="field-device-name" className="scroll-mt-28">
             <div className="flex items-center justify-between mb-1.5">
               <label htmlFor="sell-device-name-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider">
                 Nombre de Equipo <span className="text-red-500">*</span>
               </label>
-              {showError && !deviceName.trim() && (
+              {errors["deviceName"] && (
                 <span className="text-xs text-red-600 font-bold animate-pulse">
-                  Escribe el modelo de tu teléfono
+                  {errors["deviceName"]}
                 </span>
               )}
             </div>
 
             <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
-              showError && !deviceName.trim() ? "ring-2 ring-red-500" : ""
+              errors["deviceName"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
             }`}>
               <Smartphone className="w-4 h-4 text-[#1B57F2] shrink-0" />
               <input 
@@ -274,19 +364,26 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 value={deviceName}
                 onChange={(e) => {
                   setDeviceName(e.target.value);
-                  if (showError) setShowError(false);
+                  clearError("deviceName");
                 }}
-                placeholder={deviceType === "iphone" ? "Ej: iPhone 14 Pro Max" : "Ej: Galaxy S24 Ultra, Xiaomi 13T..."}
+                placeholder={deviceType === "iphone" ? "Ej: iPhone 14 Pro Max" : deviceType === "android" ? "Ej: Galaxy S24 Ultra, Xiaomi 13T..." : "Escribe la marca y modelo (ej: iPhone 13, Galaxy S23)..."}
                 className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* CAMPO 3: ALMACENAMIENTO (UN SOLO BOTÓN QUE ABRE VENTANA DE SELECCIÓN) */}
-          <div className="relative">
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-              Espacio de Almacenamiento
-            </label>
+          {/* CAMPO 3: ALMACENAMIENTO (INICIA VACÍO, UN SOLO BOTÓN) */}
+          <div id="field-storage" className="relative scroll-mt-28">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                Espacio de Almacenamiento <span className="text-red-500">*</span>
+              </label>
+              {errors["storage"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["storage"]}
+                </span>
+              )}
+            </div>
 
             <button
               type="button"
@@ -295,28 +392,36 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsSimOpen(false);
                 setIsConditionOpen(false);
               }}
-              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+              className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
+                errors["storage"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              }`}
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl clay-badge-blue flex items-center justify-center text-white shrink-0">
                   <HardDrive className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] text-slate-500 block">Capacidad seleccionada:</span>
-                  <span className="text-sm font-bold text-[#14171F]">
-                    {storage === "Otro" && customStorage.trim() ? customStorage.trim() : storage}
-                  </span>
+                  <span className="text-[11px] text-slate-500 block">Capacidad:</span>
+                  {storage ? (
+                    <span className="text-sm font-bold text-[#14171F]">
+                      {storage === "Otro" && customStorage.trim() ? customStorage.trim() : storage}
+                    </span>
+                  ) : (
+                    <span className="text-sm font-semibold text-slate-400 italic">
+                      Seleccionar capacidad (128, 256, 512, 1TB)...
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs">
-                <span>Elegir</span>
+                <span>{storage ? "Cambiar" : "Elegir"}</span>
                 {isStorageOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </div>
             </button>
 
             {/* Ventana de selección desplegable */}
             {isStorageOpen && (
-              <div className="absolute top-full left-0 right-0 z-30 mt-2 p-3 rounded-2xl clay-surface shadow-xl border border-slate-200/80 animate-scaleIn space-y-1.5">
+              <div className="absolute top-full left-0 right-0 z-30 mt-2 p-3 rounded-2xl clay-surface shadow-xl border border-slate-200/80 animate-scaleIn space-y-2">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {STORAGE_OPTIONS.map((opt) => (
                     <button
@@ -324,6 +429,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                       type="button"
                       onClick={() => {
                         setStorage(opt);
+                        clearError("storage");
                         if (opt !== "Otro") setIsStorageOpen(false);
                       }}
                       className={`p-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between ${
@@ -341,15 +447,21 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 {storage === "Otro" && (
                   <div className="pt-2 border-t border-slate-200/60 flex items-center gap-2">
                     <input 
+                      id="sell-custom-storage-input"
                       type="text"
                       value={customStorage}
-                      onChange={(e) => setCustomStorage(e.target.value)}
+                      onChange={(e) => {
+                        setCustomStorage(e.target.value);
+                        clearError("storage");
+                      }}
                       placeholder="Especifica capacidad (ej: 32 GB, 2 TB)..."
                       className="flex-1 clay-inset px-3 py-2 rounded-xl text-xs font-semibold text-[#14171F] focus:outline-none"
                     />
                     <button
                       type="button"
-                      onClick={() => setIsStorageOpen(false)}
+                      onClick={() => {
+                        if (customStorage.trim()) setIsStorageOpen(false);
+                      }}
                       className="clay-btn-dark px-3 py-2 rounded-xl text-xs font-bold text-white cursor-pointer"
                     >
                       Listo
@@ -360,18 +472,32 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             )}
           </div>
 
-          {/* CAMPO 4: SALUD DE BATERÍA (SOLO EN CASO DE IPHONE, CASILLA EN BLANCO PARA ESCRIBIR) */}
+          {/* CAMPO 4: SALUD DE BATERÍA (SOLO IPHONE, CASILLA EN BLANCO) */}
           {deviceType === "iphone" && (
-            <div className="animate-fadeIn">
-              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-                Salud de Batería (%)
-              </label>
-              <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+            <div id="field-battery" className="animate-fadeIn scroll-mt-28">
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="sell-battery-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                  Salud de Batería (%) <span className="text-red-500">*</span>
+                </label>
+                {errors["batteryHealth"] && (
+                  <span className="text-xs text-red-600 font-bold animate-pulse">
+                    {errors["batteryHealth"]}
+                  </span>
+                )}
+              </div>
+
+              <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
+                errors["batteryHealth"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              }`}>
                 <Battery className="w-4 h-4 text-[#1B57F2] shrink-0" />
                 <input 
+                  id="sell-battery-input"
                   type="text"
                   value={batteryHealth}
-                  onChange={(e) => setBatteryHealth(e.target.value)}
+                  onChange={(e) => {
+                    setBatteryHealth(e.target.value);
+                    clearError("batteryHealth");
+                  }}
                   placeholder="Escribe el porcentaje (ej: 87% o 100%)..."
                   className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
                 />
@@ -379,11 +505,18 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
           )}
 
-          {/* CAMPO 5: SELECCIONAR SI ES ESIM O CHIP (UN SOLO BOTÓN QUE ABRE VENTANA DE SELECCIÓN) */}
-          <div className="relative">
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-              Tipo de SIM / Conectividad
-            </label>
+          {/* CAMPO 5: SELECCIONAR SI ES ESIM O CHIP (INICIA VACÍO, UN SOLO BOTÓN) */}
+          <div id="field-sim" className="relative scroll-mt-28">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                Tipo de SIM / Conectividad <span className="text-red-500">*</span>
+              </label>
+              {errors["simType"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["simType"]}
+                </span>
+              )}
+            </div>
 
             <button
               type="button"
@@ -392,7 +525,9 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsStorageOpen(false);
                 setIsConditionOpen(false);
               }}
-              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+              className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
+                errors["simType"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              }`}
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl clay-badge-blue flex items-center justify-center text-white shrink-0">
@@ -400,11 +535,17 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 </div>
                 <div>
                   <span className="text-[11px] text-slate-500 block">Conectividad:</span>
-                  <span className="text-sm font-bold text-[#14171F]">{simType}</span>
+                  {simType ? (
+                    <span className="text-sm font-bold text-[#14171F]">{simType}</span>
+                  ) : (
+                    <span className="text-sm font-semibold text-slate-400 italic">
+                      Seleccionar si es eSIM o Chip físico...
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs">
-                <span>Cambiar</span>
+                <span>{simType ? "Cambiar" : "Elegir"}</span>
                 {isSimOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </div>
             </button>
@@ -418,6 +559,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                     type="button"
                     onClick={() => {
                       setSimType(item.label);
+                      clearError("simType");
                       setIsSimOpen(false);
                     }}
                     className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between ${
@@ -439,11 +581,18 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             )}
           </div>
 
-          {/* CAMPO 6: ESTADO FÍSICO (UN SOLO BOTÓN CON LISTA DEL 1 AL 5) */}
-          <div className="relative">
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-              Estado Físico (Escala del 1 al 5)
-            </label>
+          {/* CAMPO 6: ESTADO FÍSICO 1 AL 5 (INICIA VACÍO, UN SOLO BOTÓN) */}
+          <div id="field-condition" className="relative scroll-mt-28">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                Estado Físico (Escala del 1 al 5) <span className="text-red-500">*</span>
+              </label>
+              {errors["conditionLevel"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["conditionLevel"]}
+                </span>
+              )}
+            </div>
 
             <button
               type="button"
@@ -452,19 +601,29 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                 setIsStorageOpen(false);
                 setIsSimOpen(false);
               }}
-              className="w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50"
+              className={`w-full clay-card rounded-2xl px-4 py-3.5 flex items-center justify-between text-left transition-all cursor-pointer btn-tactile hover:bg-slate-50 ${
+                errors["conditionLevel"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+              }`}
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl clay-btn-dark flex items-center justify-center text-white shrink-0 font-extrabold text-sm">
-                  {conditionLevel}★
+                  {conditionLevel ? `${conditionLevel}★` : "?"}
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-[#14171F] block">{selectedConditionObj.title}</span>
-                  <span className="text-[11px] text-slate-500 block">{selectedConditionObj.desc}</span>
+                  {selectedConditionObj ? (
+                    <>
+                      <span className="text-sm font-bold text-[#14171F] block">{selectedConditionObj.title}</span>
+                      <span className="text-[11px] text-slate-500 block">{selectedConditionObj.desc}</span>
+                    </>
+                  ) : (
+                    <span className="text-sm font-semibold text-slate-400 italic block">
+                      Seleccionar estado estético (escala del 1 al 5)...
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-1.5 text-[#1B57F2] font-semibold text-xs shrink-0 ml-2">
-                <span>Elegir</span>
+                <span>{conditionLevel ? "Cambiar" : "Elegir"}</span>
                 {isConditionOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </div>
             </button>
@@ -478,6 +637,7 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
                     type="button"
                     onClick={() => {
                       setConditionLevel(cond.level);
+                      clearError("conditionLevel");
                       setIsConditionOpen(false);
                     }}
                     className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
@@ -510,35 +670,63 @@ export default function SellPhoneSection({ whatsappNumber }: SellPhoneSectionPro
             </div>
           </div>
 
-          {/* CAMPO 7: PIEZAS CAMBIADAS (CASILLA EN BLANCO PARA ESCRIBIR LIBREMENTE, SIN OPCIONES) */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-              ¿Alguna Pieza Cambiada o Reparada?
-            </label>
-            <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+          {/* CAMPO 7: PIEZAS CAMBIADAS (CASILLA EN BLANCO, OBLIGATORIA) */}
+          <div id="field-replaced" className="scroll-mt-28">
+            <div className="flex items-center justify-between mb-1.5">
+              <label htmlFor="sell-replaced-parts-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                ¿Alguna Pieza Cambiada o Reparada? <span className="text-red-500">*</span>
+              </label>
+              {errors["replacedPartsText"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["replacedPartsText"]}
+                </span>
+              )}
+            </div>
+
+            <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
+              errors["replacedPartsText"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+            }`}>
               <Wrench className="w-4 h-4 text-[#1B57F2] shrink-0" />
               <input 
+                id="sell-replaced-parts-input"
                 type="text"
                 value={replacedPartsText}
-                onChange={(e) => setReplacedPartsText(e.target.value)}
-                placeholder="Escribe si tiene alguna (ej: Ninguna / Pantalla cambiada / Batería)..."
+                onChange={(e) => {
+                  setReplacedPartsText(e.target.value);
+                  clearError("replacedPartsText");
+                }}
+                placeholder="Escribe si tiene alguna o 'Ninguna (todo original)'..."
                 className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* CAMPO 8: MENCIONAR ALGÚN PROBLEMA QUE TENGA (CASILLA LIBRE) */}
-          <div>
-            <label className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block mb-1.5">
-              Mencionar Algún Problema o Falla
-            </label>
-            <div className="clay-inset rounded-2xl px-4 py-3 flex items-center gap-3">
+          {/* CAMPO 8: MENCIONAR ALGÚN PROBLEMA QUE TENGA (CASILLA EN BLANCO, OBLIGATORIA) */}
+          <div id="field-issues" className="scroll-mt-28">
+            <div className="flex items-center justify-between mb-1.5">
+              <label htmlFor="sell-issues-input" className="text-xs sm:text-sm font-bold text-[#14171F] uppercase tracking-wider block">
+                Mencionar Algún Problema o Falla <span className="text-red-500">*</span>
+              </label>
+              {errors["issuesText"] && (
+                <span className="text-xs text-red-600 font-bold animate-pulse">
+                  {errors["issuesText"]}
+                </span>
+              )}
+            </div>
+
+            <div className={`clay-inset rounded-2xl px-4 py-3 flex items-center gap-3 transition-all ${
+              errors["issuesText"] ? "ring-2 ring-red-500 bg-red-50/20" : ""
+            }`}>
               <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
               <input 
+                id="sell-issues-input"
                 type="text"
                 value={issuesText}
-                onChange={(e) => setIssuesText(e.target.value)}
-                placeholder="Escribe si tiene falla (ej: Ninguno, Face ID no sirve, detalle en cámara)..."
+                onChange={(e) => {
+                  setIssuesText(e.target.value);
+                  clearError("issuesText");
+                }}
+                placeholder="Escribe si tiene alguna falla o 'Ninguno (100% operativo)'..."
                 className="w-full bg-transparent text-sm text-[#14171F] font-semibold focus:outline-none placeholder:text-slate-400"
               />
             </div>
