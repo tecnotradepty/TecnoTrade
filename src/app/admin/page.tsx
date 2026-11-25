@@ -9,6 +9,9 @@ import {
   Edit3, 
   Search, 
   Upload, 
+  Camera,
+  Images,
+  Star,
   CheckCircle2, 
   AlertCircle, 
   X, 
@@ -20,8 +23,70 @@ import {
   LogOut,
   KeyRound
 } from "lucide-react";
-import { InventoryProduct, ProductCategory } from "@/types/inventory";
+import {
+  DEFAULT_PRODUCT_IMAGE,
+  InventoryProduct,
+  MAX_PRODUCT_IMAGES,
+  ProductCategory,
+  normalizeProductImages,
+} from "@/types/inventory";
 import { RepairItem, RepairBrand, RepairCategory, RepairQuality } from "@/data/repairCatalog";
+
+/**
+ * Comprime una imagen en el navegador mediante HTML5 Canvas (máx. 1200px, JPEG 82%)
+ * para mantener cada foto en ~90-120 KB y permitir hasta 3 fotos por publicación sin saturar Redis.
+ */
+async function compressImageToDataUrl(file: File, maxDimension = 1200, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      try {
+        let { width, height } = img;
+        if (width > maxDimension || height > maxDimension) {
+          if (width >= height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, width);
+        canvas.height = Math.max(1, height);
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error("No se pudo inicializar el lienzo de compresión"));
+          return;
+        }
+
+        // Fondo blanco por si la imagen original es PNG transparente
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        URL.revokeObjectURL(objectUrl);
+        resolve(dataUrl);
+      } catch (err) {
+        URL.revokeObjectURL(objectUrl);
+        reject(err);
+      }
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("No se pudo leer el archivo de imagen"));
+    };
+
+    img.src = objectUrl;
+  });
+}
 
 const CATEGORIES: ProductCategory[] = [
   "iPhone",
@@ -139,11 +204,13 @@ export default function AdminPage() {
   const [formCategory, setFormCategory] = useState<ProductCategory>("iPhone");
   const [formName, setFormName] = useState("");
   const [formSubtitle, setFormSubtitle] = useState("");
+  const [formDescription, setFormDescription] = useState("");
   const [formPrice, setFormPrice] = useState("");
   const [formGrade, setFormGrade] = useState("Grado A+");
   const [formBattery, setFormBattery] = useState("");
   const [formTag, setFormTag] = useState("");
-  const [formImage, setFormImage] = useState("");
+  const [formImages, setFormImages] = useState<string[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState("");
   const [formInStock, setFormInStock] = useState(true);
   const [formId, setFormId] = useState("");
 
@@ -245,62 +312,119 @@ export default function AdminPage() {
   // ==============================================================
   const handleOpenCreate = () => {
     setEditingProduct(null);
+    setFormId(`prod-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`);
     setFormCategory("iPhone");
     setFormName("");
     setFormSubtitle("");
+    setFormDescription("");
     setFormPrice("");
     setFormGrade("Grado A+");
     setFormBattery("");
     setFormTag("");
-    setFormImage("");
+    setFormImages([]);
+    setImageUrlInput("");
     setFormInStock(true);
     setIsModalOpen(true);
   };
 
   const handleOpenEdit = (prod: InventoryProduct) => {
     setEditingProduct(prod);
+    setFormId(prod.id);
     setFormCategory(prod.category);
     setFormName(prod.name);
     setFormSubtitle(prod.subtitle || "");
+    setFormDescription(prod.description || "");
     setFormPrice(prod.price ? prod.price.toString() : "");
     setFormGrade(prod.grade || "Grado A+");
     setFormBattery(prod.battery || "");
     setFormTag(prod.tag || "");
-    setFormImage(prod.image || "");
+    setFormImages(normalizeProductImages(prod.images, prod.image));
+    setImageUrlInput("");
     setFormInStock(prod.inStock !== false);
     setIsModalOpen(true);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const selectedFiles = Array.from(e.target.files || []);
+    e.target.value = "";
+    if (selectedFiles.length === 0) return;
+
+    const remainingSlots = MAX_PRODUCT_IMAGES - formImages.length;
+    if (remainingSlots <= 0) {
+      showNotification(`Máximo ${MAX_PRODUCT_IMAGES} fotos por publicación`, "error");
+      return;
+    }
+
+    const filesToProcess = selectedFiles.slice(0, remainingSlots);
+    const skippedCount = selectedFiles.length - filesToProcess.length;
 
     try {
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append("file", file);
+      const compressedUrls: string[] = [];
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData
-      });
+      for (const file of filesToProcess) {
+        const compressed = await compressImageToDataUrl(file);
+        compressedUrls.push(compressed);
+      }
 
-      if (res.ok) {
-        const data = await res.json();
-        setFormImage(data.url);
-        showNotification("Foto subida correctamente", "success");
+      setFormImages((prev) =>
+        normalizeProductImages([...prev, ...compressedUrls]).slice(0, MAX_PRODUCT_IMAGES)
+      );
+
+      if (skippedCount > 0) {
+        showNotification(
+          `Se agregaron ${compressedUrls.length} foto(s). El límite es de ${MAX_PRODUCT_IMAGES} fotos por publicación.`,
+          "success"
+        );
       } else {
-        showNotification("Error al subir imagen", "error");
+        showNotification(
+          compressedUrls.length > 1
+            ? `${compressedUrls.length} fotos agregadas correctamente`
+            : "Foto agregada correctamente",
+          "success"
+        );
       }
     } catch {
-      showNotification("Error de conexión al subir imagen", "error");
+      showNotification("No se pudo procesar la imagen seleccionada", "error");
     } finally {
       setIsUploading(false);
     }
   };
 
+  const handleAddImageUrl = () => {
+    const trimmed = imageUrlInput.trim();
+    if (!trimmed) return;
+
+    if (formImages.length >= MAX_PRODUCT_IMAGES) {
+      showNotification(`Máximo ${MAX_PRODUCT_IMAGES} fotos por publicación`, "error");
+      return;
+    }
+
+    if (formImages.includes(trimmed)) {
+      showNotification("Esa imagen ya está agregada en esta publicación", "error");
+      return;
+    }
+
+    setFormImages((prev) => [...prev, trimmed].slice(0, MAX_PRODUCT_IMAGES));
+    setImageUrlInput("");
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    setFormImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleSetCoverImage = (indexToPromote: number) => {
+    if (indexToPromote === 0) return;
+    setFormImages((prev) => {
+      if (indexToPromote < 0 || indexToPromote >= prev.length) return prev;
+      const target = prev[indexToPromote];
+      return [target, ...prev.filter((_, idx) => idx !== indexToPromote)];
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingProduct) return;
 
     if (!formName.trim()) {
       showNotification("El nombre o modelo es obligatorio", "error");
@@ -313,20 +437,26 @@ export default function AdminPage() {
       return;
     }
 
+    const cleanedImages = normalizeProductImages(formImages);
+    const finalImages = cleanedImages.length > 0 ? cleanedImages : [DEFAULT_PRODUCT_IMAGE];
+
     const payload = {
-      id: editingProduct ? editingProduct.id : undefined,
+      id: editingProduct ? editingProduct.id : formId || `prod-${Date.now()}`,
       category: formCategory,
       name: formName.trim(),
       subtitle: formSubtitle.trim(),
+      description: formDescription.trim(),
       price: priceNum,
       grade: formGrade.trim(),
       battery: formBattery.trim(),
       tag: formTag.trim(),
-      image: formImage.trim() || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
+      image: finalImages[0],
+      images: finalImages,
       inStock: formInStock
     };
 
     try {
+      setIsSubmittingProduct(true);
       const method = editingProduct ? "PUT" : "POST";
       const res = await fetch("/api/products", {
         method,
@@ -346,6 +476,8 @@ export default function AdminPage() {
       }
     } catch {
       showNotification("Error de conexión", "error");
+    } finally {
+      setIsSubmittingProduct(false);
     }
   };
 
@@ -935,7 +1067,10 @@ export default function AdminPage() {
               </div>
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredProducts.map((prod) => (
+                {filteredProducts.map((prod) => {
+                  const gallery = normalizeProductImages(prod.images, prod.image);
+                  const coverImage = gallery[0] || DEFAULT_PRODUCT_IMAGE;
+                  return (
                   <div 
                     key={prod.id}
                     className="bg-white rounded-3xl p-5 border border-black/[0.05] shadow-xs flex flex-col justify-between minimal-card-hover group"
@@ -943,7 +1078,7 @@ export default function AdminPage() {
                     <div>
                       <div className="relative h-48 rounded-2xl bg-[#F4F4F6] overflow-hidden mb-4 flex items-center justify-center p-2">
                         <img 
-                          src={prod.image} 
+                          src={coverImage} 
                           alt={prod.name}
                           className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                         />
@@ -953,6 +1088,12 @@ export default function AdminPage() {
                         {prod.battery && (
                           <span className="absolute top-3 right-3 bg-zinc-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
                             {prod.battery}
+                          </span>
+                        )}
+                        {gallery.length > 1 && (
+                          <span className="absolute bottom-2.5 right-2.5 bg-black/75 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                            <Images className="w-3 h-3" />
+                            <span>{gallery.length}</span>
                           </span>
                         )}
                       </div>
@@ -1002,7 +1143,8 @@ export default function AdminPage() {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="bg-white rounded-3xl p-16 text-center border border-black/[0.05]">
@@ -1386,14 +1528,27 @@ export default function AdminPage() {
 
               <div>
                 <label className="text-xs font-semibold text-zinc-700 block mb-1.5">
-                  Subtítulo / Especificaciones
+                  Subtítulo / Especificaciones Cortas
                 </label>
                 <input 
                   type="text"
                   value={formSubtitle}
                   onChange={(e) => setFormSubtitle(e.target.value)}
-                  placeholder="Ej: Titanio Natural · 128 GB, Para iPhone 13 a 16 Pro..."
+                  placeholder="Ej: Titanio Natural · 128 GB · Liberado de fábrica"
                   className="w-full bg-[#FAF9F8] border border-black/[0.06] rounded-xl px-4 py-2.5 text-xs text-zinc-900 focus:outline-none focus:border-black/30"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-zinc-700 block mb-1.5">
+                  Descripción Completa (Vista Marketplace)
+                </label>
+                <textarea
+                  rows={3}
+                  value={formDescription}
+                  onChange={(e) => setFormDescription(e.target.value)}
+                  placeholder="Describe estado físico, accesorios incluidos, Face ID / True Tone, garantía o detalles clave que verá el cliente al abrir la publicación..."
+                  className="w-full bg-[#FAF9F8] border border-black/[0.06] rounded-xl px-4 py-2.5 text-xs text-zinc-900 focus:outline-none focus:border-black/30 resize-y"
                 />
               </div>
 
@@ -1457,50 +1612,175 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-zinc-700 block mb-1.5">
-                  Foto del Producto
-                </label>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <input 
-                      type="file" 
-                      ref={fileInputRef}
-                      onChange={handleFileUpload}
-                      accept="image/*"
-                      className="hidden"
-                    />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-semibold text-zinc-700">
+                    Fotos del Producto ({formImages.length} / {MAX_PRODUCT_IMAGES})
+                  </label>
+                  {formImages.length > 0 && (
                     <button
                       type="button"
-                      disabled={isUploading}
-                      onClick={() => fileInputRef.current?.click()}
-                      className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all inline-flex items-center gap-2 btn-tactile disabled:opacity-50"
+                      onClick={() => setFormImages([])}
+                      className="text-[11px] font-semibold text-red-600 hover:text-red-700 hover:underline cursor-pointer"
                     >
-                      <Upload className="w-3.5 h-3.5" />
-                      <span>{isUploading ? "Subiendo foto..." : "Subir foto desde PC o Celular"}</span>
+                      Quitar todas
                     </button>
-                    <span className="text-[11px] text-zinc-400">o ingresa enlace web abajo</span>
-                  </div>
-
+                  )}
+                </div>
+                
+                <div className="space-y-3">
+                  {/* Inputs ocultos para galería (múltiple) y cámara directa */}
                   <input 
-                    type="url"
-                    value={formImage}
-                    onChange={(e) => setFormImage(e.target.value)}
-                    placeholder="https://... o ruta de archivo subido"
-                    className="w-full bg-[#FAF9F8] border border-black/[0.06] rounded-xl px-4 py-2 text-xs text-zinc-900 focus:outline-none focus:border-black/30"
+                    type="file" 
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                  />
+                  <input
+                    type="file"
+                    ref={cameraInputRef}
+                    onChange={handleFileUpload}
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
                   />
 
-                  {formImage && (
-                    <div className="w-24 h-24 rounded-2xl bg-zinc-100 overflow-hidden border border-black/[0.08] p-1 flex items-center justify-center">
-                      <img 
-                        src={formImage} 
-                        alt="Vista previa" 
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                  {/* Galería de hasta 3 slots con opción de quitar o marcar como portada */}
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {Array.from({ length: MAX_PRODUCT_IMAGES }).map((_, slotIdx) => {
+                      const imgSrc = formImages[slotIdx];
+                      if (imgSrc) {
+                        return (
+                          <div
+                            key={`${slotIdx}-${imgSrc.slice(0, 32)}`}
+                            className="relative aspect-square rounded-2xl bg-[#F4F4F6] overflow-hidden border border-black/[0.08] group"
+                          >
+                            <img
+                              src={imgSrc}
+                              alt={`Foto ${slotIdx + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            {/* Botón siempre visible para quitar la foto */}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(slotIdx)}
+                              title="Quitar esta foto"
+                              aria-label={`Quitar foto ${slotIdx + 1}`}
+                              className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-md transition-transform active:scale-90 cursor-pointer"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+
+                            {slotIdx === 0 ? (
+                              <span className="absolute bottom-1.5 left-1.5 bg-zinc-900/90 text-white text-[9px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                                <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                                Portada
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleSetCoverImage(slotIdx)}
+                                className="absolute bottom-1.5 left-1.5 bg-white/95 hover:bg-white text-zinc-900 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs cursor-pointer"
+                                title="Usar como foto principal"
+                              >
+                                Hacer portada
+                              </button>
+                            )}
+                          </div>
+                        );
+                      }
+
+                      const canUploadHere = formImages.length < MAX_PRODUCT_IMAGES && !isUploading;
+                      return (
+                        <button
+                          key={`empty-${slotIdx}`}
+                          type="button"
+                          disabled={!canUploadHere}
+                          onClick={() => fileInputRef.current?.click()}
+                          className="aspect-square rounded-2xl border-2 border-dashed border-zinc-300 hover:border-zinc-500 bg-[#FAF9F8] flex flex-col items-center justify-center gap-1 text-zinc-400 hover:text-zinc-700 transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span className="text-[10px] font-semibold">
+                            {slotIdx === 0 ? "Portada" : `Foto ${slotIdx + 1}`}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Botones de carga (Galería / Cámara) y campo de URL */}
+                  {formImages.length < MAX_PRODUCT_IMAGES ? (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          disabled={isUploading}
+                          onClick={() => fileInputRef.current?.click()}
+                          className="bg-zinc-900 hover:bg-black text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all inline-flex items-center gap-2 btn-tactile disabled:opacity-50 cursor-pointer"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>
+                            {isUploading
+                              ? "Procesando..."
+                              : `Subir fotos (${MAX_PRODUCT_IMAGES - formImages.length} disp.)`}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          disabled={isUploading}
+                          onClick={() => cameraInputRef.current?.click()}
+                          className="bg-[#F4F4F6] hover:bg-zinc-200 text-zinc-900 text-xs font-semibold px-3.5 py-2.5 rounded-xl transition-all inline-flex items-center gap-2 btn-tactile disabled:opacity-50 cursor-pointer"
+                        >
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>Cámara</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <input 
+                          type="url"
+                          value={imageUrlInput}
+                          onChange={(e) => setImageUrlInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              handleAddImageUrl();
+                            }
+                          }}
+                          placeholder="O pega un enlace web (https://...)"
+                          className="flex-1 bg-[#FAF9F8] border border-black/[0.06] rounded-xl px-4 py-2 text-xs text-zinc-900 focus:outline-none focus:border-black/30"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleAddImageUrl}
+                          disabled={!imageUrlInput.trim()}
+                          className="px-3.5 py-2 rounded-xl bg-zinc-200 hover:bg-zinc-300 text-zinc-900 text-xs font-semibold disabled:opacity-40 cursor-pointer"
+                        >
+                          Agregar URL
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200/70 rounded-xl px-3 py-2">
+                      Ya subiste el máximo de {MAX_PRODUCT_IMAGES} fotos. Puedes quitar alguna con la X para reemplazarla.
+                    </p>
                   )}
                 </div>
               </div>
+
+              <label className="flex items-center gap-2.5 pt-1 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={formInStock}
+                  onChange={(e) => setFormInStock(e.target.checked)}
+                  className="w-4 h-4 rounded accent-zinc-900 cursor-pointer"
+                />
+                <span className="text-xs font-semibold text-zinc-700">
+                  Equipo disponible en stock (desmarca para mostrar como Agotado)
+                </span>
+              </label>
 
               <div className="pt-4 border-t border-black/[0.06] flex items-center justify-end gap-3">
                 <button
@@ -1512,9 +1792,16 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-zinc-950 hover:bg-black transition-all shadow-md btn-tactile"
+                  disabled={isSubmittingProduct || isUploading}
+                  className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-zinc-950 hover:bg-black transition-all shadow-md btn-tactile disabled:opacity-50 cursor-pointer"
                 >
-                  {editingProduct ? "Guardar Cambios" : "Publicar en Tienda"}
+                  {isSubmittingProduct
+                    ? editingProduct
+                      ? "Guardando..."
+                      : "Publicando..."
+                    : editingProduct
+                      ? "Guardar Cambios"
+                      : "Publicar en Tienda"}
                 </button>
               </div>
             </form>

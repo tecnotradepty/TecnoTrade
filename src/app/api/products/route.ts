@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getProducts, saveProducts } from "@/lib/storage";
-import { InventoryProduct } from "@/types/inventory";
+import {
+  DEFAULT_PRODUCT_IMAGE,
+  InventoryProduct,
+  normalizeProductImages,
+} from "@/types/inventory";
 
 const NO_CACHE_HEADERS = {
   "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -34,17 +38,22 @@ export async function POST(request: Request) {
       });
     }
 
+    const normalizedImages = normalizeProductImages(body.images, body.image);
+    const primaryImage = normalizedImages[0] || DEFAULT_PRODUCT_IMAGE;
+
     const newProduct: InventoryProduct = {
       id: productId,
       category: body.category || "Otros",
       name: body.name || "Sin nombre",
       subtitle: body.subtitle || "",
+      description: typeof body.description === "string" ? body.description.trim() : "",
       price: Number(body.price) || 0,
       grade: body.grade || "Nuevo",
       battery: body.battery || "",
       tag: body.tag || "",
       colors: Array.isArray(body.colors) ? body.colors : ["#111111"],
-      image: body.image || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
+      image: primaryImage,
+      images: normalizedImages.length > 0 ? normalizedImages : [primaryImage],
       inStock: body.inStock !== false,
       createdAt: new Date().toISOString()
     };
@@ -99,18 +108,38 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Producto no encontrado" }, { status: 404 });
     }
 
+    const existing = products[index];
+    const hasImagesField = body.images !== undefined;
+    const hasImageField = body.image !== undefined;
+    const normalizedImages =
+      hasImagesField || hasImageField
+        ? normalizeProductImages(
+            hasImagesField ? body.images : undefined,
+            hasImageField ? body.image : undefined
+          )
+        : normalizeProductImages(existing.images, existing.image);
+
+    const primaryImage = normalizedImages[0] || DEFAULT_PRODUCT_IMAGE;
+
     const updatedProduct: InventoryProduct = {
-      ...products[index],
-      category: body.category || products[index].category,
-      name: body.name || products[index].name,
-      subtitle: body.subtitle !== undefined ? body.subtitle : products[index].subtitle,
-      price: body.price !== undefined ? Number(body.price) : products[index].price,
-      grade: body.grade !== undefined ? body.grade : products[index].grade,
-      battery: body.battery !== undefined ? body.battery : products[index].battery,
-      tag: body.tag !== undefined ? body.tag : products[index].tag,
-      colors: Array.isArray(body.colors) ? body.colors : products[index].colors,
-      image: body.image || products[index].image,
-      inStock: body.inStock !== undefined ? Boolean(body.inStock) : products[index].inStock
+      ...existing,
+      category: body.category || existing.category,
+      name: body.name || existing.name,
+      subtitle: body.subtitle !== undefined ? body.subtitle : existing.subtitle,
+      description:
+        body.description !== undefined
+          ? typeof body.description === "string"
+            ? body.description.trim()
+            : ""
+          : existing.description,
+      price: body.price !== undefined ? Number(body.price) : existing.price,
+      grade: body.grade !== undefined ? body.grade : existing.grade,
+      battery: body.battery !== undefined ? body.battery : existing.battery,
+      tag: body.tag !== undefined ? body.tag : existing.tag,
+      colors: Array.isArray(body.colors) ? body.colors : existing.colors,
+      image: primaryImage,
+      images: normalizedImages.length > 0 ? normalizedImages : [primaryImage],
+      inStock: body.inStock !== undefined ? Boolean(body.inStock) : existing.inStock
     };
 
     products[index] = updatedProduct;

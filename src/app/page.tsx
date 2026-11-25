@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
@@ -25,12 +25,14 @@ import {
   ExternalLink,
   Settings,
   SlidersHorizontal,
-  BadgeDollarSign
+  BadgeDollarSign,
+  Images
 } from "lucide-react";
 import SellPhoneSection from "@/components/SellPhoneSection";
+import ProductDetailModal from "@/components/ProductDetailModal";
 import { REPAIR_CATALOG, POPULAR_MODELS, isModelMatch, RepairItem } from "@/data/repairCatalog";
 import INITIAL_INVENTORY from "@/data/inventory.json";
-import { InventoryProduct } from "@/types/inventory";
+import { InventoryProduct, getProductImages } from "@/types/inventory";
 
 // Datos oficiales de TecnoTrade PTY
 const WHATSAPP_NUMBER = "50768529324";
@@ -95,6 +97,7 @@ export default function Home() {
   const [devicePriceSort, setDevicePriceSort] = useState<"default" | "asc" | "desc">("default");
   const [showFullCatalog, setShowFullCatalog] = useState(false);
   const [isFilterTabOpen, setIsFilterTabOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<InventoryProduct | null>(null);
 
   // Estado del Carrito
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -1159,14 +1162,26 @@ export default function Home() {
             ) : filteredDevices.length > 0 ? (
               <>
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-                  {displayedDevices.map((dev) => (
+                  {displayedDevices.map((dev) => {
+                    const gallery = getProductImages(dev);
+                    const coverImage = gallery[0] || "/logo.jpg";
+                    return (
                     <div 
                       key={dev.id}
-                      className="clay-surface rounded-2xl sm:rounded-[2.2rem] p-3 sm:p-5 flex flex-col justify-between clay-card-interactive animate-scaleIn group"
+                      onClick={() => setSelectedProduct(dev)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedProduct(dev);
+                        }
+                      }}
+                      className="clay-surface rounded-2xl sm:rounded-[2.2rem] p-3 sm:p-5 flex flex-col justify-between clay-card-interactive animate-scaleIn group cursor-pointer text-left"
                     >
                       <div className="relative h-36 sm:h-52 md:h-60 rounded-xl sm:rounded-2xl clay-card overflow-hidden mb-3 sm:mb-4 flex items-center justify-center">
                         <img 
-                          src={dev.image || "/logo.jpg"} 
+                          src={coverImage} 
                           alt={dev.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
@@ -1178,6 +1193,12 @@ export default function Home() {
                         {dev.battery && (
                           <span className="absolute top-2 right-2 sm:top-3.5 sm:right-3.5 clay-btn-dark text-[9px] sm:text-xs font-bold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
                             {dev.battery}
+                          </span>
+                        )}
+                        {gallery.length > 1 && (
+                          <span className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-black/75 backdrop-blur-xs text-white text-[9px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-xs">
+                            <Images className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                            <span>{gallery.length}</span>
                           </span>
                         )}
                       </div>
@@ -1228,20 +1249,25 @@ export default function Home() {
                         </div>
 
                         <button
-                          onClick={() => addToCart({
-                            id: dev.id,
-                            title: dev.name,
-                            subtitle: `${dev.subtitle || dev.category} · ${dev.grade || "Garantizado"}`,
-                            price: dev.price
-                          })}
-                          className="clay-btn-blue text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center justify-center gap-1 btn-tactile cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addToCart({
+                              id: dev.id,
+                              title: dev.name,
+                              subtitle: `${dev.subtitle || dev.category} · ${dev.grade || "Garantizado"}`,
+                              price: dev.price
+                            });
+                          }}
+                          disabled={dev.inStock === false}
+                          className="clay-btn-blue text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center justify-center gap-1 btn-tactile cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed"
                         >
                           <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                          <span>Añadir</span>
+                          <span>{dev.inStock === false ? "Agotado" : "Añadir"}</span>
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Botón para mostrar catálogo completo o contraer */}
@@ -1545,6 +1571,22 @@ export default function Home() {
           <MessageCircle className="w-6 h-6 fill-current" />
         </button>
       </div>
+
+      {/* MODAL DETALLE DE PRODUCTO ESTILO FACEBOOK MARKETPLACE */}
+      <ProductDetailModal
+        key={selectedProduct?.id || "closed"}
+        product={selectedProduct}
+        whatsappNumber={WHATSAPP_NUMBER}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={(prod) =>
+          addToCart({
+            id: prod.id,
+            title: prod.name,
+            subtitle: `${prod.subtitle || prod.category} · ${prod.grade || "Garantizado"}`,
+            price: prod.price,
+          })
+        }
+      />
 
     </div>
   );
